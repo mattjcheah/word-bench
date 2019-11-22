@@ -1,4 +1,64 @@
+:root {
+  --grain: #e5dad6;
+  --blackboard: #565656;
+  --oxblood: #763240;
+  --tan: #c2a080;
+}
+
 body {
+  color: var(--blackboard);
+  background-color: var(--grain);
+}
+
+.landingContainer {
+  width: 50%;
+  min-width: 300px;
+  max-width: 600px;
+  /* margin: 0 auto; */
+  margin-top: 30vh;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.landingTitle {
+  font-size: 30px;
+}
+
+.initButtonContainer {
+  padding: 40px;
+  margin: 40px;
+  border-top: 1px solid var(--oxblood);
+  border-bottom: 1px solid var(--oxblood);
+}
+
+.landingButton {
+  padding: 10px;
+  margin: 5px;
+  width: 100px;
+  font-size: 12px;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--blackboard);
+  border: 1px solid var(--blackboard);
+}
+
+.landingButton:hover {
   color: white;
-  background-color: black;
+  background: var(--oxblood);
+  border: 1px solid var(--oxblood);
+  cursor: pointer;
+}
+
+.landingButton:focus {
+  outline: none;
+}
+
+.aboutInfo {
+  font-size: 12px;
+  width: 80%;
+  margin: 0 auto;
 }
