@@ -1,32 +1,31 @@
-# empty-project
+# word-bench
 
-Empty project.
+This is word bench.
 
-## Building and running on localhost
+## Installation
 
-First install dependencies:
+First, navigate to the `server/` folder and run
 
-```sh
+```bash
 npm install
 ```
 
-To run in hot module reloading mode:
+Then, navigate to the `client/` folder and run
 
-```sh
+```bash
+npm install
+```
+
+## Development
+
+First, navigate to the `server/` folder and run
+
+```bash
+npm run watch
+```
+
+Then, navigate to the `client/` folder and run
+
+```bash
 npm start
 ```
-
-To create a production build:
-
-```sh
-npm run build-prod
-```
-
-## Running
-
-Open the file `dist/index.html` in your browser
-
-## Credits
-
-Made with [createapp.dev](https://createapp.dev/)
-
