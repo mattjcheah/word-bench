@@ -1,0 +1,25 @@
+{
+  "name": "wordbench-be",
+  "version": "0.0.1",
+  "description": "Socket IO backend for WordBench",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "babel-watch src/index.js",
+    "test": "jest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.7.2",
+    "@babel/node": "^7.7.0",
+    "@babel/preset-env": "^7.7.1",
+    "babel-watch": "^7.0.0",
+    "eslint": "^6.6.0",
+    "jest": "^24.9.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "dependencies": {
+    "socket.io": "^2.3.0"
+  }
+}
