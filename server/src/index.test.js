@@ -15,8 +15,9 @@ describe("socket test", () => {
   it("should connect to the socket", done => {
     const socket = socketIO("http://localhost:5000");
 
-    socket.on("connectionStatus", status => {
-      expect(JSON.parse(status)).toEqual({ status: "connected" });
+    socket.on("connectionStatus", response => {
+      expect(response.status).toEqual("SUCCESS");
+
       socket.close();
       done();
     });
@@ -25,10 +26,16 @@ describe("socket test", () => {
   it("should be able to create a room", done => {
     const socket = socketIO("http://localhost:5000");
 
-    socket.emit("createRoom", JSON.stringify({ name: "Test" }));
+    socket.emit("createRoom", { name: "TEST" });
 
-    socket.on("roomStatus", status => {
-      expect(JSON.parse(status)).toEqual({ status: "joined" });
+    socket.on("roomStatus", response => {
+      expect(response.status).toEqual("SUCCESS");
+      expect(response.players).toEqual([
+        {
+          name: "TEST"
+        }
+      ]);
+
       socket.close();
       done();
     });
