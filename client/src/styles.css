@@ -3,6 +3,7 @@
   --blackboard: #565656;
   --oxblood: #763240;
   --tan: #c2a080;
+  --darktan: #997a5e;
 }
 
 body {
@@ -11,11 +12,11 @@ body {
 }
 
 .landingContainer {
-  width: 50%;
-  min-width: 300px;
+  width: 60%;
+  min-width: 350px;
   max-width: 600px;
   /* margin: 0 auto; */
-  margin-top: 30vh;
+  margin-top: 15vh;
   margin-left: auto;
   margin-right: auto;
 
@@ -25,10 +26,35 @@ body {
 }
 
 .landingTitle {
-  font-size: 30px;
+  font-size: calc(35px + 0.3vw);
 }
 
-.initButtonContainer {
+.inputFieldContainer {
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 60%;
+  padding: 10px;
+  margin: 5px;
+  font-size: calc(14px + 0.3vw);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--blackboard);
+  border: 1px solid var(--darktan);
+}
+
+.inputField:focus {
+  outline: none;
+  border: 1px solid var(--tan);
+}
+
+.inputFieldNumber {
+  /* width: 40px; */
+  width: 25px;
+}
+
+.menuBorderContainer {
   padding: 40px;
   margin: 40px;
   border-top: 1px solid var(--oxblood);
@@ -36,10 +62,10 @@ body {
 }
 
 .landingButton {
-  padding: 10px;
+  padding: 10px 25px;
   margin: 5px;
-  width: 100px;
-  font-size: 12px;
+  font-size: calc(14px + 0.3vw);
+  text-decoration: none;
   border-radius: 4px;
   background: transparent;
   color: var(--blackboard);
@@ -58,7 +84,7 @@ body {
 }
 
 .aboutInfo {
-  font-size: 12px;
+  font-size: calc(12px + 0.2vw);
   width: 80%;
   margin: 0 auto;
 }
