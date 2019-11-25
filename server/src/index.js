@@ -34,24 +34,30 @@ export function startServer() {
     socket.on("joinRoom", response => {
       const { roomID, name } = response;
 
-      // TODO: Error checking on whether it's a room
-      const room = {
-        ...rooms[roomID],
-        players: {
-          ...rooms[roomID].players,
-          [name]: {
-            name
+      if (!rooms.hasOwnProperty(roomID)) {
+        socket.emit("roomStatus", {
+          status: "FAILURE",
+          reason: "Room does not exist"
+        });
+      } else {
+        const room = {
+          ...rooms[roomID],
+          players: {
+            ...rooms[roomID].players,
+            [name]: {
+              name
+            }
           }
-        }
-      };
+        };
 
-      // TODO: Error checking on whether the person's name already exists?
-      nameToSocket[name] = socket;
+        // TODO: Error checking on whether the person's name already exists?
+        nameToSocket[name] = socket;
 
-      socket.join(roomID).emit("roomStatus", {
-        status: "SUCCESS",
-        players: Object.values(room.players)
-      });
+        socket.join(roomID).emit("roomStatus", {
+          status: "SUCCESS",
+          players: Object.values(room.players)
+        });
+      }
     });
   });
 
@@ -61,7 +67,7 @@ export function startServer() {
 function generateRoomID(rooms) {
   let roomID;
   do {
-    roomID = Math.random(0, 100000);
+    roomID = Math.floor(Math.random() * 10000);
   } while (rooms.hasOwnProperty(roomID));
   return roomID;
 }
