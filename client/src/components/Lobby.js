@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { getQuote } from "./Helper";
 import "../styles.css";
 
 const ROOM_ID = "fog2ka";
@@ -30,18 +31,16 @@ const LobbyList = props => {
 const Lobby = props => {
   const { userName } = props;
 
-  console.log(userName);
+  const quoteObject = getQuote();
+
   return (
     <div className="landingContainer">
       <div className="landingTitle">Waiting for more players...</div>
       <LobbyList userName={userName} />
+      <p className="aboutInfo">{quoteObject.quote}</p>
+      <br />
       <p className="aboutInfo">
-        Let's put a touch more of the magic here. This is the way you take out
-        your flustrations. Let's make some happy little clouds in our world.
-        We'll take a little bit of Van Dyke Brown. Trees grow in all kinds of
-        ways. They're not all perfectly straight. Not every limb is perfect.
-        Everybody needs a friend. Steve wants reflections, so let's give him
-        reflections.
+        <strong>{quoteObject.author}</strong>
       </p>
     </div>
   );
