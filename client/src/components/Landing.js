@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { getQuote } from "./Helper";
 import "../styles.css";
 
 const ROOM_ID = "/fog2ka";
@@ -151,17 +152,16 @@ const LandingStage = props => {
 const Landing = () => {
   const [stage, setStage] = useState("initial");
 
+  const quoteObject = getQuote();
+
   return (
     <div className="landingContainer">
       <div className="landingTitle">Welcome to WordBench</div>
       <LandingStage stage={stage} setStage={setStage} />
+      <p className="aboutInfo">{quoteObject.quote}</p>
+      <br />
       <p className="aboutInfo">
-        Let's put a touch more of the magic here. This is the way you take out
-        your flustrations. Let's make some happy little clouds in our world.
-        We'll take a little bit of Van Dyke Brown. Trees grow in all kinds of
-        ways. They're not all perfectly straight. Not every limb is perfect.
-        Everybody needs a friend. Steve wants reflections, so let's give him
-        reflections.
+        <strong>{quoteObject.author}</strong>
       </p>
     </div>
   );
