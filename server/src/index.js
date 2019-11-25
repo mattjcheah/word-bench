@@ -1,36 +1,75 @@
 import socketIO from "socket.io";
-import * as lobby from "./controllers/lobby";
 
 const PORT = 5000;
 
 const io = socketIO(PORT);
 
-const sockets = {};
-const rooms = [];
+export function startServer() {
+  const nameToSocket = {};
+  const rooms = {};
+  io.on("connection", socket => {
+    socket.emit("connectionStatus", { status: "SUCCESS" });
 
-export function handleConnection(socket) {
-  // console.log("Connection established!");
+    socket.on("createRoom", response => {
+      const roomID = generateRoomID(rooms);
+      const room = {
+        roomID,
+        players: {
+          [response.name]: {
+            name: response.name
+          }
+        }
+      };
 
-  socket.emit(
-    "connectionStatus",
-    JSON.stringify({
-      status: "connected"
-    })
-  );
+      rooms[roomID] = room;
+      nameToSocket[response.name] = socket;
 
-  socket.on("createRoom", lobby.createRoom(socket, sockets, rooms));
+      socket.join(roomID);
+      socket.emit("roomStatus", {
+        status: "SUCCESS",
+        players: Object.values(room.players)
+      });
+    });
 
-  socket.on("joinRoom", lobby.joinRoom(socket));
+    socket.on("joinRoom", response => {
+      const { roomID, name } = response;
 
-  socket.on("disconnect", function() {
-    // console.log("Disconnected!");
+      if (!rooms.hasOwnProperty(roomID)) {
+        socket.emit("roomStatus", {
+          status: "FAILURE",
+          reason: "Room does not exist"
+        });
+      } else {
+        const room = {
+          ...rooms[roomID],
+          players: {
+            ...rooms[roomID].players,
+            [name]: {
+              name
+            }
+          }
+        };
+
+        // TODO: Error checking on whether the person's name already exists?
+        nameToSocket[name] = socket;
+
+        socket.join(roomID).emit("roomStatus", {
+          status: "SUCCESS",
+          players: Object.values(room.players)
+        });
+      }
+    });
   });
+
+  return () => io.close();
 }
 
-export function startServer() {
-  io.on("connection", handleConnection);
-  // console.log(`Server listening on ${PORT}`);
-  return () => io.close();
+function generateRoomID(rooms) {
+  let roomID;
+  do {
+    roomID = Math.floor(Math.random() * 10000);
+  } while (rooms.hasOwnProperty(roomID));
+  return roomID;
 }
 
 startServer();
