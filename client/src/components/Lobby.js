@@ -14,8 +14,8 @@ function Lobby({ userName, roomID }) {
     socket.emit("joinRoom", { name: userName, roomID });
 
     socket.on("roomStatus", response => {
-      console.log(response.players);
       if (response.status === "SUCCESS") {
+        console.log(response.players);
         setPlayers(response.players);
       }
     });

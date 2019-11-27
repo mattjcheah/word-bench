@@ -63,6 +63,28 @@ export function startServer() {
         });
       }
     });
+
+    socket.on("disconnecting", () => {
+      Object.keys(socket.rooms).forEach(roomID => {
+        if (rooms.hasOwnProperty(roomID)) {
+          console.log("socketid", socket.id);
+          const { [socket.id]: omit, ...players } = rooms[roomID].players;
+          const room = {
+            ...rooms[roomID],
+            players
+          };
+
+          rooms[roomID] = room;
+          console.log(room);
+
+          socket.to(roomID).emit("roomStatus", {
+            status: "SUCCESS",
+            roomID,
+            players: Object.values(room.players)
+          });
+        }
+      });
+    });
   });
 
   return () => io.close();
