@@ -1,11 +1,45 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { getQuote } from "./Helper";
 import "../styles.css";
+import { connectToServer } from "../services/socket";
 
-const ROOM_ID = "/fog2ka";
+function Landing({ setUserName }) {
+  const [stage, setStage] = useState("initial");
 
-const InitialLanding = props => {
+  const quoteObject = getQuote();
+
+  return (
+    <div className="landingContainer">
+      <div className="landingTitle">Welcome to WordBench</div>
+      <LandingStage
+        stage={stage}
+        setStage={setStage}
+        setUserName={setUserName}
+      />
+      <p className="aboutInfo">{quoteObject.quote}</p>
+      <br />
+      <p className="aboutInfo">
+        <strong>{quoteObject.author}</strong>
+      </p>
+    </div>
+  );
+}
+
+function LandingStage({ stage, setStage, setUserName }) {
+  switch (stage) {
+    case "initial":
+      return <InitialLanding setStage={setStage} />;
+    case "newGame":
+      return <NewGameLanding setStage={setStage} setUserName={setUserName} />;
+    case "joinGame":
+      return <JoinGameLanding setStage={setStage} setUserName={setUserName} />;
+    default:
+      return <InitialLanding />;
+  }
+}
+
+function InitialLanding(props) {
   const { setStage } = props;
   return (
     <div>
@@ -19,16 +53,15 @@ const InitialLanding = props => {
       </div>
     </div>
   );
-};
+}
 
-const NewGameLanding = props => {
-  const { setStage } = props;
-
-  const [userName, setUserName] = useState("");
+function NewGameLanding({ setStage, setUserName }) {
+  const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
+  const [roomID, setRoomID] = useState(null);
 
   const handleChangeUserName = event => {
-    setUserName(event.target.value);
+    setName(event.target.value);
   };
 
   const handleChangeGameLength = event => {
@@ -36,8 +69,23 @@ const NewGameLanding = props => {
   };
 
   const handleSubmit = () => {
-    console.log("User Name:", userName, ",", "Game Length:", gameLength);
+    setUserName(name);
+
+    const socket = connectToServer();
+
+    socket.emit("createRoom", { name });
+
+    socket.on("roomStatus", response => {
+      if (response.status === "SUCCESS") {
+        setRoomID(response.roomID);
+      }
+      socket.close();
+    });
   };
+
+  if (roomID) {
+    return <Redirect to={`/${roomID}`} />;
+  }
 
   return (
     <div>
@@ -47,7 +95,7 @@ const NewGameLanding = props => {
             type="text"
             name="user_name"
             placeholder="Enter your name..."
-            value={userName}
+            value={name}
             onChange={handleChangeUserName}
             className="inputField"
           />
@@ -65,37 +113,31 @@ const NewGameLanding = props => {
             />
           </div>
         </div>
-        <Link
-          to={ROOM_ID}
-          className="landingButton"
-          onClick={() => handleSubmit()}
-        >
+        <button className="landingButton" onClick={handleSubmit}>
           CREATE
-        </Link>
+        </button>
         <button className="landingButton" onClick={() => setStage("initial")}>
           BACK
         </button>
       </div>
     </div>
   );
-};
+}
 
-const JoinGameLanding = props => {
-  const { setStage } = props;
-
-  const [roomNumber, setRoomNumber] = useState("");
-  const [userName, setUserName] = useState("");
+function JoinGameLanding({ setStage, setUserName }) {
+  const [roomID, setRoomID] = useState("");
+  const [name, setName] = useState("");
 
   const handleChangeRoomNumber = event => {
-    setRoomNumber(event.target.value);
+    setRoomID(event.target.value);
   };
 
   const handleChangeUserName = event => {
-    setUserName(event.target.value);
+    setName(event.target.value);
   };
 
   const handleSubmit = () => {
-    console.log("Room Number:", roomNumber, ",", "User Name:", userName);
+    setUserName(name);
   };
 
   return (
@@ -106,7 +148,7 @@ const JoinGameLanding = props => {
             type="text"
             name="room_code"
             placeholder="Enter a room id..."
-            value={roomNumber}
+            value={roomID}
             onChange={handleChangeRoomNumber}
             className="inputField"
           />
@@ -114,16 +156,12 @@ const JoinGameLanding = props => {
             type="text"
             name="user_name"
             placeholder="Enter your name..."
-            value={userName}
+            value={name}
             onChange={handleChangeUserName}
             className="inputField"
           />
         </div>
-        <Link
-          to={ROOM_ID}
-          className="landingButton"
-          onClick={() => handleSubmit()}
-        >
+        <Link to={roomID} className="landingButton" onClick={handleSubmit}>
           JOIN
         </Link>
         <button className="landingButton" onClick={() => setStage("initial")}>
@@ -132,39 +170,6 @@ const JoinGameLanding = props => {
       </div>
     </div>
   );
-};
-
-const LandingStage = props => {
-  const { stage, setStage } = props;
-
-  switch (stage) {
-    case "initial":
-      return <InitialLanding setStage={setStage} />;
-    case "newGame":
-      return <NewGameLanding setStage={setStage} />;
-    case "joinGame":
-      return <JoinGameLanding setStage={setStage} />;
-    default:
-      return <InitialLanding />;
-  }
-};
-
-const Landing = () => {
-  const [stage, setStage] = useState("initial");
-
-  const quoteObject = getQuote();
-
-  return (
-    <div className="landingContainer">
-      <div className="landingTitle">Welcome to WordBench</div>
-      <LandingStage stage={stage} setStage={setStage} />
-      <p className="aboutInfo">{quoteObject.quote}</p>
-      <br />
-      <p className="aboutInfo">
-        <strong>{quoteObject.author}</strong>
-      </p>
-    </div>
-  );
-};
+}
 
 export default Landing;
