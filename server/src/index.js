@@ -14,11 +14,7 @@ export function startServer() {
       const roomID = generateRoomID(rooms);
       const room = {
         roomID,
-        players: {
-          [response.name]: {
-            name: response.name
-          }
-        }
+        players: {}
       };
 
       rooms[roomID] = room;
@@ -27,6 +23,7 @@ export function startServer() {
       socket.join(roomID);
       socket.emit("roomStatus", {
         status: "SUCCESS",
+        roomID,
         players: Object.values(room.players)
       });
     });
@@ -44,20 +41,49 @@ export function startServer() {
           ...rooms[roomID],
           players: {
             ...rooms[roomID].players,
-            [name]: {
-              name
+            [socket.id]: {
+              id: socket.id,
+              name,
+              ready: false
             }
           }
         };
 
+        rooms[roomID] = room;
+
         // TODO: Error checking on whether the person's name already exists?
         nameToSocket[name] = socket;
 
-        socket.join(roomID).emit("roomStatus", {
+        socket.join(roomID);
+
+        io.to(roomID).emit("roomStatus", {
           status: "SUCCESS",
+          roomID,
           players: Object.values(room.players)
         });
       }
+    });
+
+    socket.on("disconnecting", () => {
+      Object.keys(socket.rooms).forEach(roomID => {
+        if (rooms.hasOwnProperty(roomID)) {
+          console.log("socketid", socket.id);
+          const { [socket.id]: omit, ...players } = rooms[roomID].players;
+          const room = {
+            ...rooms[roomID],
+            players
+          };
+
+          rooms[roomID] = room;
+          console.log(room);
+
+          socket.to(roomID).emit("roomStatus", {
+            status: "SUCCESS",
+            roomID,
+            players: Object.values(room.players)
+          });
+        }
+      });
     });
   });
 

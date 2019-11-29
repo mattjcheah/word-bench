@@ -1,29 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles.css";
 import Landing from "./Landing";
-
 import { Switch, Route } from "react-router-dom";
-import Lobby from "./Lobby";
-import ErrorPage from "./ErrorPage";
 import GameRoom from "./GameRoom";
 
 const App = () => {
-  // state = {
-  //   userName: null
-  // };
+  const [userName, setUserName] = useState(null);
 
-  // render() {
   return (
     <Switch>
-      <Route exact path="/" component={Landing} />
       <Route
-        path="/([a-zA-Z0-9_]{6})"
-        render={props => <GameRoom {...props} userName={"Jeff"} />}
+        exact
+        path="/"
+        render={props => <Landing {...props} setUserName={setUserName} />}
       />
-      <Route component={ErrorPage} />
+      <Route
+        path="/:roomID"
+        render={props => <GameRoom {...props} userName={userName} />}
+      />
     </Switch>
   );
-  // }
 };
 
 export default App;
