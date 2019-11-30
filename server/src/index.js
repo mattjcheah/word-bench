@@ -1,4 +1,6 @@
 import socketIO from "socket.io";
+import { generateRoomID } from "./helpers";
+import SocketController from "./SocketController";
 
 const PORT = 5000;
 
@@ -14,7 +16,12 @@ export function startServer() {
       const roomID = generateRoomID(rooms);
       const room = {
         roomID,
-        players: {}
+        players: {
+          [socket.id]: {
+            id: socket.id,
+            name: response.name
+          }
+        }
       };
 
       rooms[roomID] = room;
@@ -43,8 +50,7 @@ export function startServer() {
             ...rooms[roomID].players,
             [socket.id]: {
               id: socket.id,
-              name,
-              ready: false
+              name
             }
           }
         };
@@ -67,7 +73,6 @@ export function startServer() {
     socket.on("disconnecting", () => {
       Object.keys(socket.rooms).forEach(roomID => {
         if (rooms.hasOwnProperty(roomID)) {
-          console.log("socketid", socket.id);
           const { [socket.id]: omit, ...players } = rooms[roomID].players;
           const room = {
             ...rooms[roomID],
@@ -75,7 +80,6 @@ export function startServer() {
           };
 
           rooms[roomID] = room;
-          console.log(room);
 
           socket.to(roomID).emit("roomStatus", {
             status: "SUCCESS",
@@ -88,14 +92,6 @@ export function startServer() {
   });
 
   return () => io.close();
-}
-
-function generateRoomID(rooms) {
-  let roomID;
-  do {
-    roomID = Math.floor(Math.random() * 10000);
-  } while (rooms.hasOwnProperty(roomID));
-  return roomID;
 }
 
 startServer();
