@@ -36,12 +36,12 @@ describe("Sockets", () => {
       socket.on("roomStatus", response => {
         expect(response.status).toEqual("SUCCESS");
         expect(response.roomID).toEqual("0");
-        expect(response.players).toEqual([
-          {
+        expect(response.players).toEqual({
+          [socket.id]: {
             id: socket.id,
             name: "CREATE TEST"
           }
-        ]);
+        });
 
         socket.close();
         done();
@@ -65,16 +65,16 @@ describe("Sockets", () => {
 
       socket2.on("roomStatus", response => {
         expect(response.status).toEqual("SUCCESS");
-        expect(response.players).toEqual([
-          {
+        expect(response.players).toEqual({
+          [socket1.id]: {
             id: socket1.id,
             name: "CREATE TEST"
           },
-          {
+          [socket2.id]: {
             id: socket2.id,
             name: "JOIN TEST 1"
           }
-        ]);
+        });
 
         socket1.close();
         socket2.close();
@@ -93,6 +93,36 @@ describe("Sockets", () => {
 
         socket.close();
         done();
+      });
+    });
+  });
+
+  describe("disconnecting", () => {
+    it("should leave rooms before disconnecting", done => {
+      const socket1 = socketIO("http://localhost:5000");
+      const socket2 = socketIO("http://localhost:5000");
+
+      socket1.emit("createRoom", { name: "disconnect test 1" });
+
+      socket1.on("roomStatus", () => {
+        socket2.emit("joinRoom", { roomID: "0", name: "disconnect test 2" });
+        socket1.close();
+
+        socket2.on("roomStatus", response => {
+          if (socket1.disconnected) {
+            expect(response.status).toEqual("SUCCESS");
+            expect(response.roomID).toEqual("0");
+            expect(response.players).toEqual({
+              [socket2.id]: {
+                id: socket2.id,
+                name: "disconnect test 2"
+              }
+            });
+
+            socket2.close();
+            done();
+          }
+        });
       });
     });
   });
