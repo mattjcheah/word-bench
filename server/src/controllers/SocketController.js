@@ -24,6 +24,14 @@ class SocketController {
       name
     });
 
+    if (!room) {
+      this.socket.emit("roomStatus", {
+        status: "FAILURE",
+        reason: "Room does not exist"
+      });
+      return;
+    }
+
     this.socket.join(roomID);
 
     this.socket.to(roomID).emit("roomStatus", {
