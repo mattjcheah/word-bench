@@ -33,9 +33,10 @@ jest.mock("../helpers", () => ({
 describe("SocketController", () => {
   let fakeSocket;
   let socketController;
-  let roomEmit = jest.fn();
+  let roomEmit;
 
   beforeEach(() => {
+    roomEmit = jest.fn();
     fakeSocket = {
       id: "test id",
       on: jest.fn(),
@@ -75,6 +76,7 @@ describe("SocketController", () => {
     it("should emit the new room to all room members", () => {
       expect(socketController.socket.to).toHaveBeenCalledWith("0");
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
+        status: "SUCCESS",
         roomID: "0",
         players: {
           "test id": {
@@ -110,6 +112,7 @@ describe("SocketController", () => {
     it("should emit the new room to all room members", () => {
       expect(socketController.socket.to).toHaveBeenCalledWith("0");
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
+        status: "SUCCESS",
         roomID: "0",
         players: {
           hostID: {

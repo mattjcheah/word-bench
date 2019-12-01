@@ -6,16 +6,19 @@ class SocketController {
     this.socket = socket;
   }
 
-  createRoom({ name }) {
+  createRoom = ({ name }) => {
     const roomID = generateRoomID(Rooms);
     const room = Rooms.add(roomID, { id: this.socket.id, name });
 
     this.socket.join(roomID);
 
-    this.socket.to(roomID).emit("roomStatus", room);
-  }
+    this.socket.to(roomID).emit("roomStatus", {
+      status: "SUCCESS",
+      ...room
+    });
+  };
 
-  joinRoom({ roomID, name }) {
+  joinRoom = ({ roomID, name }) => {
     const room = Rooms.findOneAndAddPlayer(roomID, {
       id: this.socket.id,
       name
@@ -23,8 +26,11 @@ class SocketController {
 
     this.socket.join(roomID);
 
-    this.socket.to(roomID).emit("roomStatus", room);
-  }
+    this.socket.to(roomID).emit("roomStatus", {
+      status: "SUCCESS",
+      ...room
+    });
+  };
 }
 
 export default SocketController;
