@@ -28,6 +28,20 @@ jest.mock("../models/Rooms", () => ({
       };
     }
     return undefined;
+  }),
+  findOneAndRemovePlayer: jest.fn(roomID => {
+    if (roomID === "0") {
+      return {
+        roomID: "0",
+        players: {
+          hostID: {
+            id: "hostID",
+            name: "host"
+          }
+        }
+      };
+    }
+    return undefined;
   })
 }));
 
@@ -163,7 +177,23 @@ describe("SocketController", () => {
     });
 
     it("should leave rooms that it is in", () => {
-      expect(socketController.socket.leave).toHaveBeenCalledWith("0");
+      expect(Rooms.findOneAndRemovePlayer).toHaveBeenCalledWith("0", {
+        id: "test id"
+      });
+    });
+
+    it("should emit to the room the new room", () => {
+      expect(socketController.server.to).toHaveBeenCalledWith("0");
+      expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
+        status: "SUCCESS",
+        roomID: "0",
+        players: {
+          hostID: {
+            id: "hostID",
+            name: "host"
+          }
+        }
+      });
     });
   });
 });

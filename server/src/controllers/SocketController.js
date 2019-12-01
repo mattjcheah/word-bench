@@ -43,7 +43,12 @@ class SocketController {
 
   disconnecting = () => {
     Object.keys(this.socket.rooms).forEach(roomID => {
-      this.socket.leave(roomID);
+      const room = Rooms.findOneAndRemovePlayer(roomID, { id: this.socket.id });
+
+      this.server.to(roomID).emit("roomStatus", {
+        status: "SUCCESS",
+        ...room
+      });
     });
   };
 }
