@@ -200,5 +200,7 @@ describe("Rooms", () => {
         expect(Rooms.rooms).toEqual({});
       });
     });
+
+    // TODO: Test to check error if given player does not exist
   });
 });
