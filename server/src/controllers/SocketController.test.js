@@ -52,7 +52,9 @@ describe("SocketController", () => {
       id: "test id",
       on: jest.fn(),
       join: jest.fn(),
-      emit: jest.fn()
+      leave: jest.fn(),
+      emit: jest.fn(),
+      rooms: { "0": "0" }
     };
     socketController = new SocketController(fakeServer, fakeSocket);
   });
@@ -151,6 +153,17 @@ describe("SocketController", () => {
           }
         );
       });
+    });
+  });
+
+  describe("disconnect", () => {
+    beforeEach(() => {
+      socketController.createRoom({ name: "disconnect test" });
+      socketController.disconnect();
+    });
+
+    it("should leave rooms that it is in", () => {
+      expect(socketController.socket.leave).toHaveBeenCalledWith("0");
     });
   });
 });
