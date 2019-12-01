@@ -159,7 +159,7 @@ describe("SocketController", () => {
   describe("disconnect", () => {
     beforeEach(() => {
       socketController.createRoom({ name: "disconnect test" });
-      socketController.disconnect();
+      socketController.disconnecting();
     });
 
     it("should leave rooms that it is in", () => {

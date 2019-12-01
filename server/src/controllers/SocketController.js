@@ -41,7 +41,7 @@ class SocketController {
     });
   };
 
-  disconnect = () => {
+  disconnecting = () => {
     Object.keys(this.socket.rooms).forEach(roomID => {
       this.socket.leave(roomID);
     });
