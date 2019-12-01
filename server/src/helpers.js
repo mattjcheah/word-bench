@@ -1,4 +1,4 @@
-function generateRoomID(rooms) {
+function generateRoomID(roomsModel) {
   let roomID;
   do {
     roomID = Math.floor(Math.random() * 10000);
