@@ -36,25 +36,32 @@ jest.mock("../helpers", () => ({
 }));
 
 describe("SocketController", () => {
+  let fakeServer;
   let fakeSocket;
   let socketController;
   let roomEmit;
 
   beforeEach(() => {
     roomEmit = jest.fn();
-    fakeSocket = {
-      id: "test id",
-      on: jest.fn(),
-      join: jest.fn(),
-      emit: jest.fn(),
+    fakeServer = {
       to: jest.fn(() => ({
         emit: roomEmit
       }))
     };
-    socketController = new SocketController(fakeSocket);
+    fakeSocket = {
+      id: "test id",
+      on: jest.fn(),
+      join: jest.fn(),
+      emit: jest.fn()
+    };
+    socketController = new SocketController(fakeServer, fakeSocket);
   });
 
   describe("constructor", () => {
+    it("should initialise a server variable", () => {
+      expect(socketController.server).toEqual(fakeServer);
+    });
+
     it("should initialise a socket variable", () => {
       expect(socketController.socket).toEqual(fakeSocket);
     });
@@ -80,7 +87,7 @@ describe("SocketController", () => {
     });
 
     it("should emit the new room to all room members", () => {
-      expect(socketController.socket.to).toHaveBeenCalledWith("0");
+      expect(socketController.server.to).toHaveBeenCalledWith("0");
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
         status: "SUCCESS",
         roomID: "0",
@@ -115,7 +122,7 @@ describe("SocketController", () => {
       });
 
       it("should emit the new room to all room members", () => {
-        expect(socketController.socket.to).toHaveBeenCalledWith("0");
+        expect(socketController.server.to).toHaveBeenCalledWith("0");
         expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
           status: "SUCCESS",
           roomID: "0",

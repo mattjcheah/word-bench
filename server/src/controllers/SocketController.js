@@ -2,7 +2,8 @@ import { generateRoomID } from "../helpers";
 import Rooms from "../models/Rooms";
 
 class SocketController {
-  constructor(socket) {
+  constructor(server, socket) {
+    this.server = server;
     this.socket = socket;
   }
 
@@ -12,7 +13,7 @@ class SocketController {
 
     this.socket.join(roomID);
 
-    this.socket.to(roomID).emit("roomStatus", {
+    this.server.to(roomID).emit("roomStatus", {
       status: "SUCCESS",
       ...room
     });
@@ -34,7 +35,7 @@ class SocketController {
 
     this.socket.join(roomID);
 
-    this.socket.to(roomID).emit("roomStatus", {
+    this.server.to(roomID).emit("roomStatus", {
       status: "SUCCESS",
       ...room
     });
