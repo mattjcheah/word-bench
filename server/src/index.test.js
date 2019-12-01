@@ -54,7 +54,7 @@ describe("Sockets", () => {
     beforeAll(done => {
       socket1 = socketIO("http://localhost:5000");
       socket1.emit("createRoom", { name: "CREATE TEST" });
-      socket1.on("roomStatus", response => {
+      socket1.on("roomStatus", () => {
         done();
       });
     });
