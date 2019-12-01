@@ -25,12 +25,19 @@ class Rooms {
   }
 
   static findOneAndUpdate(roomID, room) {
+    if (!Rooms.hasRoom(roomID)) {
+      return undefined;
+    }
     Rooms.rooms[roomID] = room;
     return room;
   }
 
   static findOneAndAddPlayer(roomID, { id, name }) {
     const room = Rooms.findOne(roomID);
+    if (!room) {
+      return undefined;
+    }
+
     const newRoom = {
       ...room,
       players: {
@@ -47,6 +54,10 @@ class Rooms {
 
   static findOneAndRemovePlayer(roomID, { id }) {
     const room = Rooms.findOne(roomID);
+    if (!room) {
+      return undefined;
+    }
+
     // eslint-disable-next-line no-unused-vars
     const { [id]: omit, ...players } = room.players;
     const newRoom = {
