@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { getQuote } from "./Helper";
-import "../styles.css";
+import "../styles.scss";
 
 const ROOM_ID = "/fog2ka";
 

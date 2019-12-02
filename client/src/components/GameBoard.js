@@ -1,5 +1,5 @@
-import React from "react";
-import "../styles.css";
+import React, { useState } from "react";
+import "../styles.scss";
 
 const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -113,22 +113,37 @@ const PlayerInput = () => {
 
 const OpponentList = props => {
   const { opponents } = props;
+  opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
 
   return (
-    <div className="opponentList">
-      {opponents.map(opponent => {
+    <ul class="skill-list">
+      {opponents.map((opponent, ind) => {
+        const colourIndex = (ind % 4) + 1;
+        const colourClass = "skill-" + colourIndex;
         return (
-          <div className="opponentSingleContainer">
-            <div className="opponentName">{opponent.name}</div>
-            <div className="opponentCompletion">{opponent.completion}</div>
-          </div>
+          <li class="skill">
+            <h3>{opponent.name}</h3>
+            <progress
+              class={colourClass}
+              max="100"
+              value={opponent.completion}
+            />
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 };
 
 const GameBoard = () => {
+  const [opponents, setOpponents] = useState([
+    { name: "Max", completion: "47" },
+    { name: "Matt", completion: "82" },
+    { name: "Julian", completion: "65" },
+    { name: "Name", completion: "21" },
+    { name: "Jeff", completion: "90" }
+  ]);
+
   return (
     <div className="gameBoardContainer">
       <div className="leftSideMain">
@@ -147,13 +162,7 @@ const GameBoard = () => {
         </div>
         <div className="opponentsContainer">
           <p className="sideBarTitle">PLAYERS</p>
-          <OpponentList
-            opponents={[
-              { name: "player1", completion: "81%" },
-              { name: "player2", completion: "63%" },
-              { name: "player3", completion: "58%" }
-            ]}
-          />
+          <OpponentList opponents={opponents} />
         </div>
       </div>
     </div>

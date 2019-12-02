@@ -88,6 +88,8 @@ body {
   font-size: calc(12px + 0.2vw);
   width: 80%;
   margin: 0 auto;
+  opacity: 0;
+  animation: fadeInUp 1s ease-in-out 0s forwards;
 }
 
 .gameBoardContainer {
@@ -165,7 +167,7 @@ body {
 
 .opponentsContainer {
   border-top: 1px solid var(--oxblood);
-  background-color: lightskyblue;
+  // background-color: lightskyblue;
   flex: 1;
   overflow: scroll;
 }
@@ -200,6 +202,8 @@ body {
   margin: 10px;
 }
 
+/* PLAYER INPUT STYLES */
+
 .field {
   display: flex;
   width: 50%;
@@ -232,4 +236,101 @@ body {
   background-color: var(--darktan);
   color: #fff;
   border: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+/* PROGRESS BAR STYLES */
+
+progress,
+progress[role] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background-size: auto;
+  height: 95px;
+  width: 100%;
+}
+
+// The unordered list
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 1em;
+}
+
+// The list item
+.skill {
+  margin-bottom: 1em;
+  position: relative;
+  h3 {
+    color: #fff;
+    left: 1em;
+    line-height: 1;
+    position: absolute;
+    top: 1em;
+  }
+  ::-webkit-progress-value {
+    -webkit-animation: bar-fill 2s;
+    width: 0px;
+  }
+}
+
+// Style the bar colors
+.skill-1::-webkit-progress-value {
+  background: #ff9e2c;
+}
+
+.skill-1::-moz-progress-bar {
+  background: #ff9e2c;
+}
+
+.skill-2::-webkit-progress-value {
+  background: #4ecdc4;
+}
+
+.skill-2::-moz-progress-bar {
+  background: #4ecdc4;
+}
+
+.skill-3::-webkit-progress-value {
+  background: #ff6b6b;
+}
+
+.skill-3::-moz-progress-bar {
+  background: #ff6b6b;
+}
+
+.skill-4::-webkit-progress-value {
+  background: #5fce64;
+}
+
+.skill-4::-moz-progress-bar {
+  background: #5fce64;
+}
+
+// Animation Keyframes
+@-webkit-keyframes bar-fill {
+  0% {
+    width: 0;
+  }
+}
+
+@keyframes bar-fill {
+  0% {
+    width: 0;
+  }
 }

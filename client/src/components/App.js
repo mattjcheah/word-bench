@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles.css";
+import "../styles.scss";
 import Landing from "./Landing";
 
 import { Switch, Route } from "react-router-dom";
