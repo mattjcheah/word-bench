@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../styles.scss";
+import Timer from "./Timer";
 
 const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -144,6 +145,13 @@ const GameBoard = () => {
     { name: "Jeff", completion: "90" }
   ]);
 
+  const minutes = 0;
+  const seconds = 11;
+
+  const gameEndTime = new Date();
+  gameEndTime.setMinutes(gameEndTime.getMinutes() + minutes);
+  gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
+
   return (
     <div className="gameBoardContainer">
       <div className="leftSideMain">
@@ -158,7 +166,7 @@ const GameBoard = () => {
       <div className="rightSideMain">
         <div className="timerContainer">
           <p className="sideBarTitle">TIME REMAINING</p>
-          <p className="timer">3:19</p>
+          <Timer gameEndTime={gameEndTime} />
         </div>
         <div className="opponentsContainer">
           <p className="sideBarTitle">PLAYERS</p>
