@@ -60,9 +60,4 @@ const quotes = [
   }
 ];
 
-const gameStages = {
-  lobby: "lobby",
-  game: "game"
-};
-
-export { quotes, gameStages };
+export { quotes };
