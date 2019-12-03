@@ -1,14 +1,20 @@
+import generateBoard from "./generateBoard";
+
+jest.mock("./generateBoard", () => () => ({
+  height: 0,
+  width: 0,
+  words: []
+}));
+
 class Rooms {
   static rooms = {};
 
   static createRoom({ roomID, id, name }) {
+    const board = generateBoard();
+
     return {
       roomID,
-      board: {
-        height: 0,
-        width: 0,
-        words: []
-      },
+      board,
       players: {
         [id]: {
           id,
