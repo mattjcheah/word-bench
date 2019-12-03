@@ -3,21 +3,10 @@ import Timer from "./Timer";
 
 import { dummy_board_data } from "./Constants";
 
+import { parseBoardPayload } from "./Helpers";
+
 import "../components/stars.scss";
 import "../components/bokeh.scss";
-
-const BoardSquare = () => {
-  return (
-    <div
-      style={{
-        height: "2vw",
-        width: "2vw",
-        border: "1px solid grey",
-        display: "inline-block"
-      }}
-    />
-  );
-};
 
 const Board = () => {
   const board_width = dummy_board_data.board.width;
@@ -28,6 +17,8 @@ const Board = () => {
 
   const scaled_width = 4 * dummy_board_data.board.width;
   const scaled_height = 4 * dummy_board_data.board.height;
+
+  parseBoardPayload(dummy_board_data);
 
   return (
     <div
@@ -47,16 +38,17 @@ const Board = () => {
     >
       {Array(board_width)
         .fill(0)
-        .map((x, i) => {
+        .map((x, indx) => {
           return Array(board_height)
             .fill(0)
-            .map((y, i) => {
+            .map((y, indy) => {
               return (
                 <div
                   style={{
                     backgroundColor: "lightgrey",
                     border: "1px solid grey"
                   }}
+                  key={(indx, indy)}
                 >
                   <div
                     style={{
@@ -83,9 +75,9 @@ const LetterBench = () => {
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
-        {letters.map(letter => {
+        {letters.map((letter, ind) => {
           return (
-            <div className="letterTileContainer">
+            <div className="letterTileContainer" key={letter + ind}>
               <div className="letterTileInner">{letter}</div>
             </div>
           );
@@ -116,7 +108,7 @@ const LetterBench = () => {
 
 const PlayerInput = () => {
   return (
-    <div class="field" id="searchform">
+    <div className="field" id="searchform">
       <input type="text" id="searchterm" placeholder="Enter a Word..." />
       <button type="button" id="search">
         GO
@@ -130,15 +122,15 @@ const OpponentList = props => {
   opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
 
   return (
-    <ul class="skill-list">
+    <ul className="skill-list">
       {opponents.map((opponent, ind) => {
         const colourIndex = (ind % 4) + 1;
         const colourClass = "skill-" + colourIndex;
         return (
-          <li class="skill">
+          <li className="skill" key={opponent + ind}>
             <h3>{opponent.name}</h3>
             <progress
-              class={colourClass}
+              className={colourClass}
               max="100"
               value={opponent.completion}
             />

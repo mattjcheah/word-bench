@@ -42,3 +42,7 @@ export function validateJoinGame(roomNumber, userName) {
   }
   return [true, "ok"];
 }
+
+export function parseBoardPayload(payload) {
+  console.log(payload);
+}
