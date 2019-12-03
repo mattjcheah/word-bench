@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Timer from "./Timer";
 
+import "../components/stars.scss";
+
+import "../components/bokeh.scss";
+
 const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
@@ -37,6 +41,7 @@ const Board = () => {
   return (
     <div
       style={{
+        zIndex: "999",
         width: "48vw",
         height: "36vw",
         backgroundColor: "lightgrey",
@@ -54,7 +59,10 @@ const Board = () => {
         return rows.map(y => {
           return (
             <div
-              style={{ backgroundColor: "lightgrey", border: "1px solid grey" }}
+              style={{
+                backgroundColor: "lightgrey",
+                border: "1px solid grey"
+              }}
             >
               <div
                 style={{
@@ -72,7 +80,6 @@ const Board = () => {
         });
       })}
     </div>
-    // </div>
   );
 };
 
@@ -80,6 +87,9 @@ const LetterBench = () => {
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
+        <div className="letterTileContainer">
+          <div className="letterTileInner">A</div>
+        </div>
         <div className="letterTileContainer">
           <div className="letterTileInner">A</div>
         </div>
@@ -152,26 +162,42 @@ const GameBoard = () => {
   gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
 
   return (
-    <div className="gameBoardContainer">
-      <div className="leftSideMain">
-        <div className="boardContainer">
-          <Board />
+    <div className="background">
+      <div id="stars2" />
+
+      <div className="gameBoardContainer">
+        <div className="leftSideMain">
+          <div className="boardContainer">
+            <Board />
+          </div>
+          <div className="playerInputContainer">
+            <LetterBench />
+            <PlayerInput />
+          </div>
         </div>
-        <div className="playerInputContainer">
-          <LetterBench />
-          <PlayerInput />
+        <div className="rightSideMain">
+          <div className="timerContainer">
+            <p className="sideBarTitle">TIME REMAINING</p>
+            <Timer gameEndTime={gameEndTime} />
+          </div>
+          <div className="opponentsContainer">
+            <p className="sideBarTitle">PLAYERS</p>
+            <OpponentList opponents={opponents} />
+          </div>
         </div>
       </div>
-      <div className="rightSideMain">
-        <div className="timerContainer">
-          <p className="sideBarTitle">TIME REMAINING</p>
-          <Timer gameEndTime={gameEndTime} />
-        </div>
-        <div className="opponentsContainer">
-          <p className="sideBarTitle">PLAYERS</p>
-          <OpponentList opponents={opponents} />
-        </div>
-      </div>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   );
 };

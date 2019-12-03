@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Landing from "./Landing";
 import { Switch, Route } from "react-router-dom";
 import GameRoom from "./GameRoom";
+import GameBoard from "./GameBoard";
 
 const App = () => {
   const [userName, setUserName] = useState(null);
@@ -16,6 +17,7 @@ const App = () => {
       <Route
         path="/:roomID"
         render={props => <GameRoom {...props} userName={userName} />}
+        // render={props => <GameBoard />}
       />
     </Switch>
   );

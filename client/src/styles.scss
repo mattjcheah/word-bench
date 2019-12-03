@@ -126,7 +126,7 @@ body {
 .boardContainer {
   border-bottom: 1px solid var(--oxblood);
   /* height: 200px; */
-  background-color: lightseagreen;
+  background-image: linear-gradient(#1b2735, #233244);
   /* height: 76vh; */
   flex: 1;
   overflow: scroll;
@@ -134,9 +134,6 @@ body {
 
 .playerInputContainer {
   border-top: 1px solid var(--oxblood);
-  /* background-color: grey; */
-  /* flex: 1; */
-  /* min-height: 150px; */
   height: 155px;
   display: flex;
   flex-direction: column;
@@ -144,14 +141,10 @@ body {
 }
 
 .letterBench {
-  /* border-bottom: 1px solid lightsalmon; */
   margin: 0 auto;
-  /* flex: 1; */
 }
 
 .letterTileContainer {
-  /* height: calc(30px + 2vw);
-  width: calc(30px + 2vw); */
   height: 70px;
   width: 70px;
   background-color: lightgoldenrodyellow;
@@ -163,7 +156,6 @@ body {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  /* font-size: calc(16px + 2vw); */
   font-size: 40px;
 }
 
