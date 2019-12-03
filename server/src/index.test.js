@@ -39,7 +39,8 @@ describe("Sockets", () => {
         expect(response.players).toEqual({
           [socket.id]: {
             id: socket.id,
-            name: "CREATE TEST"
+            name: "CREATE TEST",
+            completedWords: []
           }
         });
 
@@ -68,11 +69,13 @@ describe("Sockets", () => {
         expect(response.players).toEqual({
           [socket1.id]: {
             id: socket1.id,
-            name: "CREATE TEST"
+            name: "CREATE TEST",
+            completedWords: []
           },
           [socket2.id]: {
             id: socket2.id,
-            name: "JOIN TEST 1"
+            name: "JOIN TEST 1",
+            completedWords: []
           }
         });
 
@@ -115,7 +118,8 @@ describe("Sockets", () => {
             expect(response.players).toEqual({
               [socket2.id]: {
                 id: socket2.id,
-                name: "disconnect test 2"
+                name: "disconnect test 2",
+                completedWords: []
               }
             });
 

@@ -1,16 +1,26 @@
 class Rooms {
   static rooms = {};
 
-  static add(roomID, { id, name }) {
-    const room = {
+  static createRoom({ roomID, id, name }) {
+    return {
       roomID,
+      board: {
+        height: 0,
+        width: 0,
+        words: []
+      },
       players: {
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
+  }
+
+  static add(roomID, { id, name }) {
+    const room = Rooms.createRoom({ roomID, id, name });
 
     Rooms.rooms[roomID] = room;
     return room;
@@ -44,7 +54,8 @@ class Rooms {
         ...room.players,
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
