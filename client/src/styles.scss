@@ -118,6 +118,7 @@ body {
   background-color: lightseagreen;
   /* height: 76vh; */
   flex: 1;
+  overflow: scroll;
 }
 
 .playerInputContainer {
@@ -125,7 +126,7 @@ body {
   /* background-color: grey; */
   /* flex: 1; */
   /* min-height: 150px; */
-  height: 150px;
+  height: 160px;
   display: flex;
   flex-direction: column;
 }
@@ -139,8 +140,8 @@ body {
 .letterTileContainer {
   /* height: calc(30px + 2vw);
   width: calc(30px + 2vw); */
-  height: 60px;
-  width: 60px;
+  height: 70px;
+  width: 70px;
   background-color: lightgoldenrodyellow;
   margin: 10px;
 }
