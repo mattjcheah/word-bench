@@ -31,7 +31,7 @@ export function validateJoinGame(roomNumber, userName) {
   if (!roomNumber) {
     return [false, "Please enter a room number"];
   }
-  if (roomNumber.length < 6) {
+  if (roomNumber.length !== 4) {
     return [false, "Invalid room number format"];
   }
   if (!userName) {

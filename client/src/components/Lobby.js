@@ -12,8 +12,7 @@ function Lobby({ userName, roomID }) {
 
     socket.on("roomStatus", response => {
       if (response.status === "SUCCESS") {
-        console.log(response.players);
-        setPlayers(response.players);
+        setPlayers(Object.values(response.players));
       }
     });
   }, [userName, roomID]);

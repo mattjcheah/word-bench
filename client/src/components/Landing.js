@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
-import { validateNewGame, validateJoinGame, getQuote } from "./Helper";
+import { Link, Redirect } from "react-router-dom";
+import { validateNewGame, validateJoinGame, getQuote } from "./Helpers";
 import { connectToServer } from "../services/socket";
 import "./tooltips.scss";
 
@@ -173,9 +173,13 @@ function JoinGameLanding({ setStage, setUserName }) {
           />
         </div>
         {isValid ? (
-          <button className="landingButton" onClick={handleSubmit}>
+          <Link
+            to={`/${roomID}`}
+            className="landingButton"
+            onClick={handleSubmit}
+          >
             JOIN
-          </button>
+          </Link>
         ) : (
           <span tooltip={validMessage} flow="left">
             <button className=" disabledButton" disabled={true}>
