@@ -26,7 +26,7 @@ const Board = () => {
         zIndex: "999",
         width: scaled_width,
         height: scaled_height,
-        backgroundColor: "lightgrey",
+        // backgroundColor: "lightgrey",
         // margin: "0 auto",
         // position: "relative",
         // top: "50%",
@@ -45,8 +45,10 @@ const Board = () => {
               return (
                 <div
                   style={{
-                    backgroundColor: "lightgrey",
-                    border: "1px solid grey"
+                    backgroundColor: "#e5dad6",
+                    // border: "1px solid grey"
+                    margin: "2px",
+                    borderRadius: "3px"
                   }}
                   key={(indx, indy)}
                 >
