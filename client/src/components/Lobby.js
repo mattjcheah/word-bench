@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { getQuote } from "./Helper";
+import { getQuote } from "./Helpers";
 import "../styles.scss";
 
 const ROOM_ID = "fog2ka";

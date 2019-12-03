@@ -84,6 +84,17 @@ body {
   outline: none;
 }
 
+.disabledButton {
+  padding: 10px 25px;
+  margin: 5px;
+  font-size: calc(14px + 0.3vw);
+  text-decoration: none;
+  border-radius: 4px;
+  background: grey;
+  color: darkgrey;
+  border: 1px solid grey;
+}
+
 .aboutInfo {
   font-size: calc(12px + 0.2vw);
   width: 80%;
@@ -126,9 +137,10 @@ body {
   /* background-color: grey; */
   /* flex: 1; */
   /* min-height: 150px; */
-  height: 160px;
+  height: 155px;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 }
 
 .letterBench {
