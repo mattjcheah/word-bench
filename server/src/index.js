@@ -1,101 +1,25 @@
 import socketIO from "socket.io";
+import SocketController from "./controllers/SocketController";
 
 const PORT = 5000;
 
-const io = socketIO(PORT);
+const server = socketIO(PORT);
 
 export function startServer() {
-  const nameToSocket = {};
-  const rooms = {};
-  io.on("connection", socket => {
+  server.on("connection", socket => {
+    socket.leave(socket.id);
     socket.emit("connectionStatus", { status: "SUCCESS" });
 
-    socket.on("createRoom", response => {
-      const roomID = generateRoomID(rooms);
-      const room = {
-        roomID,
-        players: {}
-      };
+    const socketController = new SocketController(server, socket);
 
-      rooms[roomID] = room;
-      nameToSocket[response.name] = socket;
+    socket.on("createRoom", socketController.createRoom);
 
-      socket.join(roomID);
-      socket.emit("roomStatus", {
-        status: "SUCCESS",
-        roomID,
-        players: Object.values(room.players)
-      });
-    });
+    socket.on("joinRoom", socketController.joinRoom);
 
-    socket.on("joinRoom", response => {
-      const { roomID, name } = response;
-
-      if (!rooms.hasOwnProperty(roomID)) {
-        socket.emit("roomStatus", {
-          status: "FAILURE",
-          reason: "Room does not exist"
-        });
-      } else {
-        const room = {
-          ...rooms[roomID],
-          players: {
-            ...rooms[roomID].players,
-            [socket.id]: {
-              id: socket.id,
-              name,
-              ready: false
-            }
-          }
-        };
-
-        rooms[roomID] = room;
-
-        // TODO: Error checking on whether the person's name already exists?
-        nameToSocket[name] = socket;
-
-        socket.join(roomID);
-
-        io.to(roomID).emit("roomStatus", {
-          status: "SUCCESS",
-          roomID,
-          players: Object.values(room.players)
-        });
-      }
-    });
-
-    socket.on("disconnecting", () => {
-      Object.keys(socket.rooms).forEach(roomID => {
-        if (rooms.hasOwnProperty(roomID)) {
-          console.log("socketid", socket.id);
-          const { [socket.id]: omit, ...players } = rooms[roomID].players;
-          const room = {
-            ...rooms[roomID],
-            players
-          };
-
-          rooms[roomID] = room;
-          console.log(room);
-
-          socket.to(roomID).emit("roomStatus", {
-            status: "SUCCESS",
-            roomID,
-            players: Object.values(room.players)
-          });
-        }
-      });
-    });
+    socket.on("disconnecting", socketController.disconnecting);
   });
 
-  return () => io.close();
-}
-
-function generateRoomID(rooms) {
-  let roomID;
-  do {
-    roomID = Math.floor(Math.random() * 10000);
-  } while (rooms.hasOwnProperty(roomID));
-  return roomID;
+  return () => server.close();
 }
 
 startServer();

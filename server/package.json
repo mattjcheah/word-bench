@@ -6,17 +6,24 @@
   "scripts": {
     "start": "node src/index.js",
     "watch": "babel-watch src/index.js",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "lint": "eslint ./src"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.2",
     "@babel/node": "^7.7.0",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.1",
+    "babel-eslint": "^10.0.3",
     "babel-watch": "^7.0.0",
-    "eslint": "^6.6.0",
+    "eslint": "^6.7.1",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "jest": "^24.9.0",
+    "prettier": "^1.19.1",
     "socket.io-client": "^2.3.0"
   },
   "dependencies": {

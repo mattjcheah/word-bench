@@ -1,6 +1,6 @@
 const quotes = [
   {
-    quote: "Unfortunately I’m not looking to relocate to Perth.",
+    quote: "Soz I'm wfh today.",
     author: "Max Philip"
   },
   {
@@ -53,12 +53,11 @@ const quotes = [
   {
     quote: "It does not matter how slowly you go as long as you do not stop.",
     author: "Confucius"
+  },
+  {
+    quote: "We know what we are, but know not what we may be.",
+    author: "William Shakespeare"
   }
 ];
 
-const gameStages = {
-  lobby: "lobby",
-  game: "game"
-};
-
-export { quotes, gameStages };
+export { quotes };

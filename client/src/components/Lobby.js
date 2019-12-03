@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getQuote } from "./Helper";
-import "../styles.css";
-import { gameStages } from "./Constants";
+import { getQuote } from "./Helpers";
 import { connectToServer } from "../services/socket";
 
 function Lobby({ userName, roomID }) {
-  const [stage, setStage] = useState(gameStages.lobby);
   const [players, setPlayers] = useState([]);
 
   useEffect(() => {
@@ -15,8 +12,7 @@ function Lobby({ userName, roomID }) {
 
     socket.on("roomStatus", response => {
       if (response.status === "SUCCESS") {
-        console.log(response.players);
-        setPlayers(response.players);
+        setPlayers(Object.values(response.players));
       }
     });
   }, [userName, roomID]);
