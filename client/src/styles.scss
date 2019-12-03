@@ -1,0 +1,353 @@
+:root {
+  --grain: #e5dad6;
+  --blackboard: #565656;
+  --oxblood: #763240;
+  --tan: #c2a080;
+  --darktan: #997a5e;
+}
+
+body {
+  margin: 0;
+  color: var(--blackboard);
+  background-color: var(--grain);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+.landingContainer {
+  width: 60%;
+  min-width: 350px;
+  max-width: 600px;
+  /* margin: 0 auto; */
+  margin-top: 15vh;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
+}
+
+.landingTitle {
+  font-size: calc(35px + 0.3vw);
+}
+
+.inputFieldContainer {
+  margin-bottom: 20px;
+}
+
+.inputField {
+  width: 60%;
+  padding: 10px;
+  margin: 5px;
+  font-size: calc(14px + 0.3vw);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--blackboard);
+  border: 1px solid var(--darktan);
+}
+
+.inputField:focus {
+  outline: none;
+  border: 1px solid var(--tan);
+}
+
+.inputFieldNumber {
+  /* width: 40px; */
+  width: 25px;
+}
+
+.menuBorderContainer {
+  padding: 40px;
+  margin: 40px;
+  border-top: 1px solid var(--oxblood);
+  border-bottom: 1px solid var(--oxblood);
+}
+
+.landingButton {
+  padding: 10px 25px;
+  margin: 5px;
+  font-size: calc(14px + 0.3vw);
+  text-decoration: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--blackboard);
+  border: 1px solid var(--blackboard);
+}
+
+.landingButton:hover {
+  color: white;
+  background: var(--oxblood);
+  border: 1px solid var(--oxblood);
+  cursor: pointer;
+}
+
+.landingButton:focus {
+  outline: none;
+}
+
+.disabledButton {
+  padding: 10px 25px;
+  margin: 5px;
+  font-size: calc(14px + 0.3vw);
+  text-decoration: none;
+  border-radius: 4px;
+  background: grey;
+  color: darkgrey;
+  border: 1px solid grey;
+}
+
+.aboutInfo {
+  font-size: calc(12px + 0.2vw);
+  width: 80%;
+  margin: 0 auto;
+  opacity: 0;
+  animation: fadeInUp 1s ease-in-out 0s forwards;
+}
+
+.gameBoardContainer {
+  display: flex;
+}
+
+.leftSideMain {
+  width: 75vw;
+  border-right: 1px solid var(--oxblood);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightSideMain {
+  border-left: 1px solid var(--oxblood);
+  height: 100vh;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.boardContainer {
+  border-bottom: 1px solid var(--oxblood);
+  /* height: 200px; */
+  background-color: lightseagreen;
+  /* height: 76vh; */
+  flex: 1;
+  overflow: scroll;
+}
+
+.playerInputContainer {
+  border-top: 1px solid var(--oxblood);
+  /* background-color: grey; */
+  /* flex: 1; */
+  /* min-height: 150px; */
+  height: 155px;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.letterBench {
+  /* border-bottom: 1px solid lightsalmon; */
+  margin: 0 auto;
+  /* flex: 1; */
+}
+
+.letterTileContainer {
+  /* height: calc(30px + 2vw);
+  width: calc(30px + 2vw); */
+  height: 70px;
+  width: 70px;
+  background-color: lightgoldenrodyellow;
+  margin: 10px;
+}
+
+.letterTileInner {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  /* font-size: calc(16px + 2vw); */
+  font-size: 40px;
+}
+
+.playerInput {
+  /* height: auto; */
+  display: inline;
+}
+
+.timerContainer {
+  border-bottom: 1px solid var(--oxblood);
+  /* background-color: lightcoral; */
+  height: 150px;
+}
+
+.opponentsContainer {
+  border-top: 1px solid var(--oxblood);
+  // background-color: lightskyblue;
+  flex: 1;
+  overflow: scroll;
+}
+
+.opponentSingleContainer {
+  height: 50px;
+  margin: 10px 0;
+  background-color: lightgoldenrodyellow;
+  display: flex;
+}
+
+.opponentName {
+  width: 90%;
+}
+
+.opponentCompletion {
+  flex: 1;
+}
+
+.sideBarTitle {
+  margin: 10px;
+  font-size: calc(14px + 0.5vw);
+  font-weight: 900;
+}
+
+.timer {
+  font-size: calc(20px + 1vw);
+  text-align: center;
+}
+
+.timerComplete {
+  color: #e20b0b;
+}
+
+.opponentList {
+  margin: 10px;
+}
+
+/* PLAYER INPUT STYLES */
+
+.field {
+  display: flex;
+  width: 50%;
+  /* min-width: 100px; */
+  margin: 5px auto;
+  height: "100px";
+  flex-direction: row;
+  -moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
+}
+
+.field > input[type="text"],
+.field > button {
+  display: block;
+  font-size: 1.2em;
+  font-weight: 900;
+}
+
+.field > input[type="text"] {
+  flex: 1;
+  padding: 0.6em;
+  border: 0.2em solid var(--darktan);
+  border-left: none;
+  border-top: none;
+}
+
+.field > button {
+  padding: 0.6em 0.8em;
+  background-color: var(--darktan);
+  color: #fff;
+  border: none;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+/* PROGRESS BAR STYLES */
+
+progress,
+progress[role] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  background-size: auto;
+  height: 95px;
+  width: 100%;
+}
+
+// The unordered list
+.skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 1em;
+}
+
+// The list item
+.skill {
+  margin-bottom: 1em;
+  position: relative;
+  h3 {
+    color: #fff;
+    left: 1em;
+    line-height: 1;
+    position: absolute;
+    top: 1em;
+  }
+  ::-webkit-progress-value {
+    -webkit-animation: bar-fill 2s;
+    width: 0px;
+  }
+}
+
+// Style the bar colors
+.skill-1::-webkit-progress-value {
+  background: #ff9e2c;
+}
+
+.skill-1::-moz-progress-bar {
+  background: #ff9e2c;
+}
+
+.skill-2::-webkit-progress-value {
+  background: #4ecdc4;
+}
+
+.skill-2::-moz-progress-bar {
+  background: #4ecdc4;
+}
+
+.skill-3::-webkit-progress-value {
+  background: #ff6b6b;
+}
+
+.skill-3::-moz-progress-bar {
+  background: #ff6b6b;
+}
+
+.skill-4::-webkit-progress-value {
+  background: #5fce64;
+}
+
+.skill-4::-moz-progress-bar {
+  background: #5fce64;
+}
+
+// Animation Keyframes
+@-webkit-keyframes bar-fill {
+  0% {
+    width: 0;
+  }
+}
+
+@keyframes bar-fill {
+  0% {
+    width: 0;
+  }
+}

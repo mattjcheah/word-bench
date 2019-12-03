@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
-import { getQuote } from "./Helper";
-import "../styles.css";
+import { validateNewGame, validateJoinGame, getQuote } from "./Helpers";
 import { connectToServer } from "../services/socket";
+import "./tooltips.scss";
 
 function Landing({ setUserName }) {
   const [stage, setStage] = useState("initial");
@@ -39,8 +39,7 @@ function LandingStage({ stage, setStage, setUserName }) {
   }
 }
 
-function InitialLanding(props) {
-  const { setStage } = props;
+function InitialLanding({ setStage }) {
   return (
     <div>
       <div className="menuBorderContainer">
@@ -59,6 +58,8 @@ function NewGameLanding({ setStage, setUserName }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
   const [roomID, setRoomID] = useState(null);
+
+  const [isValid, validMessage] = validateNewGame(name, gameLength);
 
   const handleChangeUserName = event => {
     setName(event.target.value);
@@ -113,9 +114,17 @@ function NewGameLanding({ setStage, setUserName }) {
             />
           </div>
         </div>
-        <button className="landingButton" onClick={handleSubmit}>
-          CREATE
-        </button>
+        {isValid ? (
+          <button className="landingButton" onClick={handleSubmit}>
+            CREATE
+          </button>
+        ) : (
+          <span tooltip={validMessage} flow="left">
+            <button className=" disabledButton" disabled={true}>
+              CREATE
+            </button>
+          </span>
+        )}
         <button className="landingButton" onClick={() => setStage("initial")}>
           BACK
         </button>
@@ -127,6 +136,8 @@ function NewGameLanding({ setStage, setUserName }) {
 function JoinGameLanding({ setStage, setUserName }) {
   const [roomID, setRoomID] = useState("");
   const [name, setName] = useState("");
+
+  const [isValid, validMessage] = validateJoinGame(roomID, name);
 
   const handleChangeRoomNumber = event => {
     setRoomID(event.target.value);
@@ -161,9 +172,21 @@ function JoinGameLanding({ setStage, setUserName }) {
             className="inputField"
           />
         </div>
-        <Link to={roomID} className="landingButton" onClick={handleSubmit}>
-          JOIN
-        </Link>
+        {isValid ? (
+          <Link
+            to={`/${roomID}`}
+            className="landingButton"
+            onClick={handleSubmit}
+          >
+            JOIN
+          </Link>
+        ) : (
+          <span tooltip={validMessage} flow="left">
+            <button className=" disabledButton" disabled={true}>
+              JOIN
+            </button>
+          </span>
+        )}
         <button className="landingButton" onClick={() => setStage("initial")}>
           BACK
         </button>
