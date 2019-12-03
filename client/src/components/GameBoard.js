@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import Timer from "./Timer";
 
+import { dummy_board_data } from "./Constants";
+
 import "../components/stars.scss";
-
 import "../components/bokeh.scss";
-
-const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-const cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
-const dict = {
-  "1,1": "A",
-  "1,2": "B"
-};
 
 const BoardSquare = () => {
   return (
@@ -27,66 +19,78 @@ const BoardSquare = () => {
   );
 };
 
-const Row = () => {
-  return (
-    <div>
-      {liss.map(l => {
-        return <BoardSquare />;
-      })}
-    </div>
-  );
-};
-
 const Board = () => {
+  const board_width = dummy_board_data.board.width;
+  const board_height = dummy_board_data.board.height;
+
+  const col_class = "4vw ".repeat(board_width);
+  const row_class = "4vw ".repeat(board_height);
+
+  const scaled_width = 4 * dummy_board_data.board.width;
+  const scaled_height = 4 * dummy_board_data.board.height;
+
   return (
     <div
       style={{
         zIndex: "999",
-        width: "48vw",
-        height: "36vw",
+        width: scaled_width,
+        height: scaled_height,
         backgroundColor: "lightgrey",
-        margin: "0 auto",
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
+        // margin: "0 auto",
+        // position: "relative",
+        // top: "50%",
+        // transform: "translateY(-50%)",
         display: "grid",
-        gridTemplateColumns:
-          "3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw",
-        gridTemplateRows: "3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw"
+        gridTemplateColumns: col_class,
+        gridTemplateRows: row_class
       }}
     >
-      {cols.map(x => {
-        return rows.map(y => {
-          return (
-            <div
-              style={{
-                backgroundColor: "lightgrey",
-                border: "1px solid grey"
-              }}
-            >
-              <div
-                style={{
-                  textAlign: "center",
-                  position: "relative",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: "calc(10px + 1vw)"
-                }}
-              >
-                A
-              </div>
-            </div>
-          );
-        });
-      })}
+      {Array(board_width)
+        .fill(0)
+        .map((x, i) => {
+          return Array(board_height)
+            .fill(0)
+            .map((y, i) => {
+              return (
+                <div
+                  style={{
+                    backgroundColor: "lightgrey",
+                    border: "1px solid grey"
+                  }}
+                >
+                  <div
+                    style={{
+                      textAlign: "center",
+                      position: "relative",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      fontSize: "calc(10px + 1vw)"
+                    }}
+                  >
+                    A
+                  </div>
+                </div>
+              );
+            });
+        })}
     </div>
   );
 };
 
 const LetterBench = () => {
+  const letters = dummy_board_data.board.letters;
+
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
+        {letters.map(letter => {
+          return (
+            <div className="letterTileContainer">
+              <div className="letterTileInner">{letter}</div>
+            </div>
+          );
+        })}
+        {/* 
         <div className="letterTileContainer">
           <div className="letterTileInner">A</div>
         </div>
@@ -104,7 +108,7 @@ const LetterBench = () => {
         </div>
         <div className="letterTileContainer">
           <div className="letterTileInner">A</div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
