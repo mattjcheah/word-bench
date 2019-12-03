@@ -1,4 +1,4 @@
-export const quotes = [
+const quotes = [
   {
     quote: "Soz I'm wfh today.",
     author: "Max Philip"
@@ -59,3 +59,10 @@ export const quotes = [
     author: "William Shakespeare"
   }
 ];
+
+const gameStages = {
+  lobby: "lobby",
+  game: "game"
+};
+
+export { quotes, gameStages };

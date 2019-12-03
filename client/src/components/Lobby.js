@@ -1,42 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getQuote } from "./Helpers";
 import "../styles.scss";
+import { connectToServer } from "../services/socket";
 
-const ROOM_ID = "fog2ka";
+function Lobby({ userName, roomID }) {
+  const [players, setPlayers] = useState([]);
 
-const PLAYERS = ["player1", "player2", "player3", "player4"];
+  useEffect(() => {
+    const socket = connectToServer();
+    socket.emit("joinRoom", { name: userName, roomID });
 
-const LobbyList = props => {
-  const { userName } = props;
-
-  return (
-    <div className="menuBorderContainer">
-      <p style={{ fontWeight: "900" }}>Room ID: {ROOM_ID}</p>
-      <br />
-      <p>{userName}</p>
-      {PLAYERS.map(player => {
-        return <p key={player}>{player}</p>;
-      })}
-      <br />
-      <br />
-      <button className="landingButton">READY</button>
-      <Link to="/" className="landingButton">
-        QUIT
-      </Link>
-    </div>
-  );
-};
-
-const Lobby = props => {
-  const { userName } = props;
+    socket.on("roomStatus", response => {
+      if (response.status === "SUCCESS") {
+        console.log(response.players);
+        setPlayers(response.players);
+      }
+    });
+  }, [userName, roomID]);
 
   const quoteObject = getQuote();
 
   return (
     <div className="landingContainer">
       <div className="landingTitle">Waiting for more players...</div>
-      <LobbyList userName={userName} />
+      <div className="menuBorderContainer">
+        <p style={{ fontWeight: "900" }}>Room ID: {roomID}</p>
+        <br />
+        {players.map(player => {
+          return <p key={player.id}>{player.name}</p>;
+        })}
+        <br />
+        <br />
+        <button className="landingButton">READY</button>
+        <Link to="/" className="landingButton">
+          QUIT
+        </Link>
+      </div>
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />
       <p className="aboutInfo">
@@ -44,6 +44,6 @@ const Lobby = props => {
       </p>
     </div>
   );
-};
+}
 
 export default Lobby;
