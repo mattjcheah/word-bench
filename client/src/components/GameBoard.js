@@ -1,85 +1,88 @@
 import React, { useState } from "react";
 import Timer from "./Timer";
 
-const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+import { dummy_board_data } from "./Constants";
 
-const cols = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+import { parseBoardPayload } from "./Helpers";
 
-const dict = {
-  "1,1": "A",
-  "1,2": "B"
-};
-
-const BoardSquare = () => {
-  return (
-    <div
-      style={{
-        height: "2vw",
-        width: "2vw",
-        border: "1px solid grey",
-        display: "inline-block"
-      }}
-    />
-  );
-};
-
-const Row = () => {
-  return (
-    <div>
-      {liss.map(l => {
-        return <BoardSquare />;
-      })}
-    </div>
-  );
-};
+import "../components/stars.scss";
+import "../components/bokeh.scss";
 
 const Board = () => {
+  const board_width = dummy_board_data.board.width;
+  const board_height = dummy_board_data.board.height;
+
+  const col_class = "4vw ".repeat(board_width);
+  const row_class = "4vw ".repeat(board_height);
+
+  const scaled_width = 4 * dummy_board_data.board.width;
+  const scaled_height = 4 * dummy_board_data.board.height;
+
+  parseBoardPayload(dummy_board_data);
+
   return (
     <div
       style={{
-        width: "48vw",
-        height: "36vw",
+        zIndex: "999",
+        width: scaled_width,
+        height: scaled_height,
         backgroundColor: "lightgrey",
-        margin: "0 auto",
-        position: "relative",
-        top: "50%",
-        transform: "translateY(-50%)",
+        // margin: "0 auto",
+        // position: "relative",
+        // top: "50%",
+        // transform: "translateY(-50%)",
         display: "grid",
-        gridTemplateColumns:
-          "3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw",
-        gridTemplateRows: "3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw 3vw"
+        gridTemplateColumns: col_class,
+        gridTemplateRows: row_class
       }}
     >
-      {cols.map(x => {
-        return rows.map(y => {
-          return (
-            <div
-              style={{ backgroundColor: "lightgrey", border: "1px solid grey" }}
-            >
-              <div
-                style={{
-                  textAlign: "center",
-                  position: "relative",
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: "calc(10px + 1vw)"
-                }}
-              >
-                A
-              </div>
-            </div>
-          );
-        });
-      })}
+      {Array(board_width)
+        .fill(0)
+        .map((x, indx) => {
+          return Array(board_height)
+            .fill(0)
+            .map((y, indy) => {
+              return (
+                <div
+                  style={{
+                    backgroundColor: "lightgrey",
+                    border: "1px solid grey"
+                  }}
+                  key={(indx, indy)}
+                >
+                  <div
+                    style={{
+                      textAlign: "center",
+                      position: "relative",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      fontSize: "calc(10px + 1vw)"
+                    }}
+                  >
+                    A
+                  </div>
+                </div>
+              );
+            });
+        })}
     </div>
-    // </div>
   );
 };
 
 const LetterBench = () => {
+  const letters = dummy_board_data.board.letters;
+
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
+        {letters.map((letter, ind) => {
+          return (
+            <div className="letterTileContainer" key={letter + ind}>
+              <div className="letterTileInner">{letter}</div>
+            </div>
+          );
+        })}
+        {/* 
         <div className="letterTileContainer">
           <div className="letterTileInner">A</div>
         </div>
@@ -95,6 +98,9 @@ const LetterBench = () => {
         <div className="letterTileContainer">
           <div className="letterTileInner">A</div>
         </div>
+        <div className="letterTileContainer">
+          <div className="letterTileInner">A</div>
+        </div> */}
       </div>
     </div>
   );
@@ -102,7 +108,7 @@ const LetterBench = () => {
 
 const PlayerInput = () => {
   return (
-    <div class="field" id="searchform">
+    <div className="field" id="searchform">
       <input type="text" id="searchterm" placeholder="Enter a Word..." />
       <button type="button" id="search">
         GO
@@ -116,15 +122,15 @@ const OpponentList = props => {
   opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
 
   return (
-    <ul class="skill-list">
+    <ul className="skill-list">
       {opponents.map((opponent, ind) => {
         const colourIndex = (ind % 4) + 1;
         const colourClass = "skill-" + colourIndex;
         return (
-          <li class="skill">
+          <li className="skill" key={opponent + ind}>
             <h3>{opponent.name}</h3>
             <progress
-              class={colourClass}
+              className={colourClass}
               max="100"
               value={opponent.completion}
             />
@@ -152,26 +158,42 @@ const GameBoard = () => {
   gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
 
   return (
-    <div className="gameBoardContainer">
-      <div className="leftSideMain">
-        <div className="boardContainer">
-          <Board />
+    <div className="background">
+      <div id="stars2" />
+
+      <div className="gameBoardContainer">
+        <div className="leftSideMain">
+          <div className="boardContainer">
+            <Board />
+          </div>
+          <div className="playerInputContainer">
+            <LetterBench />
+            <PlayerInput />
+          </div>
         </div>
-        <div className="playerInputContainer">
-          <LetterBench />
-          <PlayerInput />
+        <div className="rightSideMain">
+          <div className="timerContainer">
+            <p className="sideBarTitle">TIME REMAINING</p>
+            <Timer gameEndTime={gameEndTime} />
+          </div>
+          <div className="opponentsContainer">
+            <p className="sideBarTitle">PLAYERS</p>
+            <OpponentList opponents={opponents} />
+          </div>
         </div>
       </div>
-      <div className="rightSideMain">
-        <div className="timerContainer">
-          <p className="sideBarTitle">TIME REMAINING</p>
-          <Timer gameEndTime={gameEndTime} />
-        </div>
-        <div className="opponentsContainer">
-          <p className="sideBarTitle">PLAYERS</p>
-          <OpponentList opponents={opponents} />
-        </div>
-      </div>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   );
 };
