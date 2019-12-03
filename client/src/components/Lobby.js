@@ -1,21 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { getQuote } from "./Helpers";
-import { connectToServer } from "../services/socket";
+import ServerContext from "./ServerContext";
 
-function Lobby({ userName, roomID }) {
-  const [players, setPlayers] = useState([]);
+function Lobby() {
+  const server = useContext(ServerContext);
 
-  useEffect(() => {
-    const socket = connectToServer();
-    socket.emit("joinRoom", { name: userName, roomID });
-
-    socket.on("roomStatus", response => {
-      if (response.status === "SUCCESS") {
-        setPlayers(Object.values(response.players));
-      }
-    });
-  }, [userName, roomID]);
+  const players = Object.values(server.players);
 
   const quoteObject = getQuote();
 
@@ -23,7 +14,7 @@ function Lobby({ userName, roomID }) {
     <div className="landingContainer">
       <div className="landingTitle">Waiting for more players...</div>
       <div className="menuBorderContainer">
-        <p style={{ fontWeight: "900" }}>Room ID: {roomID}</p>
+        <p style={{ fontWeight: "900" }}>Room ID: {server.roomID}</p>
         <br />
         {players.map(player => {
           return <p key={player.id}>{player.name}</p>;

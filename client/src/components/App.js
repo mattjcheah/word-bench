@@ -1,26 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Landing from "./Landing";
 import { Switch, Route } from "react-router-dom";
 import GameRoom from "./GameRoom";
-import GameBoard from "./GameBoard";
+import Socket from "../services/Socket";
+import ServerContext from "./ServerContext";
+import { useServer } from "./useServer";
 
-const App = () => {
-  const [userName, setUserName] = useState(null);
+function App() {
+  const [state, dispatch] = useServer();
+
+  useEffect(() => {
+    const socket = new Socket(dispatch);
+
+    dispatch({ type: "INIT_SOCKET", socket });
+
+    return () => {
+      socket.closeConnection();
+    };
+  }, []);
 
   return (
-    <Switch>
-      <Route
-        exact
-        path="/"
-        render={props => <Landing {...props} setUserName={setUserName} />}
-      />
-      <Route
-        path="/:roomID"
-        render={props => <GameRoom {...props} userName={userName} />}
-        // render={props => <GameBoard />}
-      />
-    </Switch>
+    <ServerContext.Provider value={state}>
+      <Switch>
+        <Route exact path="/" component={Landing} />
+        <Route path="/:roomID" component={GameRoom} />
+      </Switch>
+    </ServerContext.Provider>
   );
-};
+}
 
 export default App;
