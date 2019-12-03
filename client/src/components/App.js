@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../styles.css";
 import Landing from "./Landing";
 import { Switch, Route } from "react-router-dom";
 import GameRoom from "./GameRoom";

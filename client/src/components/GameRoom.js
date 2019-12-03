@@ -1,5 +1,4 @@
 import React from "react";
-import "../styles.css";
 import Lobby from "./Lobby";
 import ErrorPage from "./ErrorPage";
 

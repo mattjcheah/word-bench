@@ -39,8 +39,7 @@ function LandingStage({ stage, setStage, setUserName }) {
   }
 }
 
-const InitialLanding = props => {
-  const { setStage } = props;
+function InitialLanding({ setStage }) {
   return (
     <div>
       <div className="menuBorderContainer">
@@ -53,7 +52,7 @@ const InitialLanding = props => {
       </div>
     </div>
   );
-};
+}
 
 function NewGameLanding({ setStage, setUserName }) {
   const [name, setName] = useState("");

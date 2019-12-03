@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getQuote } from "./Helpers";
-import "../styles.scss";
 import { connectToServer } from "../services/socket";
 
 function Lobby({ userName, roomID }) {
