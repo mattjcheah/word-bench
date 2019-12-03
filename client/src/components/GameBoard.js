@@ -3,7 +3,7 @@ import Timer from "./Timer";
 
 import { dummy_board_data } from "./Constants";
 
-import { parseBoardPayload } from "./Helpers";
+import { parseBoardPayload, generateBoardKey } from "./Helpers";
 
 import "../components/stars.scss";
 import "../components/bokeh.scss";
@@ -18,7 +18,9 @@ const Board = () => {
   const scaled_width = 4 * dummy_board_data.board.width;
   const scaled_height = 4 * dummy_board_data.board.height;
 
-  parseBoardPayload(dummy_board_data);
+  const boardRep = parseBoardPayload(dummy_board_data);
+
+  console.log(boardRep);
 
   return (
     <div
@@ -26,7 +28,7 @@ const Board = () => {
         zIndex: "999",
         width: scaled_width,
         height: scaled_height,
-        // backgroundColor: "lightgrey",
+        margin: "3% auto auto 30%",
         // margin: "0 auto",
         // position: "relative",
         // top: "50%",
@@ -42,11 +44,10 @@ const Board = () => {
           return Array(board_height)
             .fill(0)
             .map((y, indy) => {
-              return (
+              return boardRep[generateBoardKey(indx, indy)].content !== "_" ? (
                 <div
                   style={{
                     backgroundColor: "#e5dad6",
-                    // border: "1px solid grey"
                     margin: "2px",
                     borderRadius: "3px"
                   }}
@@ -61,9 +62,11 @@ const Board = () => {
                       fontSize: "calc(10px + 1vw)"
                     }}
                   >
-                    A
+                    {boardRep[generateBoardKey(indx, indy)].content}
                   </div>
                 </div>
+              ) : (
+                <div />
               );
             });
         })}
@@ -84,25 +87,6 @@ const LetterBench = () => {
             </div>
           );
         })}
-        {/* 
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div>
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div>
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div>
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div>
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div>
-        <div className="letterTileContainer">
-          <div className="letterTileInner">A</div>
-        </div> */}
       </div>
     </div>
   );
@@ -162,6 +146,12 @@ const GameBoard = () => {
   return (
     <div className="background">
       <div id="stars2" />
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
 
       <div className="gameBoardContainer">
         <div className="leftSideMain">
@@ -184,18 +174,6 @@ const GameBoard = () => {
           </div>
         </div>
       </div>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
     </div>
   );
 };

@@ -43,6 +43,51 @@ export function validateJoinGame(roomNumber, userName) {
   return [true, "ok"];
 }
 
+export const generateBoardKey = (row, col) => {
+  return row.toString() + "," + col.toString();
+};
+
 export function parseBoardPayload(payload) {
-  console.log(payload);
+  const boardWidth = payload.board.width;
+  const boardHeight = payload.board.height;
+  const words = payload.board.words;
+
+  let boardRep = {};
+
+  for (var i = 0; i < boardWidth; i++) {
+    for (var j = 0; j < boardHeight; j++) {
+      boardRep[generateBoardKey(i, j)] = {
+        content: "_",
+        found: false
+      };
+    }
+  }
+
+  words.forEach(word => {
+    let startRow = word.startLocation[0];
+    let startCol = word.startLocation[1];
+
+    switch (word.direction) {
+      case "DOWN":
+        for (var i = 0; i < word.word.length; i++) {
+          boardRep[generateBoardKey(startRow + i, startCol)] = {
+            content: word.word[i],
+            found: false
+          };
+        }
+        break;
+      case "ACROSS":
+        for (var i = 0; i < word.word.length; i++) {
+          boardRep[generateBoardKey(startRow, startCol + i)] = {
+            content: word.word[i],
+            found: false
+          };
+        }
+        break;
+      default:
+        console.log("word direction error");
+    }
+  });
+
+  return boardRep;
 }
