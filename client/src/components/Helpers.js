@@ -69,7 +69,7 @@ export function parseBoardPayload(payload) {
 
     switch (word.direction) {
       case "DOWN":
-        for (var i = 0; i < word.word.length; i++) {
+        for (let i = 0; i < word.word.length; i++) {
           boardRep[generateBoardKey(startRow + i, startCol)] = {
             content: word.word[i],
             found: true
@@ -77,7 +77,7 @@ export function parseBoardPayload(payload) {
         }
         break;
       case "ACROSS":
-        for (var i = 0; i < word.word.length; i++) {
+        for (let i = 0; i < word.word.length; i++) {
           boardRep[generateBoardKey(startRow, startCol + i)] = {
             content: word.word[i],
             found: true
