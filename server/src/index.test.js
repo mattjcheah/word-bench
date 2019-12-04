@@ -157,16 +157,19 @@ describe("Sockets", () => {
       socket.emit("createRoom", { name: "CREATE TEST" });
 
       socket.on("roomStatus", response => {
-        expect(response.status).toEqual("SUCCESS");
-        expect(response.roomID).toEqual("0");
-        expect(response.players).toEqual({
-          [socket.id]: {
-            id: socket.id,
-            name: "CREATE TEST",
-            completedWords: []
-          }
+        expect(response).toEqual({
+          status: "SUCCESS",
+          roomID: "0",
+          stage: "LOBBY",
+          players: {
+            [socket.id]: {
+              id: socket.id,
+              name: "CREATE TEST",
+              completedWords: []
+            }
+          },
+          board: testBoard
         });
-        expect(response.board).toEqual(testBoard);
 
         socket.close();
         done();
@@ -189,20 +192,24 @@ describe("Sockets", () => {
       socket2.emit("joinRoom", { name: "JOIN TEST 1", roomID: "0" });
 
       socket2.on("roomStatus", response => {
-        expect(response.status).toEqual("SUCCESS");
-        expect(response.players).toEqual({
-          [socket1.id]: {
-            id: socket1.id,
-            name: "CREATE TEST",
-            completedWords: []
+        expect(response).toEqual({
+          status: "SUCCESS",
+          roomID: "0",
+          stage: "LOBBY",
+          players: {
+            [socket1.id]: {
+              id: socket1.id,
+              name: "CREATE TEST",
+              completedWords: []
+            },
+            [socket2.id]: {
+              id: socket2.id,
+              name: "JOIN TEST 1",
+              completedWords: []
+            }
           },
-          [socket2.id]: {
-            id: socket2.id,
-            name: "JOIN TEST 1",
-            completedWords: []
-          }
+          board: testBoard
         });
-        expect(response.board).toEqual(testBoard);
 
         socket1.close();
         socket2.close();
@@ -216,8 +223,10 @@ describe("Sockets", () => {
       socket.emit("joinRoom", { name: "TEST1", roomID: "1" });
 
       socket.on("roomStatus", response => {
-        expect(response.status).toEqual("FAILURE");
-        expect(response.reason).toEqual("Room does not exist");
+        expect(response).toEqual({
+          status: "FAILURE",
+          reason: "Room does not exist"
+        });
 
         socket.close();
         done();
@@ -238,16 +247,19 @@ describe("Sockets", () => {
 
         socket2.on("roomStatus", response => {
           if (socket1.disconnected) {
-            expect(response.status).toEqual("SUCCESS");
-            expect(response.roomID).toEqual("0");
-            expect(response.players).toEqual({
-              [socket2.id]: {
-                id: socket2.id,
-                name: "disconnect test 2",
-                completedWords: []
-              }
+            expect(response).toEqual({
+              status: "SUCCESS",
+              roomID: "0",
+              stage: "LOBBY",
+              players: {
+                [socket2.id]: {
+                  id: socket2.id,
+                  name: "disconnect test 2",
+                  completedWords: []
+                }
+              },
+              board: testBoard
             });
-            expect(response.board).toEqual(testBoard);
 
             socket2.close();
             done();
