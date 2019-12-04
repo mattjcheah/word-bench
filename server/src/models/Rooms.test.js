@@ -256,4 +256,41 @@ describe("Rooms", () => {
 
     // TODO: Test to check error if given player does not exist
   });
+
+  describe("findOneAndChangeStage", () => {
+    describe("given the room exists", () => {
+      beforeEach(() => {
+        Rooms.add("0", { id: "id", name: "name" });
+      });
+
+      it("should change the stage of the room", () => {
+        Rooms.findOneAndChangeStage("0", { stage: "GAME" });
+
+        expect(Rooms.rooms["0"].stage).toEqual("GAME");
+      });
+
+      it("should return the updated room", () => {
+        const room = Rooms.findOneAndChangeStage("0", { stage: "GAME" });
+
+        expect(room.stage).toEqual("GAME");
+      });
+    });
+
+    describe("given the room does not exist", () => {
+      let room;
+      beforeEach(() => {
+        room = Rooms.findOneAndChangeStage("0", {
+          stage: "GAME"
+        });
+      });
+
+      it("should return undefined", () => {
+        expect(room).toEqual(undefined);
+      });
+
+      it("should not modify rooms", () => {
+        expect(Rooms.rooms).toEqual({});
+      });
+    });
+  });
 });

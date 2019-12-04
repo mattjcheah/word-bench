@@ -123,6 +123,10 @@ describe("SocketController", () => {
         }
       });
     });
+
+    it("should save the roomID to the socket", () => {
+      expect(socketController.roomID).toEqual("0");
+    });
   });
 
   describe("joinRoom", () => {
@@ -163,6 +167,10 @@ describe("SocketController", () => {
             }
           }
         });
+      });
+
+      it("should save the roomID to the socket", () => {
+        expect(socketController.roomID).toEqual("0");
       });
     });
 

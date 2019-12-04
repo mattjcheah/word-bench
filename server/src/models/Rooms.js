@@ -79,6 +79,20 @@ class Rooms {
 
     return Rooms.findOneAndUpdate(roomID, newRoom);
   }
+
+  static findOneAndChangeStage(roomID, { stage }) {
+    const room = Rooms.findOne(roomID);
+    if (!room) {
+      return undefined;
+    }
+
+    const newRoom = {
+      ...room,
+      stage
+    };
+
+    return Rooms.findOneAndUpdate(roomID, newRoom);
+  }
 }
 
 export default Rooms;
