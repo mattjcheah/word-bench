@@ -8,6 +8,7 @@ class Rooms {
 
     return {
       roomID,
+      stage: "LOBBY",
       board,
       players: {
         [id]: {

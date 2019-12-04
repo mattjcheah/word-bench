@@ -4,6 +4,7 @@ import Rooms from "../models/Rooms";
 jest.mock("../models/Rooms", () => ({
   add: jest.fn(() => ({
     roomID: "0",
+    stage: "LOBBY",
     board: { height: 0, width: 0, words: [] },
     players: {
       "test id": {
@@ -16,6 +17,7 @@ jest.mock("../models/Rooms", () => ({
     if (roomID === "0") {
       return {
         roomID: "0",
+        stage: "LOBBY",
         board: { height: 0, width: 0, words: [] },
         players: {
           hostID: {
@@ -35,6 +37,7 @@ jest.mock("../models/Rooms", () => ({
     if (roomID === "0") {
       return {
         roomID: "0",
+        stage: "LOBBY",
         board: { height: 0, width: 0, words: [] },
         players: {
           hostID: {
@@ -110,6 +113,7 @@ describe("SocketController", () => {
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
         status: "SUCCESS",
         roomID: "0",
+        stage: "LOBBY",
         board: { height: 0, width: 0, words: [] },
         players: {
           "test id": {
@@ -146,6 +150,7 @@ describe("SocketController", () => {
         expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
           status: "SUCCESS",
           roomID: "0",
+          stage: "LOBBY",
           board: { height: 0, width: 0, words: [] },
           players: {
             hostID: {
@@ -192,6 +197,7 @@ describe("SocketController", () => {
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
         status: "SUCCESS",
         roomID: "0",
+        stage: "LOBBY",
         board: { height: 0, width: 0, words: [] },
         players: {
           hostID: {
