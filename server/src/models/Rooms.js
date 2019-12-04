@@ -93,6 +93,25 @@ class Rooms {
 
     return Rooms.findOneAndUpdate(roomID, newRoom);
   }
+
+  static findOneAndAddCompletedWord(roomID, { id, word }) {
+    const room = Rooms.findOne(roomID);
+
+    const players = {
+      ...room.players,
+      [id]: {
+        ...room.players[id],
+        completedWords: room.players[id].completedWords.concat(word)
+      }
+    };
+
+    const newRoom = {
+      ...room,
+      players
+    };
+
+    return Rooms.findOneAndUpdate(roomID, newRoom);
+  }
 }
 
 export default Rooms;
