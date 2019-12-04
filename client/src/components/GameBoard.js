@@ -82,8 +82,6 @@ function Board({ board, completedWords }) {
 
   const boardRep = parseBoardPayload(board, completedWords);
 
-  console.log(boardRep);
-
   return (
     <div style={{ margin: "2% 15%", height: "92%" }}>
       <div
