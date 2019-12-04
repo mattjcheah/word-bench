@@ -3,137 +3,27 @@ import Timer from "./Timer";
 
 import { dummy_board_data } from "./Constants";
 
-import { parseBoardPayload, generateBoardKey } from "./Helpers";
+import {
+  parseBoardPayload,
+  formatBoardKey,
+  generateOpponents
+} from "./Helpers";
 
-// import ServerContext from "./ServerContext";
+import ServerContext from "./ServerContext";
 
 import "../components/stars.scss";
 import "../components/bokeh.scss";
 
-const Board = () => {
-  // const server = useContext(ServerContext);
+function GameBoard() {
+  const server = useContext(ServerContext);
 
-  const board_width = dummy_board_data.board.width;
-  const board_height = dummy_board_data.board.height;
+  const player = server.players[server.socket.socket.id];
 
-  const col_cell_width = 100 / board_width;
-  const row_cell_width = 100 / board_height;
-
-  const col_class = (col_cell_width.toString() + "% ").repeat(board_width);
-  const row_class = (row_cell_width.toString() + "% ").repeat(board_height);
-
-  const boardRep = parseBoardPayload(dummy_board_data);
-
-  console.log(boardRep);
-
-  return (
-    <div style={{ margin: "2% 15%", height: "92%" }}>
-      <div
-        style={{
-          zIndex: "999",
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          gridTemplateColumns: col_class,
-          gridTemplateRows: row_class
-        }}
-      >
-        {Array(board_width)
-          .fill(0)
-          .map((x, indx) => {
-            return Array(board_height)
-              .fill(0)
-              .map((y, indy) => {
-                return boardRep[generateBoardKey(indx, indy)].content !==
-                  "_" ? (
-                  boardRep[generateBoardKey(indx, indy)].found ? (
-                    <div className="boardTileOuter" key={(indx, indy)}>
-                      <div className="boardTileInner">
-                        {boardRep[
-                          generateBoardKey(indx, indy)
-                        ].content.toUpperCase()}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="boardTileOuterHidden" />
-                  )
-                ) : (
-                  <div />
-                );
-              });
-          })}
-      </div>
-    </div>
+  const opponents = generateOpponents(
+    server.id,
+    server.players,
+    server.board.words.length
   );
-};
-
-const LetterBench = () => {
-  const letters = dummy_board_data.board.letters;
-
-  return (
-    <div className="letterBench">
-      <div style={{ display: "flex" }}>
-        {letters.map((letter, ind) => {
-          return (
-            <div className="letterTileContainer" key={letter + ind}>
-              <div className="letterTileInner">{letter}</div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-const PlayerInput = () => {
-  const [currentInput, setCurrentInput] = useState("");
-  return (
-    <div className="field" id="searchform">
-      <input
-        type="text"
-        id="searchterm"
-        placeholder="Enter a Word..."
-        value={currentInput}
-      />
-      <button type="button" id="search">
-        GO
-      </button>
-    </div>
-  );
-};
-
-const OpponentList = props => {
-  const { opponents } = props;
-  opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
-
-  return (
-    <ul className="skill-list">
-      {opponents.map((opponent, ind) => {
-        const colourIndex = (ind % 4) + 1;
-        const colourClass = "skill-" + colourIndex;
-        return (
-          <li className="skill" key={opponent + ind}>
-            <h3>{opponent.name}</h3>
-            <progress
-              className={colourClass}
-              max="100"
-              value={opponent.completion}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
-const GameBoard = () => {
-  const [opponents, setOpponents] = useState([
-    { name: "Max", completion: "47" },
-    { name: "Chatthew", completion: "82" },
-    { name: "Julian", completion: "65" },
-    { name: "Listerine Chew", completion: "21" },
-    { name: "Justin Thyme", completion: "90" }
-  ]);
 
   const minutes = 0;
   const seconds = 11;
@@ -155,7 +45,10 @@ const GameBoard = () => {
       <div className="gameBoardContainer">
         <div className="leftSideMain">
           <div className="boardContainer">
-            <Board />
+            <Board
+              board={server.board}
+              completedWords={player.completedWords}
+            />
           </div>
           <div className="playerInputContainer">
             <LetterBench />
@@ -175,6 +68,120 @@ const GameBoard = () => {
       </div>
     </div>
   );
-};
+}
+
+function Board({ board, completedWords }) {
+  const boardWidth = board.width;
+  const boardHeight = board.height;
+
+  const col_cell_width = 100 / boardWidth;
+  const row_cell_width = 100 / boardHeight;
+
+  const col_class = (col_cell_width.toString() + "% ").repeat(boardWidth);
+  const row_class = (row_cell_width.toString() + "% ").repeat(boardHeight);
+
+  const boardRep = parseBoardPayload(board, completedWords);
+
+  console.log(boardRep);
+
+  return (
+    <div style={{ margin: "2% 15%", height: "92%" }}>
+      <div
+        style={{
+          zIndex: "999",
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: col_class,
+          gridTemplateRows: row_class
+        }}
+      >
+        {Array(boardWidth)
+          .fill(0)
+          .map((_, indx) => {
+            return Array(boardHeight)
+              .fill(0)
+              .map((y, indy) => {
+                return boardRep[formatBoardKey(indx, indy)].content !== "_" ? (
+                  boardRep[formatBoardKey(indx, indy)].found ? (
+                    <div className="boardTileOuter" key={(indx, indy)}>
+                      <div className="boardTileInner">
+                        {boardRep[
+                          formatBoardKey(indx, indy)
+                        ].content.toUpperCase()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="boardTileOuterHidden" key={(indx, indy)} />
+                  )
+                ) : (
+                  <div key={(indx, indy)} />
+                );
+              });
+          })}
+      </div>
+    </div>
+  );
+}
+
+function LetterBench() {
+  const letters = dummy_board_data.board.letters;
+
+  return (
+    <div className="letterBench">
+      <div style={{ display: "flex" }}>
+        {letters.map((letter, ind) => {
+          return (
+            <div className="letterTileContainer" key={letter + ind}>
+              <div className="letterTileInner">{letter}</div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PlayerInput() {
+  const [currentInput, setCurrentInput] = useState("");
+  return (
+    <div className="field" id="searchform">
+      <input
+        type="text"
+        id="searchterm"
+        placeholder="Enter a Word..."
+        value={currentInput}
+        onChange={e => setCurrentInput(e.target.value)}
+      />
+      <button type="button" id="search">
+        GO
+      </button>
+    </div>
+  );
+}
+
+function OpponentList(props) {
+  const { opponents } = props;
+  opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
+
+  return (
+    <ul className="skill-list">
+      {opponents.map((opponent, ind) => {
+        const colourIndex = (ind % 4) + 1;
+        const colourClass = "skill-" + colourIndex;
+        return (
+          <li className="skill" key={opponent + ind}>
+            <h3>{opponent.name}</h3>
+            <progress
+              className={colourClass}
+              max="100"
+              value={opponent.completion}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
 export default GameBoard;
