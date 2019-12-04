@@ -5,10 +5,12 @@ import ServerContext from "./ServerContext";
 
 function Lobby() {
   const server = useContext(ServerContext);
-
   const players = Object.values(server.players);
-
   const quoteObject = getQuote();
+
+  const handleStart = () => {
+    server.socket.startGame();
+  };
 
   return (
     <div className="landingContainer">
@@ -21,7 +23,9 @@ function Lobby() {
         })}
         <br />
         <br />
-        <button className="landingButton">READY</button>
+        <button className="landingButton" onClick={handleStart}>
+          Start
+        </button>
         <Link to="/" className="landingButton">
           QUIT
         </Link>
