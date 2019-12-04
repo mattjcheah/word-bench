@@ -5,7 +5,12 @@ jest.mock("../models/Rooms", () => ({
   add: jest.fn(() => ({
     roomID: "0",
     stage: "LOBBY",
-    board: { height: 0, width: 0, words: [] },
+    board: {
+      height: 0,
+      width: 0,
+      words: [],
+      letters: ["D", "K", "E", "S", "T", "O"]
+    },
     players: {
       "test id": {
         id: "test id",
@@ -18,7 +23,12 @@ jest.mock("../models/Rooms", () => ({
       return {
         roomID: "0",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",
@@ -38,7 +48,12 @@ jest.mock("../models/Rooms", () => ({
       return {
         roomID: "0",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",
@@ -114,7 +129,12 @@ describe("SocketController", () => {
         status: "SUCCESS",
         roomID: "0",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           "test id": {
             id: "test id",
@@ -155,7 +175,12 @@ describe("SocketController", () => {
           status: "SUCCESS",
           roomID: "0",
           stage: "LOBBY",
-          board: { height: 0, width: 0, words: [] },
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {
             hostID: {
               id: "hostID",
@@ -206,7 +231,12 @@ describe("SocketController", () => {
         status: "SUCCESS",
         roomID: "0",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",

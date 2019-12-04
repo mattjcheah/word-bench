@@ -5,9 +5,10 @@ jest.mock("./helpers", () => ({
   generateRoomID: jest.fn(() => "0")
 }));
 
-jest.mock("./models/generateBoard", () => () => ({
+jest.mock("./generateBoard", () => () => ({
   height: 9,
   width: 9,
+  letters: ["D", "K", "E", "S", "T", "O"],
   words: [
     {
       word: "toe",
@@ -71,6 +72,7 @@ describe("Sockets", () => {
   const testBoard = {
     height: 9,
     width: 9,
+    letters: ["D", "K", "E", "S", "T", "O"],
     words: [
       {
         word: "toe",

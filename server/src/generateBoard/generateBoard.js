@@ -2,6 +2,7 @@ function generateBoard() {
   return {
     height: 9,
     width: 9,
+    letters: ["D", "K", "E", "S", "T", "O"],
     words: [
       {
         word: "toe",

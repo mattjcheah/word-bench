@@ -1,4 +1,4 @@
-import generateBoard from "./generateBoard";
+import generateBoard from "../generateBoard";
 
 class Rooms {
   static rooms = {};
