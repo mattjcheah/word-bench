@@ -1,11 +1,5 @@
 import generateBoard from "./generateBoard";
 
-jest.mock("./generateBoard", () => () => ({
-  height: 0,
-  width: 0,
-  words: []
-}));
-
 class Rooms {
   static rooms = {};
 

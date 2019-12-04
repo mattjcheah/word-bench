@@ -1,5 +1,11 @@
 import Rooms from "./Rooms";
 
+jest.mock("./generateBoard", () => () => ({
+  height: 0,
+  width: 0,
+  words: []
+}));
+
 describe("Rooms", () => {
   beforeEach(() => {
     Rooms.rooms = {};
