@@ -5,7 +5,130 @@ jest.mock("./helpers", () => ({
   generateRoomID: jest.fn(() => "0")
 }));
 
+jest.mock("./models/generateBoard", () => () => ({
+  height: 9,
+  width: 9,
+  words: [
+    {
+      word: "toe",
+      startLocation: [0, 1],
+      direction: "DOWN"
+    },
+    {
+      word: "desk",
+      startLocation: [2, 0],
+      direction: "ACROSS"
+    },
+    {
+      word: "dote",
+      startLocation: [2, 0],
+      direction: "DOWN"
+    },
+    {
+      word: "toes",
+      startLocation: [4, 0],
+      direction: "ACROSS"
+    },
+    {
+      word: "stoke",
+      startLocation: [4, 3],
+      direction: "DOWN"
+    },
+    {
+      word: "stoked",
+      startLocation: [6, 1],
+      direction: "ACROSS"
+    },
+    {
+      word: "sod",
+      startLocation: [6, 1],
+      direction: "DOWN"
+    },
+    {
+      word: "does",
+      startLocation: [4, 5],
+      direction: "DOWN"
+    },
+    {
+      word: "dose",
+      startLocation: [4, 5],
+      direction: "ACROSS"
+    },
+    {
+      word: "ode",
+      startLocation: [2, 8],
+      direction: "DOWN"
+    },
+    {
+      word: "doe",
+      startLocation: [8, 1],
+      direction: "ACROSS"
+    }
+  ]
+}));
+
 describe("Sockets", () => {
+  const testBoard = {
+    height: 9,
+    width: 9,
+    words: [
+      {
+        word: "toe",
+        startLocation: [0, 1],
+        direction: "DOWN"
+      },
+      {
+        word: "desk",
+        startLocation: [2, 0],
+        direction: "ACROSS"
+      },
+      {
+        word: "dote",
+        startLocation: [2, 0],
+        direction: "DOWN"
+      },
+      {
+        word: "toes",
+        startLocation: [4, 0],
+        direction: "ACROSS"
+      },
+      {
+        word: "stoke",
+        startLocation: [4, 3],
+        direction: "DOWN"
+      },
+      {
+        word: "stoked",
+        startLocation: [6, 1],
+        direction: "ACROSS"
+      },
+      {
+        word: "sod",
+        startLocation: [6, 1],
+        direction: "DOWN"
+      },
+      {
+        word: "does",
+        startLocation: [4, 5],
+        direction: "DOWN"
+      },
+      {
+        word: "dose",
+        startLocation: [4, 5],
+        direction: "ACROSS"
+      },
+      {
+        word: "ode",
+        startLocation: [2, 8],
+        direction: "DOWN"
+      },
+      {
+        word: "doe",
+        startLocation: [8, 1],
+        direction: "ACROSS"
+      }
+    ]
+  };
   let closeServer;
 
   beforeAll(() => {
@@ -43,6 +166,7 @@ describe("Sockets", () => {
             completedWords: []
           }
         });
+        expect(response.board).toEqual(testBoard);
 
         socket.close();
         done();
@@ -78,6 +202,7 @@ describe("Sockets", () => {
             completedWords: []
           }
         });
+        expect(response.board).toEqual(testBoard);
 
         socket1.close();
         socket2.close();
@@ -122,6 +247,7 @@ describe("Sockets", () => {
                 completedWords: []
               }
             });
+            expect(response.board).toEqual(testBoard);
 
             socket2.close();
             done();
