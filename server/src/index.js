@@ -16,6 +16,8 @@ export function startServer() {
 
     socket.on("joinRoom", socketController.joinRoom);
 
+    socket.on("startGame", socketController.startGame);
+
     socket.on("disconnecting", socketController.disconnecting);
   });
 
