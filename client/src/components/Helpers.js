@@ -72,7 +72,7 @@ export function parseBoardPayload(payload) {
         for (var i = 0; i < word.word.length; i++) {
           boardRep[generateBoardKey(startRow + i, startCol)] = {
             content: word.word[i],
-            found: false
+            found: true
           };
         }
         break;
@@ -80,7 +80,7 @@ export function parseBoardPayload(payload) {
         for (var i = 0; i < word.word.length; i++) {
           boardRep[generateBoardKey(startRow, startCol + i)] = {
             content: word.word[i],
-            found: false
+            found: true
           };
         }
         break;

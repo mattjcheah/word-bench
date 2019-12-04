@@ -130,6 +130,26 @@ body {
   overflow: auto;
 }
 
+.boardTileOuter {
+  background-color: #e5dad6;
+  margin: 2px;
+  border-radius: 3px;
+}
+
+.boardTileInner {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(14px + 1vw);
+}
+
+.boardTileOuterHidden {
+  background-color: #425972;
+  margin: 2px;
+  border-radius: 3px;
+}
+
 .playerInputContainer {
   border-top: 1px solid var(--oxblood);
   height: 155px;

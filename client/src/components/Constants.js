@@ -17,47 +17,67 @@ export const quotes = [
     author: "Alex Graham"
   },
   {
-    quote: "Well done is better than well said.",
-    author: "Benjamin Franklin"
+    quote: "I need you to love me.",
+    author: "Justin Ha"
   },
   {
-    quote: "Only I can change my life. No one can do it for me.",
-    author: "Carol Burnett"
+    quote: "I got 45% off EatClub!",
+    author: "Christine Liu"
   },
   {
-    quote:
-      "Look up at the stars and not down at your feet. Try to make sense of what you see, and wonder about what makes the universe exist. Be curious.",
-    author: "Stephen Hawking"
+    quote: "I eat pies for breakfast.",
+    author: "Jarry Chen"
   },
   {
-    quote: "With the new day comes new strength and new thoughts",
-    author: "Eleanor Roosevelt"
+    quote: "Perfectly balanced, as all things should be.",
+    author: "Thanos"
   },
   {
-    quote: "Quality is not an act, it is a habit.",
-    author: "Aristotle"
-  },
-  {
-    quote: "Life is 10% what happens to you and 90% how you react to it.",
-    author: "Charles R. Swindoll"
-  },
-  {
-    quote: "The secret of getting ahead is getting started.",
-    author: "Mark Twain"
-  },
-  {
-    quote:
-      "Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence.",
-    author: "Helen Keller"
+    quote: "It’s bullshit, I did not hit her. I did nooot. Oh hi, Mark.",
+    author: "Johnny"
   },
   {
     quote: "It does not matter how slowly you go as long as you do not stop.",
     author: "Confucius"
   },
   {
-    quote: "We know what we are, but know not what we may be.",
-    author: "William Shakespeare"
+    quote: "Quality is not an act, it is a habit.",
+    author: "Aristotle"
   }
+  // {
+  //   quote: "We know what we are, but know not what we may be.",
+  //   author: "William Shakespeare"
+  // }
+  // {
+  //   quote: "Well done is better than well said.",
+  //   author: "Benjamin Franklin"
+  // },
+  // {
+  //   quote: "Only I can change my life. No one can do it for me.",
+  //   author: "Carol Burnett"
+  // },
+  // {
+  //   quote:
+  //     "Look up at the stars and not down at your feet. Try to make sense of what you see, and wonder about what makes the universe exist. Be curious.",
+  //   author: "Stephen Hawking"
+  // },
+  // {
+  //   quote: "With the new day comes new strength and new thoughts.",
+  //   author: "Eleanor Roosevelt"
+  // },
+  // {
+  //   quote: "Life is 10% what happens to you and 90% how you react to it.",
+  //   author: "Charles R. Swindoll"
+  // },
+  // {
+  //   quote: "The secret of getting ahead is getting started.",
+  //   author: "Mark Twain"
+  // },
+  // {
+  //   quote:
+  //     "Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence.",
+  //   author: "Helen Keller"
+  // }
 ];
 
 export const dummy_board_data = {

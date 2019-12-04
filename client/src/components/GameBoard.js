@@ -1,75 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
 import { dummy_board_data } from "./Constants";
 
 import { parseBoardPayload, generateBoardKey } from "./Helpers";
 
+import ServerContext from "./ServerContext";
+
 import "../components/stars.scss";
 import "../components/bokeh.scss";
 
 const Board = () => {
+  const server = useContext(ServerContext);
+
   const board_width = dummy_board_data.board.width;
   const board_height = dummy_board_data.board.height;
 
-  const col_class = "4vw ".repeat(board_width);
-  const row_class = "4vw ".repeat(board_height);
+  const col_cell_width = 100 / board_width;
+  const row_cell_width = 100 / board_height;
 
-  const scaled_width = 4 * dummy_board_data.board.width;
-  const scaled_height = 4 * dummy_board_data.board.height;
+  const col_class = (col_cell_width.toString() + "% ").repeat(board_width);
+  const row_class = (row_cell_width.toString() + "% ").repeat(board_height);
 
   const boardRep = parseBoardPayload(dummy_board_data);
 
   console.log(boardRep);
 
   return (
-    <div
-      style={{
-        zIndex: "999",
-        width: scaled_width,
-        height: scaled_height,
-        margin: "3% auto auto 30%",
-        // margin: "0 auto",
-        // position: "relative",
-        // top: "50%",
-        // transform: "translateY(-50%)",
-        display: "grid",
-        gridTemplateColumns: col_class,
-        gridTemplateRows: row_class
-      }}
-    >
-      {Array(board_width)
-        .fill(0)
-        .map((x, indx) => {
-          return Array(board_height)
-            .fill(0)
-            .map((y, indy) => {
-              return boardRep[generateBoardKey(indx, indy)].content !== "_" ? (
-                <div
-                  style={{
-                    backgroundColor: "#e5dad6",
-                    margin: "2px",
-                    borderRadius: "3px"
-                  }}
-                  key={(indx, indy)}
-                >
-                  <div
-                    style={{
-                      textAlign: "center",
-                      position: "relative",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      fontSize: "calc(10px + 1vw)"
-                    }}
-                  >
-                    {boardRep[generateBoardKey(indx, indy)].content}
-                  </div>
-                </div>
-              ) : (
-                <div />
-              );
-            });
-        })}
+    <div style={{ margin: "2% 15%", height: "92%" }}>
+      <div
+        style={{
+          zIndex: "999",
+          width: "100%",
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: col_class,
+          gridTemplateRows: row_class
+        }}
+      >
+        {Array(board_width)
+          .fill(0)
+          .map((x, indx) => {
+            return Array(board_height)
+              .fill(0)
+              .map((y, indy) => {
+                return boardRep[generateBoardKey(indx, indy)].content !==
+                  "_" ? (
+                  boardRep[generateBoardKey(indx, indy)].found ? (
+                    <div className="boardTileOuter" key={(indx, indy)}>
+                      <div className="boardTileInner">
+                        {boardRep[
+                          generateBoardKey(indx, indy)
+                        ].content.toUpperCase()}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="boardTileOuterHidden" />
+                  )
+                ) : (
+                  <div />
+                );
+              });
+          })}
+      </div>
     </div>
   );
 };
@@ -93,9 +86,15 @@ const LetterBench = () => {
 };
 
 const PlayerInput = () => {
+  const [currentInput, setCurrentInput] = useState("");
   return (
     <div className="field" id="searchform">
-      <input type="text" id="searchterm" placeholder="Enter a Word..." />
+      <input
+        type="text"
+        id="searchterm"
+        placeholder="Enter a Word..."
+        value={currentInput}
+      />
       <button type="button" id="search">
         GO
       </button>
@@ -130,10 +129,10 @@ const OpponentList = props => {
 const GameBoard = () => {
   const [opponents, setOpponents] = useState([
     { name: "Max", completion: "47" },
-    { name: "Matt", completion: "82" },
+    { name: "Chatthew", completion: "82" },
     { name: "Julian", completion: "65" },
-    { name: "Name", completion: "21" },
-    { name: "Jeff", completion: "90" }
+    { name: "Listerine Chew", completion: "21" },
+    { name: "Justin Thyme", completion: "90" }
   ]);
 
   const minutes = 0;
