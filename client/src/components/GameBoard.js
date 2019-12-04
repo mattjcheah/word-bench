@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
-import { dummy_board_data } from "./Constants";
-
 import {
   parseBoardPayload,
   formatBoardKey,
@@ -51,7 +49,7 @@ function GameBoard() {
             />
           </div>
           <div className="playerInputContainer">
-            <LetterBench />
+            <LetterBench letters={server.board.letters} />
             <PlayerInput />
           </div>
         </div>
@@ -122,9 +120,7 @@ function Board({ board, completedWords }) {
   );
 }
 
-function LetterBench() {
-  const letters = dummy_board_data.board.letters;
-
+function LetterBench({ letters }) {
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
