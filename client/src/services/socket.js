@@ -6,15 +6,26 @@ class Socket {
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
+    this.updateOnStartGame();
   }
 
   updateOnRoomStatus = () => {
-    this.socket.on("roomStatus", ({ status, roomID, players }) => {
-      console.log(players);
+    this.socket.on(
+      "roomStatus",
+      ({ status, roomID, players, board, stage }) => {
+        if (status === "SUCCESS") {
+          this.dispatch({ type: "UPDATE_ROOM", roomID, players, board, stage });
+        } else {
+          throw new Error("Room status failure");
+        }
+      }
+    );
+  };
+
+  updateOnStartGame = () => {
+    this.socket.on("startGame", ({ status }) => {
       if (status === "SUCCESS") {
-        this.dispatch({ type: "UPDATE_ROOM", roomID, players });
-      } else {
-        throw new Error("Room status failure");
+        this.dispatch({ type: "START_GAME" });
       }
     });
   };
@@ -29,6 +40,10 @@ class Socket {
     this.socket.emit("joinRoom", { name, roomID });
 
     this.dispatch({ type: "SET_NAME", name });
+  };
+
+  startGame = () => {
+    this.socket.emit("startGame");
   };
 
   closeConnection = () => {

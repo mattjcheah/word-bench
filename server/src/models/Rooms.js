@@ -8,6 +8,7 @@ class Rooms {
 
     return {
       roomID,
+      stage: "LOBBY",
       board,
       players: {
         [id]: {
@@ -74,6 +75,20 @@ class Rooms {
     const newRoom = {
       ...room,
       players
+    };
+
+    return Rooms.findOneAndUpdate(roomID, newRoom);
+  }
+
+  static findOneAndChangeStage(roomID, { stage }) {
+    const room = Rooms.findOne(roomID);
+    if (!room) {
+      return undefined;
+    }
+
+    const newRoom = {
+      ...room,
+      stage
     };
 
     return Rooms.findOneAndUpdate(roomID, newRoom);
