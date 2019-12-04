@@ -1,16 +1,26 @@
+import generateBoard from "./generateBoard";
+
 class Rooms {
   static rooms = {};
 
-  static add(roomID, { id, name }) {
-    const room = {
+  static createRoom({ roomID, id, name }) {
+    const board = generateBoard();
+
+    return {
       roomID,
+      board,
       players: {
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
+  }
+
+  static add(roomID, { id, name }) {
+    const room = Rooms.createRoom({ roomID, id, name });
 
     Rooms.rooms[roomID] = room;
     return room;
@@ -44,7 +54,8 @@ class Rooms {
         ...room.players,
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
