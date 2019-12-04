@@ -5,13 +5,13 @@ import { dummy_board_data } from "./Constants";
 
 import { parseBoardPayload, generateBoardKey } from "./Helpers";
 
-import ServerContext from "./ServerContext";
+// import ServerContext from "./ServerContext";
 
 import "../components/stars.scss";
 import "../components/bokeh.scss";
 
 const Board = () => {
-  const server = useContext(ServerContext);
+  // const server = useContext(ServerContext);
 
   const board_width = dummy_board_data.board.width;
   const board_height = dummy_board_data.board.height;

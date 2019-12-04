@@ -16,7 +16,14 @@ function reducer(state, action) {
       return {
         ...state,
         roomID: action.roomID,
-        players: action.players
+        stage: action.stage,
+        players: action.players,
+        board: action.board
+      };
+    case "START_GAME":
+      return {
+        ...state,
+        stage: "GAME"
       };
     default:
       throw new Error();

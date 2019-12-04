@@ -6,15 +6,14 @@ import GameBoard from "./GameBoard";
 
 const GameRoom = ({ match }) => {
   const server = useContext(ServerContext);
-  const [gameStarted, setGameStarted] = useState(true);
 
-  if (gameStarted) {
+  if (server.stage === "GAME") {
     return <GameBoard />;
   }
 
   const roomID = match.params.roomID;
   if (roomID && server.name) {
-    return <Lobby setGameStarted={setGameStarted} />;
+    return <Lobby />;
   }
   return <ErrorPage />;
 };
