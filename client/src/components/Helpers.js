@@ -76,7 +76,7 @@ export function parseBoardPayload(boardPayload, completedWords) {
   words.forEach(({ word, direction, startLocation }) => {
     for (let i = 0; i < word.length; i++) {
       const boardKey = generateBoardKey(startLocation, i, direction);
-      if (boardRep[boardKey].content === "_") {
+      if (boardRep[boardKey].content === "_" || !boardRep[boardKey].found) {
         boardRep[boardKey] = {
           content: word[i],
           found: completedWords.includes(word)
