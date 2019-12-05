@@ -293,4 +293,29 @@ describe("Sockets", () => {
       });
     });
   });
+
+  describe("completeWord", () => {
+    it("should broadcast the updated player to all room members", done => {
+      const socket1 = socketIO("http://localhost:5000");
+      const socket2 = socketIO("http://localhost:5000");
+
+      socket1.emit("createRoom", { name: "CREATE TEST" });
+      socket2.emit("joinRoom", { name: "JOIN TEST", roomID: "0" });
+
+      socket1.emit("completeWord", { roomID: "0", word: "word" });
+
+      socket2.on("completeWord", response => {
+        expect(response).toEqual({
+          status: "SUCCESS",
+          id: socket1.id,
+          name: "CREATE TEST",
+          completedWords: ["word"]
+        });
+
+        socket1.close();
+        socket2.close();
+        done();
+      });
+    });
+  });
 });
