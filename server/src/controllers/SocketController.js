@@ -55,6 +55,19 @@ class SocketController {
     });
   };
 
+  completeWord = ({ roomID, word }) => {
+    const room = Rooms.findOneAndAddCompletedWord(roomID, {
+      id: this.socket.id,
+      word
+    });
+    const player = room.players[this.socket.id];
+
+    this.server.to(roomID).emit("completeWord", {
+      status: "SUCCESS",
+      ...player
+    });
+  };
+
   disconnecting = () => {
     this.roomID = undefined;
 
