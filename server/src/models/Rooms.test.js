@@ -1,9 +1,10 @@
 import Rooms from "./Rooms";
 
-jest.mock("./generateBoard", () => () => ({
+jest.mock("../generateBoard", () => () => ({
   height: 0,
   width: 0,
-  words: []
+  words: [],
+  letters: ["D", "K", "E", "S", "T", "O"]
 }));
 
 describe("Rooms", () => {
@@ -18,7 +19,12 @@ describe("Rooms", () => {
       ).toEqual({
         roomID: "roomID",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           id: {
             id: "id",
@@ -60,7 +66,12 @@ describe("Rooms", () => {
       expect(Rooms.findOne("0")).toEqual({
         roomID: "0",
         stage: "LOBBY",
-        board: { height: 0, width: 0, words: [] },
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           id: {
             id: "id",
@@ -164,7 +175,12 @@ describe("Rooms", () => {
         expect(room).toEqual({
           roomID: "0",
           stage: "LOBBY",
-          board: { height: 0, width: 0, words: [] },
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {
             id: { id: "id", name: "name", completedWords: [] },
             "new id": { id: "new id", name: "new name", completedWords: [] }
@@ -204,7 +220,12 @@ describe("Rooms", () => {
         expect(Rooms.rooms["0"]).toEqual({
           roomID: "0",
           stage: "LOBBY",
-          board: { height: 0, width: 0, words: [] },
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {}
         });
       });
@@ -216,7 +237,12 @@ describe("Rooms", () => {
         expect(Rooms.rooms["0"]).toEqual({
           roomID: "0",
           stage: "LOBBY",
-          board: { height: 0, width: 0, words: [] },
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {
             id: {
               id: "id",
@@ -233,7 +259,12 @@ describe("Rooms", () => {
         expect(room).toEqual({
           roomID: "0",
           stage: "LOBBY",
-          board: { height: 0, width: 0, words: [] },
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {}
         });
       });
@@ -291,6 +322,37 @@ describe("Rooms", () => {
       it("should not modify rooms", () => {
         expect(Rooms.rooms).toEqual({});
       });
+    });
+  });
+
+  describe("findOneAndAddCompletedWord", () => {
+    beforeEach(() => {
+      Rooms.add("0", { id: "id", name: "name" });
+    });
+
+    it("should complete the word for the given player", () => {
+      Rooms.findOneAndAddCompletedWord("0", { id: "id", word: "word" });
+
+      expect(Rooms.rooms["0"].players["id"].completedWords).toEqual(["word"]);
+    });
+
+    it("should not remove any existing completed words", () => {
+      Rooms.findOneAndAddCompletedWord("0", { id: "id", word: "word1" });
+      Rooms.findOneAndAddCompletedWord("0", { id: "id", word: "word2" });
+
+      expect(Rooms.rooms["0"].players["id"].completedWords).toEqual([
+        "word1",
+        "word2"
+      ]);
+    });
+
+    it("should return the updated room", () => {
+      const room = Rooms.findOneAndAddCompletedWord("0", {
+        id: "id",
+        word: "word"
+      });
+
+      expect(room.players["id"].completedWords).toEqual(["word"]);
     });
   });
 });

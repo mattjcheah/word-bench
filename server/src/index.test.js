@@ -5,9 +5,10 @@ jest.mock("./helpers", () => ({
   generateRoomID: jest.fn(() => "0")
 }));
 
-jest.mock("./models/generateBoard", () => () => ({
+jest.mock("./generateBoard", () => () => ({
   height: 9,
   width: 9,
+  letters: ["D", "K", "E", "S", "T", "O"],
   words: [
     {
       word: "toe",
@@ -71,6 +72,7 @@ describe("Sockets", () => {
   const testBoard = {
     height: 9,
     width: 9,
+    letters: ["D", "K", "E", "S", "T", "O"],
     words: [
       {
         word: "toe",
@@ -283,6 +285,31 @@ describe("Sockets", () => {
         expect(response).toEqual({
           status: "SUCCESS",
           stage: "GAME"
+        });
+
+        socket1.close();
+        socket2.close();
+        done();
+      });
+    });
+  });
+
+  describe("completeWord", () => {
+    it("should broadcast the updated player to all room members", done => {
+      const socket1 = socketIO("http://localhost:5000");
+      const socket2 = socketIO("http://localhost:5000");
+
+      socket1.emit("createRoom", { name: "CREATE TEST" });
+      socket2.emit("joinRoom", { name: "JOIN TEST", roomID: "0" });
+
+      socket1.emit("completeWord", { roomID: "0", word: "word" });
+
+      socket2.on("completeWord", response => {
+        expect(response).toEqual({
+          status: "SUCCESS",
+          id: socket1.id,
+          name: "CREATE TEST",
+          completedWords: ["word"]
         });
 
         socket1.close();

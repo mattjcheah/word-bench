@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
-import { dummy_board_data } from "./Constants";
-
 import {
   parseBoardPayload,
   formatBoardKey,
@@ -32,6 +30,10 @@ function GameBoard() {
   gameEndTime.setMinutes(gameEndTime.getMinutes() + minutes);
   gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
 
+  const onSubmitWord = word => {
+    return server.socket.completeWord(server, player.completedWords, word);
+  };
+
   return (
     <div className="background">
       <div id="stars2" />
@@ -51,8 +53,8 @@ function GameBoard() {
             />
           </div>
           <div className="playerInputContainer">
-            <LetterBench />
-            <PlayerInput />
+            <LetterBench letters={server.board.letters} />
+            <PlayerInput onSubmit={onSubmitWord} />
           </div>
         </div>
         <div className="rightSideMain">
@@ -122,9 +124,7 @@ function Board({ board, completedWords }) {
   );
 }
 
-function LetterBench() {
-  const letters = dummy_board_data.board.letters;
-
+function LetterBench({ letters }) {
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
@@ -140,10 +140,19 @@ function LetterBench() {
   );
 }
 
-function PlayerInput() {
+function PlayerInput({ onSubmit }) {
   const [currentInput, setCurrentInput] = useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    const isValidWord = onSubmit(currentInput);
+    if (isValidWord) {
+      setCurrentInput("");
+    }
+  };
+
   return (
-    <div className="field" id="searchform">
+    <form className="field" onSubmit={handleSubmit}>
       <input
         type="text"
         id="searchterm"
@@ -151,10 +160,8 @@ function PlayerInput() {
         value={currentInput}
         onChange={e => setCurrentInput(e.target.value)}
       />
-      <button type="button" id="search">
-        GO
-      </button>
-    </div>
+      <button type="submit">GO</button>
+    </form>
   );
 }
 

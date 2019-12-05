@@ -7,6 +7,7 @@ class Socket {
 
     this.updateOnRoomStatus();
     this.updateOnStartGame();
+    this.updateOnCompleteWord();
   }
 
   updateOnRoomStatus = () => {
@@ -30,6 +31,15 @@ class Socket {
     });
   };
 
+  updateOnCompleteWord = () => {
+    this.socket.on("completeWord", ({ status, ...player }) => {
+      console.log(player);
+      if (status === "SUCCESS") {
+        this.dispatch({ type: "COMPLETE_WORD", player });
+      }
+    });
+  };
+
   createRoom = name => {
     this.socket.emit("createRoom", { name });
 
@@ -44,6 +54,17 @@ class Socket {
 
   startGame = () => {
     this.socket.emit("startGame");
+  };
+
+  completeWord = ({ roomID, board: { words } }, completedWords, word) => {
+    if (
+      words.filter(w => w.word === word).length > 0 &&
+      !completedWords.includes(word)
+    ) {
+      this.socket.emit("completeWord", { roomID, word });
+      return true;
+    }
+    return false;
   };
 
   closeConnection = () => {

@@ -18,6 +18,8 @@ export function startServer() {
 
     socket.on("startGame", socketController.startGame);
 
+    socket.on("completeWord", socketController.completeWord);
+
     socket.on("disconnecting", socketController.disconnecting);
   });
 
