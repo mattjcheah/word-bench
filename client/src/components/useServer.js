@@ -25,6 +25,14 @@ function reducer(state, action) {
         ...state,
         stage: "GAME"
       };
+    case "COMPLETE_WORD":
+      return {
+        ...state,
+        players: {
+          ...state.players,
+          [action.player.id]: action.player
+        }
+      };
     default:
       throw new Error();
   }
