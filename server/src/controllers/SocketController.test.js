@@ -4,10 +4,18 @@ import Rooms from "../models/Rooms";
 jest.mock("../models/Rooms", () => ({
   add: jest.fn(() => ({
     roomID: "0",
+    stage: "LOBBY",
+    board: {
+      height: 0,
+      width: 0,
+      words: [],
+      letters: ["D", "K", "E", "S", "T", "O"]
+    },
     players: {
       "test id": {
         id: "test id",
-        name: "test name"
+        name: "test name",
+        completedWords: []
       }
     }
   })),
@@ -15,14 +23,23 @@ jest.mock("../models/Rooms", () => ({
     if (roomID === "0") {
       return {
         roomID: "0",
+        stage: "LOBBY",
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",
-            name: "host"
+            name: "host",
+            completedWords: []
           },
           "test id": {
             id: "test id",
-            name: "test name"
+            name: "test name",
+            completedWords: []
           }
         }
       };
@@ -33,16 +50,41 @@ jest.mock("../models/Rooms", () => ({
     if (roomID === "0") {
       return {
         roomID: "0",
+        stage: "LOBBY",
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",
-            name: "host"
+            name: "host",
+            completedWords: []
           }
         }
       };
     }
     return undefined;
-  })
+  }),
+  findOneAndAddCompletedWord: jest.fn(() => ({
+    roomID: "0",
+    stage: "GAME",
+    board: {
+      height: 0,
+      width: 0,
+      words: [],
+      letters: ["D", "K", "E", "S", "T", "O"]
+    },
+    players: {
+      "test id": {
+        id: "test id",
+        name: "complete word test",
+        completedWords: ["word"]
+      }
+    }
+  }))
 }));
 
 jest.mock("../helpers", () => ({
@@ -107,13 +149,25 @@ describe("SocketController", () => {
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
         status: "SUCCESS",
         roomID: "0",
+        stage: "LOBBY",
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           "test id": {
             id: "test id",
-            name: "test name"
+            name: "test name",
+            completedWords: []
           }
         }
       });
+    });
+
+    it("should save the roomID to the socket", () => {
+      expect(socketController.roomID).toEqual("0");
     });
   });
 
@@ -142,17 +196,30 @@ describe("SocketController", () => {
         expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
           status: "SUCCESS",
           roomID: "0",
+          stage: "LOBBY",
+          board: {
+            height: 0,
+            width: 0,
+            words: [],
+            letters: ["D", "K", "E", "S", "T", "O"]
+          },
           players: {
             hostID: {
               id: "hostID",
-              name: "host"
+              name: "host",
+              completedWords: []
             },
             "test id": {
               id: "test id",
-              name: "test name"
+              name: "test name",
+              completedWords: []
             }
           }
         });
+      });
+
+      it("should save the roomID to the socket", () => {
+        expect(socketController.roomID).toEqual("0");
       });
     });
 
@@ -166,6 +233,34 @@ describe("SocketController", () => {
             reason: "Room does not exist"
           }
         );
+      });
+    });
+  });
+
+  describe("completeWord", () => {
+    beforeEach(() => {
+      socketController.createRoom({ name: "complete word test" });
+      socketController.completeWord({
+        roomID: "0",
+        playerID: "test id",
+        word: "word"
+      });
+    });
+
+    it("should complete a word for the given player", () => {
+      expect(Rooms.findOneAndAddCompletedWord).toHaveBeenCalledWith("0", {
+        id: "test id",
+        word: "word"
+      });
+    });
+
+    it("should emit to the room the updated player", () => {
+      expect(socketController.server.to).toHaveBeenCalledWith("0");
+      expect(roomEmit).toHaveBeenCalledWith("completeWord", {
+        status: "SUCCESS",
+        id: "test id",
+        name: "complete word test",
+        completedWords: ["word"]
       });
     });
   });
@@ -187,10 +282,18 @@ describe("SocketController", () => {
       expect(roomEmit).toHaveBeenCalledWith("roomStatus", {
         status: "SUCCESS",
         roomID: "0",
+        stage: "LOBBY",
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
         players: {
           hostID: {
             id: "hostID",
-            name: "host"
+            name: "host",
+            completedWords: []
           }
         }
       });

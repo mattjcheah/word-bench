@@ -9,8 +9,10 @@ class SocketController {
 
   createRoom = ({ name }) => {
     const roomID = generateRoomID(Rooms);
+
     const room = Rooms.add(roomID, { id: this.socket.id, name });
 
+    this.roomID = roomID;
     this.socket.join(roomID);
 
     this.server.to(roomID).emit("roomStatus", {
@@ -33,6 +35,7 @@ class SocketController {
       return;
     }
 
+    this.roomID = roomID;
     this.socket.join(roomID);
 
     this.server.to(roomID).emit("roomStatus", {
@@ -41,7 +44,33 @@ class SocketController {
     });
   };
 
+  startGame = () => {
+    Rooms.findOneAndChangeStage(this.roomID, {
+      stage: "GAME"
+    });
+
+    this.server.to(this.roomID).emit("startGame", {
+      status: "SUCCESS",
+      stage: "GAME"
+    });
+  };
+
+  completeWord = ({ roomID, word }) => {
+    const room = Rooms.findOneAndAddCompletedWord(roomID, {
+      id: this.socket.id,
+      word
+    });
+    const player = room.players[this.socket.id];
+
+    this.server.to(roomID).emit("completeWord", {
+      status: "SUCCESS",
+      ...player
+    });
+  };
+
   disconnecting = () => {
+    this.roomID = undefined;
+
     Object.keys(this.socket.rooms).forEach(roomID => {
       const room = Rooms.findOneAndRemovePlayer(roomID, { id: this.socket.id });
 

@@ -125,33 +125,45 @@ body {
 
 .boardContainer {
   border-bottom: 1px solid var(--oxblood);
-  /* height: 200px; */
-  background-color: lightseagreen;
-  /* height: 76vh; */
+  background-image: linear-gradient(#1b2735, #233244);
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
+}
+
+.boardTileOuter {
+  background-color: #e5dad6;
+  margin: 2px;
+  border-radius: 3px;
+}
+
+.boardTileInner {
+  text-align: center;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: calc(14px + 1vw);
+}
+
+.boardTileOuterHidden {
+  background-color: #425972;
+  margin: 2px;
+  border-radius: 3px;
 }
 
 .playerInputContainer {
   border-top: 1px solid var(--oxblood);
-  /* background-color: grey; */
-  /* flex: 1; */
-  /* min-height: 150px; */
   height: 155px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .letterBench {
-  /* border-bottom: 1px solid lightsalmon; */
   margin: 0 auto;
-  /* flex: 1; */
 }
 
 .letterTileContainer {
-  /* height: calc(30px + 2vw);
-  width: calc(30px + 2vw); */
   height: 70px;
   width: 70px;
   background-color: lightgoldenrodyellow;
@@ -163,26 +175,22 @@ body {
   position: relative;
   top: 50%;
   transform: translateY(-50%);
-  /* font-size: calc(16px + 2vw); */
   font-size: 40px;
 }
 
 .playerInput {
-  /* height: auto; */
   display: inline;
 }
 
 .timerContainer {
   border-bottom: 1px solid var(--oxblood);
-  /* background-color: lightcoral; */
   height: 150px;
 }
 
 .opponentsContainer {
   border-top: 1px solid var(--oxblood);
-  // background-color: lightskyblue;
   flex: 1;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .opponentSingleContainer {
@@ -282,7 +290,7 @@ progress[role] {
   width: 100%;
 }
 
-// The unordered list
+// The list
 .skill-list {
   list-style: none;
   margin: 0;
@@ -293,6 +301,7 @@ progress[role] {
 .skill {
   margin-bottom: 1em;
   position: relative;
+
   h3 {
     color: #fff;
     left: 1em;

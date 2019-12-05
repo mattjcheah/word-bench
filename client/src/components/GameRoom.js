@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import Lobby from "./Lobby";
 import ErrorPage from "./ErrorPage";
+import ServerContext from "./ServerContext";
+import GameBoard from "./GameBoard";
 
-const GameRoom = ({ match, userName }) => {
+const GameRoom = ({ match }) => {
+  const server = useContext(ServerContext);
+
+  if (server.stage === "GAME") {
+    return <GameBoard />;
+  }
+
   const roomID = match.params.roomID;
-  if (userName && roomID) {
-    return <Lobby roomID={roomID} userName={userName} />;
+  if (roomID && server.name) {
+    return <Lobby />;
   }
   return <ErrorPage />;
 };

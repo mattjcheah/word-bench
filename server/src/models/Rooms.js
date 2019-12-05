@@ -1,16 +1,27 @@
+import generateBoard from "../generateBoard";
+
 class Rooms {
   static rooms = {};
 
-  static add(roomID, { id, name }) {
-    const room = {
+  static createRoom({ roomID, id, name }) {
+    const board = generateBoard();
+
+    return {
       roomID,
+      stage: "LOBBY",
+      board,
       players: {
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
+  }
+
+  static add(roomID, { id, name }) {
+    const room = Rooms.createRoom({ roomID, id, name });
 
     Rooms.rooms[roomID] = room;
     return room;
@@ -44,7 +55,8 @@ class Rooms {
         ...room.players,
         [id]: {
           id,
-          name
+          name,
+          completedWords: []
         }
       }
     };
@@ -60,6 +72,39 @@ class Rooms {
 
     // eslint-disable-next-line no-unused-vars
     const { [id]: omit, ...players } = room.players;
+    const newRoom = {
+      ...room,
+      players
+    };
+
+    return Rooms.findOneAndUpdate(roomID, newRoom);
+  }
+
+  static findOneAndChangeStage(roomID, { stage }) {
+    const room = Rooms.findOne(roomID);
+    if (!room) {
+      return undefined;
+    }
+
+    const newRoom = {
+      ...room,
+      stage
+    };
+
+    return Rooms.findOneAndUpdate(roomID, newRoom);
+  }
+
+  static findOneAndAddCompletedWord(roomID, { id, word }) {
+    const room = Rooms.findOne(roomID);
+
+    const players = {
+      ...room.players,
+      [id]: {
+        ...room.players[id],
+        completedWords: room.players[id].completedWords.concat(word)
+      }
+    };
+
     const newRoom = {
       ...room,
       players

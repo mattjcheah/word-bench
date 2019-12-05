@@ -42,3 +42,60 @@ export function validateJoinGame(roomNumber, userName) {
   }
   return [true, "ok"];
 }
+
+function generateBoardKey([startRow, startCol], currentIndex, direction) {
+  if (direction === "DOWN") {
+    return formatBoardKey(startRow + currentIndex, startCol);
+  }
+  if (direction === "ACROSS") {
+    return formatBoardKey(startRow, startCol + currentIndex);
+  }
+  throw new Error("Invalid direction");
+}
+
+export function formatBoardKey(row, col) {
+  return row.toString() + "," + col.toString();
+}
+
+export function parseBoardPayload(boardPayload, completedWords) {
+  const boardWidth = boardPayload.width;
+  const boardHeight = boardPayload.height;
+  const words = boardPayload.words;
+
+  let boardRep = {};
+
+  for (var i = 0; i < boardWidth; i++) {
+    for (var j = 0; j < boardHeight; j++) {
+      boardRep[formatBoardKey(i, j)] = {
+        content: "_",
+        found: false
+      };
+    }
+  }
+
+  words.forEach(({ word, direction, startLocation }) => {
+    for (let i = 0; i < word.length; i++) {
+      const boardKey = generateBoardKey(startLocation, i, direction);
+      if (boardRep[boardKey].content === "_" || !boardRep[boardKey].found) {
+        boardRep[boardKey] = {
+          content: word[i],
+          found: completedWords.includes(word)
+        };
+      }
+    }
+  });
+
+  return boardRep;
+}
+
+export function generateOpponents(userID, players, totalNumberOfWords) {
+  return Object.values(players)
+    .filter(({ id }) => id !== userID)
+    .map(player => ({
+      ...player,
+      completion: Math.round(
+        (player.completedWords.length / totalNumberOfWords) * 100
+      )
+    }))
+    .sort((a, b) => b.completedWords.length - a.completedWords.length);
+}

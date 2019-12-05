@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
 import { validateNewGame, validateJoinGame, getQuote } from "./Helpers";
-import { connectToServer } from "../services/socket";
 import "./tooltips.scss";
+import ServerContext from "./ServerContext";
 
-function Landing({ setUserName }) {
+function Landing() {
   const [stage, setStage] = useState("initial");
 
   const quoteObject = getQuote();
@@ -12,11 +12,7 @@ function Landing({ setUserName }) {
   return (
     <div className="landingContainer">
       <div className="landingTitle">Welcome to WordBench</div>
-      <LandingStage
-        stage={stage}
-        setStage={setStage}
-        setUserName={setUserName}
-      />
+      <LandingStage stage={stage} setStage={setStage} />
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />
       <p className="aboutInfo">
@@ -26,14 +22,14 @@ function Landing({ setUserName }) {
   );
 }
 
-function LandingStage({ stage, setStage, setUserName }) {
+function LandingStage({ stage, setStage }) {
   switch (stage) {
     case "initial":
       return <InitialLanding setStage={setStage} />;
     case "newGame":
-      return <NewGameLanding setStage={setStage} setUserName={setUserName} />;
+      return <NewGameLanding setStage={setStage} />;
     case "joinGame":
-      return <JoinGameLanding setStage={setStage} setUserName={setUserName} />;
+      return <JoinGameLanding setStage={setStage} />;
     default:
       return <InitialLanding />;
   }
@@ -54,12 +50,13 @@ function InitialLanding({ setStage }) {
   );
 }
 
-function NewGameLanding({ setStage, setUserName }) {
+function NewGameLanding({ setStage }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
-  const [roomID, setRoomID] = useState(null);
 
   const [isValid, validMessage] = validateNewGame(name, gameLength);
+
+  const server = useContext(ServerContext);
 
   const handleChangeUserName = event => {
     setName(event.target.value);
@@ -70,22 +67,13 @@ function NewGameLanding({ setStage, setUserName }) {
   };
 
   const handleSubmit = () => {
-    setUserName(name);
+    const socket = server.socket;
 
-    const socket = connectToServer();
-
-    socket.emit("createRoom", { name });
-
-    socket.on("roomStatus", response => {
-      if (response.status === "SUCCESS") {
-        setRoomID(response.roomID);
-      }
-      socket.close();
-    });
+    socket.createRoom(name);
   };
 
-  if (roomID) {
-    return <Redirect to={`/${roomID}`} />;
+  if (server.roomID) {
+    return <Redirect to={`/${server.roomID}`} />;
   }
 
   return (
@@ -133,11 +121,13 @@ function NewGameLanding({ setStage, setUserName }) {
   );
 }
 
-function JoinGameLanding({ setStage, setUserName }) {
+function JoinGameLanding({ setStage }) {
   const [roomID, setRoomID] = useState("");
   const [name, setName] = useState("");
 
   const [isValid, validMessage] = validateJoinGame(roomID, name);
+
+  const server = useContext(ServerContext);
 
   const handleChangeRoomNumber = event => {
     setRoomID(event.target.value);
@@ -148,8 +138,14 @@ function JoinGameLanding({ setStage, setUserName }) {
   };
 
   const handleSubmit = () => {
-    setUserName(name);
+    const socket = server.socket;
+
+    socket.joinRoom(name, roomID);
   };
+
+  if (server.roomID) {
+    return <Redirect to={`/${server.roomID}`} />;
+  }
 
   return (
     <div>
@@ -173,13 +169,9 @@ function JoinGameLanding({ setStage, setUserName }) {
           />
         </div>
         {isValid ? (
-          <Link
-            to={`/${roomID}`}
-            className="landingButton"
-            onClick={handleSubmit}
-          >
+          <button className="landingButton" onClick={handleSubmit}>
             JOIN
-          </Link>
+          </button>
         ) : (
           <span tooltip={validMessage} flow="left">
             <button className=" disabledButton" disabled={true}>
