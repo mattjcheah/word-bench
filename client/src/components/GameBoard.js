@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
-import { parseBoardPayload, generateOpponents } from "./Helpers";
+import { parseBoardData, generateOpponents } from "./Helpers";
 
 import ServerContext from "./ServerContext";
 
@@ -78,7 +78,7 @@ function Board({ board, completedWords }) {
   const col_class = (col_cell_width.toString() + "% ").repeat(boardWidth);
   const row_class = (row_cell_width.toString() + "% ").repeat(boardHeight);
 
-  const boardData = parseBoardPayload(board, completedWords);
+  const boardData = parseBoardData(board, completedWords);
 
   return (
     <div style={{ margin: "2% 15%", height: "92%" }}>

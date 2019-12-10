@@ -53,7 +53,7 @@ function getIndexes([startRow, startCol], currentIndex, direction) {
   throw new Error("Invalid direction");
 }
 
-export function parseBoardPayload(boardData, completedWords) {
+export function parseBoardData(boardData, completedWords) {
   const result = [];
 
   for (let i = 0; i < boardData.height; i++) {
