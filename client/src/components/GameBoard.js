@@ -1,11 +1,7 @@
 import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
-import {
-  parseBoardPayload,
-  formatBoardKey,
-  generateOpponents
-} from "./Helpers";
+import { parseBoardPayload, generateOpponents } from "./Helpers";
 
 import ServerContext from "./ServerContext";
 
@@ -82,7 +78,7 @@ function Board({ board, completedWords }) {
   const col_class = (col_cell_width.toString() + "% ").repeat(boardWidth);
   const row_class = (row_cell_width.toString() + "% ").repeat(boardHeight);
 
-  const boardRep = parseBoardPayload(board, completedWords);
+  const boardData = parseBoardPayload(board, completedWords);
 
   return (
     <div style={{ margin: "2% 15%", height: "92%" }}>
@@ -96,29 +92,19 @@ function Board({ board, completedWords }) {
           gridTemplateRows: row_class
         }}
       >
-        {Array(boardWidth)
-          .fill(0)
-          .map((_, indx) => {
-            return Array(boardHeight)
-              .fill(0)
-              .map((y, indy) => {
-                return boardRep[formatBoardKey(indx, indy)].content !== "_" ? (
-                  boardRep[formatBoardKey(indx, indy)].found ? (
-                    <div className="boardTileOuter" key={(indx, indy)}>
-                      <div className="boardTileInner">
-                        {boardRep[
-                          formatBoardKey(indx, indy)
-                        ].content.toUpperCase()}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="boardTileOuterHidden" key={(indx, indy)} />
-                  )
-                ) : (
-                  <div key={(indx, indy)} />
-                );
-              });
-          })}
+        {boardData.map((row, i) =>
+          row.map(({ content, found }, j) =>
+            content === "_" ? (
+              <div key={(i, j)} />
+            ) : found ? (
+              <div className="boardTileOuter" key={(i, j)}>
+                <div className="boardTileInner">{content.toUpperCase()}</div>
+              </div>
+            ) : (
+              <div className="boardTileOuterHidden" key={(i, j)} />
+            )
+          )
+        )}
       </div>
     </div>
   );
@@ -159,6 +145,7 @@ function PlayerInput({ onSubmit }) {
         placeholder="Enter a Word..."
         value={currentInput}
         onChange={e => setCurrentInput(e.target.value)}
+        autoComplete="off"
       />
       <button type="submit">GO</button>
     </form>
