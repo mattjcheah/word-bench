@@ -43,40 +43,6 @@ export function validateJoinGame(roomNumber, userName) {
   return [true, "ok"];
 }
 
-function getIndexes([startRow, startCol], currentIndex, direction) {
-  if (direction === "DOWN") {
-    return [startRow + currentIndex, startCol];
-  }
-  if (direction === "ACROSS") {
-    return [startRow, startCol + currentIndex];
-  }
-  throw new Error("Invalid direction");
-}
-
-export function parseBoardData(boardData, completedWords) {
-  const result = [];
-
-  for (let i = 0; i < boardData.height; i++) {
-    let row = [];
-    for (let j = 0; j < boardData.width; j++) {
-      row.push({ content: "_", found: false });
-    }
-    result.push(row);
-  }
-
-  boardData.words.forEach(({ word, direction, startLocation }) => {
-    const found = completedWords.includes(word);
-    word.split("").forEach((letter, index) => {
-      const [row, col] = getIndexes(startLocation, index, direction);
-      if (result[row][col].content === "_" || !result[row][col].found) {
-        result[row][col] = { content: letter, found };
-      }
-    });
-  });
-
-  return result;
-}
-
 export function generateOpponents(userID, players, totalNumberOfWords) {
   return Object.values(players)
     .filter(({ id }) => id !== userID)
@@ -87,4 +53,46 @@ export function generateOpponents(userID, players, totalNumberOfWords) {
       )
     }))
     .sort((a, b) => b.completedWords.length - a.completedWords.length);
+}
+
+export function parseBoardData(boardData, completedWords) {
+  const result = initialiseBoard(boardData.height, boardData.width);
+
+  boardData.words.forEach(addWordToBoard(completedWords, result));
+
+  return result;
+}
+
+function initialiseBoard(height, width) {
+  const result = [];
+  for (let i = 0; i < height; i++) {
+    let row = [];
+    for (let j = 0; j < width; j++) {
+      row.push({ content: "_", found: false });
+    }
+    result.push(row);
+  }
+  return result;
+}
+
+function addWordToBoard(completedWords, result) {
+  return function({ word, direction, startLocation }) {
+    const found = completedWords.includes(word);
+    word.split("").forEach((letter, index) => {
+      const [row, col] = getIndexes(startLocation, index, direction);
+      if (result[row][col].content === "_" || !result[row][col].found) {
+        result[row][col] = { content: letter, found };
+      }
+    });
+  };
+}
+
+function getIndexes([startRow, startCol], currentIndex, direction) {
+  if (direction === "DOWN") {
+    return [startRow + currentIndex, startCol];
+  }
+  if (direction === "ACROSS") {
+    return [startRow, startCol + currentIndex];
+  }
+  throw new Error("Invalid direction");
 }
