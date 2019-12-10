@@ -16,7 +16,7 @@ function formatCrossword(letters, generatedCrossword) {
     letters,
     words: words.map(({ wordStr, xNum, yNum, isHorizon }) => ({
       word: wordStr,
-      startLocation: [xNum, yNum],
+      startLocation: [yNum, xNum],
       direction: isHorizon ? "ACROSS" : "DOWN"
     }))
   };

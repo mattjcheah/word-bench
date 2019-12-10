@@ -1,10 +1,10 @@
-import generateBoard from "../generateBoard";
+import generateCrossword from "../generateCrossword";
 
 class Rooms {
   static rooms = {};
 
   static createRoom({ roomID, id, name }) {
-    const board = generateBoard();
+    const board = generateCrossword();
 
     return {
       roomID,

@@ -5,7 +5,7 @@ jest.mock("./helpers", () => ({
   generateRoomID: jest.fn(() => "0")
 }));
 
-jest.mock("./generateBoard", () => () => ({
+jest.mock("./generateCrossword", () => () => ({
   height: 9,
   width: 9,
   letters: ["D", "K", "E", "S", "T", "O"],
