@@ -27,6 +27,8 @@
     "socket.io-client": "^2.3.0"
   },
   "dependencies": {
+    "cwg": "^0.2.1",
+    "scrabble": "^1.0.10",
     "socket.io": "^2.3.0"
   }
 }

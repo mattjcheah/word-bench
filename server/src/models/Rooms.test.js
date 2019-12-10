@@ -1,6 +1,6 @@
 import Rooms from "./Rooms";
 
-jest.mock("../generateBoard", () => () => ({
+jest.mock("../generateCrossword", () => () => ({
   height: 0,
   width: 0,
   words: [],
