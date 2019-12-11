@@ -4,7 +4,7 @@
   "description": "Socket IO backend for WordBench",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "npm run watch",
     "watch": "babel-watch src/index.js",
     "test": "jest --watch",
     "lint": "eslint ./src"
