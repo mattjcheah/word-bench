@@ -1,7 +1,8 @@
 import socketIO from "socket.io";
 import SocketController from "./controllers/SocketController";
 
-const PORT = 5000;
+// eslint-disable-next-line no-undef
+const PORT = process.env.PORT || 5000;
 
 const server = socketIO(PORT);
 
