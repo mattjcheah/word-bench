@@ -4,14 +4,17 @@
   "description": "Socket IO backend for WordBench",
   "main": "index.js",
   "scripts": {
-    "start": "npm run watch",
+    "start": "node build/index.js",
+    "build": "babel src --out-dir build",
     "watch": "babel-watch src/index.js",
     "test": "jest --watch",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "deploy": "git subtree push --prefix server heroku master"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.2",
     "@babel/node": "^7.7.0",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
