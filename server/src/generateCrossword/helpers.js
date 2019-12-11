@@ -1,7 +1,5 @@
-import fs from "fs";
+import words from "./wordList";
 
-// eslint-disable-next-line no-undef
-const words = JSON.parse(fs.readFileSync(__dirname + "/wordlist.json"));
 const baseWords = words.filter(word => word.length === 7);
 
 export function getRandomBaseWord() {
