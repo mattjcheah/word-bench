@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node build/index.js",
-    "build": "babel src --out-dir build",
+    "build": "babel src --out-dir build && cd client && npm run build",
     "watch": "babel-watch src/index.js",
     "test": "jest --watch",
     "lint": "eslint ./src",
