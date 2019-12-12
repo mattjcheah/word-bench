@@ -355,4 +355,14 @@ describe("Rooms", () => {
       expect(room.players["id"].completedWords).toEqual(["word"]);
     });
   });
+
+  describe("deleteRoom", () => {
+    it("should remove the given room ID", () => {
+      const roomID = "0";
+      Rooms.add("0", { id: "test id", name: "test name" });
+      Rooms.deleteRoom(roomID);
+
+      expect(Rooms.rooms[roomID]).toBeUndefined();
+    });
+  });
 });
