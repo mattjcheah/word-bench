@@ -31,6 +31,8 @@
   },
   "dependencies": {
     "cwg": "^0.2.1",
+    "express": "^4.17.1",
+    "http": "0.0.0",
     "scrabble": "^1.0.10",
     "socket.io": "^2.3.0"
   }

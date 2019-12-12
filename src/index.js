@@ -1,12 +1,20 @@
+import express from "express";
+import http from "http";
 import socketIO from "socket.io";
 import SocketController from "./controllers/SocketController";
 
-// eslint-disable-next-line no-undef
-const PORT = process.env.PORT || 5000;
+const app = express();
+const httpServer = http.Server(app);
+const server = socketIO(httpServer);
 
-const server = socketIO(PORT);
+const PORT = process.env.PORT || 5000;
+httpServer.listen(PORT);
 
 export function startServer() {
+  app.get("/", function(req, res) {
+    res.send("test");
+  });
+
   server.on("connection", socket => {
     socket.leave(socket.id);
     socket.emit("connectionStatus", { status: "SUCCESS" });
