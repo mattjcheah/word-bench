@@ -2,7 +2,7 @@ import socketIO from "socket.io-client";
 
 class Socket {
   constructor(dispatch) {
-    this.socket = socketIO("https://word-bench.herokuapp.com/");
+    this.socket = socketIO();
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
