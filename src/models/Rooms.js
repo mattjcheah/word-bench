@@ -101,7 +101,9 @@ class Rooms {
       ...room.players,
       [id]: {
         ...room.players[id],
-        completedWords: room.players[id].completedWords.concat(word)
+        completedWords: [
+          ...new Set(room.players[id].completedWords.concat(word))
+        ]
       }
     };
 
