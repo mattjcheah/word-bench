@@ -74,6 +74,8 @@ class SocketController {
     Object.keys(this.socket.rooms).forEach(roomID => {
       const room = Rooms.findOneAndRemovePlayer(roomID, { id: this.socket.id });
 
+      this.socket.leave(roomID);
+
       this.server.to(roomID).emit("roomStatus", {
         status: "SUCCESS",
         ...room
