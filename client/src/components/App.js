@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Landing from "./Landing";
 import { Switch, Route } from "react-router-dom";
 import GameRoom from "./GameRoom";
-import Socket from "../services/Socket";
+import Socket from "../services/socket";
 import ServerContext from "./ServerContext";
 import { useServer } from "./useServer";
 
