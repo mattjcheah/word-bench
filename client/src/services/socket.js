@@ -2,7 +2,7 @@ import socketIO from "socket.io-client";
 
 class Socket {
   constructor(dispatch) {
-    this.socket = socketIO("http://localhost:5000");
+    this.socket = socketIO();
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
