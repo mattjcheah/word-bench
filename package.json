@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node build/index.js",
     "watch": "babel-watch src/index.js",
-    "build": "babel src --out-dir build",
+    "build": "babel src --out-dir build && npm run build:client",
+    "build:client": "cd client && npm run build",
     "test": "jest --watch",
     "lint": "eslint ./src",
     "deploy": "git subtree push --prefix server heroku master"
@@ -27,6 +28,7 @@
     "eslint-plugin-prettier": "^3.1.1",
     "jest": "^24.9.0",
     "prettier": "^1.19.1",
+    "parcel-bundler": "^1.12.4",
     "socket.io-client": "^2.3.0"
   },
   "dependencies": {
