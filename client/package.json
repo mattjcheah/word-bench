@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rm dist/bundle.js",
     "watch": "parcel --port 5001 src/index.html",
-    "build": "parcel build src/index.html"
+    "build": "./node_modules/.bin/parcel build src/index.html"
   },
   "dependencies": {
     "react": "^16.11.0",
