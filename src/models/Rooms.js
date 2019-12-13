@@ -112,6 +112,12 @@ class Rooms {
 
     return Rooms.findOneAndUpdate(roomID, newRoom);
   }
+
+  static deleteRoom = roomID => {
+    // eslint-disable-next-line no-unused-vars
+    const { [roomID]: _omit, ...rooms } = Rooms.rooms;
+    Rooms.rooms = rooms;
+  };
 }
 
 export default Rooms;
