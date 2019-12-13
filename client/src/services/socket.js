@@ -2,7 +2,7 @@ import socketIO from "socket.io-client";
 
 class Socket {
   constructor(dispatch) {
-    this.socket = socketIO();
+    this.socket = socketIO("http://localhost:5000");
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
@@ -33,7 +33,6 @@ class Socket {
 
   updateOnCompleteWord = () => {
     this.socket.on("completeWord", ({ status, ...player }) => {
-      console.log(player);
       if (status === "SUCCESS") {
         this.dispatch({ type: "COMPLETE_WORD", player });
       }
