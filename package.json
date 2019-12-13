@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node build/index.js",
     "watch": "babel-watch src/index.js",
-    "build": "babel src --out-dir build && npm run build:client",
+    "build": "babel src --out-dir build",
     "build:client": "cd client && npm install && npm run build",
+    "heroku-postbuild": "npm run build && npm run build:client",
     "postinstall": "cd client && npm install --only=dev",
     "test": "jest --watch",
     "lint": "eslint ./src",
