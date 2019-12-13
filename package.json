@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node build/index.js",
     "watch": "babel-watch src/index.js",
-    "build": "babel src --out-dir build && npm run build:client",
-    "build:client": "NODE_ENV=development cd client && npm install && npm run build",
+    "build": "babel src --out-dir build",
+    "postinstall": "cd client && npm install && npm run build",
     "test": "jest --watch",
     "lint": "eslint ./src",
     "deploy": "git subtree push --prefix server heroku master"
