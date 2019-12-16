@@ -4,8 +4,7 @@ import generateWordSet from "./generateWordSet";
 function crosswordGenerator() {
   const wordSet = generateWordSet();
 
-  const crossword = formatCrossword(wordSet[0].split(""), cwg(wordSet));
-  return crossword;
+  return formatCrossword(wordSet[0].split(""), cwg(wordSet));
 }
 
 function formatCrossword(letters, generatedCrossword) {

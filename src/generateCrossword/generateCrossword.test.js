@@ -34,7 +34,16 @@ describe("crosswordGenerator", () => {
     expect(generateWordSet).toHaveBeenCalled();
   });
 
-  it("should return a crossword configuration", () => {
-    expect(crossword).toBeTruthy();
+  it("should return words", () => {
+    expect(crossword.words).toEqual(expect.any(Array));
+  });
+
+  it("should have dimensions", () => {
+    expect(crossword.height).toEqual(expect.any(Number));
+    expect(crossword.width).toEqual(expect.any(Number));
+  });
+
+  it("should return letters", () => {
+    expect(new Set(crossword.letters)).toEqual(new Set("welfare".split("")));
   });
 });
