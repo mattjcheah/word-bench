@@ -43,5 +43,3 @@ export function startServer() {
 
   return () => server.close();
 }
-
-startServer();
