@@ -117,7 +117,7 @@ function LetterBench({ letters }) {
         {letters.map((letter, ind) => {
           return (
             <div className="letterTileContainer" key={letter + ind}>
-              <div className="letterTileInner">{letter}</div>
+              <div className="letterTileInner">{letter.toUpperCase()}</div>
             </div>
           );
         })}
