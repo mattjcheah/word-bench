@@ -1,18 +1,33 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { validateNewGame, validateJoinGame, getQuote } from "./Helpers";
 import "./tooltips.scss";
 import ServerContext from "./ServerContext";
 
-function Landing() {
+const RoomContext = React.createContext();
+
+function Landing({ location }) {
   const [stage, setStage] = useState("initial");
+  const [roomID, setRoomID] = useState("");
+
+  useEffect(() => {
+    if (!roomID) {
+      const urlRoomID = new URLSearchParams(location.search).get("roomID");
+      if (urlRoomID) {
+        setRoomID(urlRoomID);
+        setStage("joinGame");
+      }
+    }
+  });
 
   const quoteObject = getQuote();
 
   return (
     <div className="landingContainer">
       <div className="landingTitle">Welcome to WordBench</div>
-      <LandingStage stage={stage} setStage={setStage} />
+      <RoomContext.Provider value={roomID}>
+        <LandingStage stage={stage} setStage={setStage} />
+      </RoomContext.Provider>
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />
       <p className="aboutInfo">
@@ -122,7 +137,8 @@ function NewGameLanding({ setStage }) {
 }
 
 function JoinGameLanding({ setStage }) {
-  const [roomID, setRoomID] = useState("");
+  const urlRoomID = useContext(RoomContext);
+  const [roomID, setRoomID] = useState(urlRoomID);
   const [name, setName] = useState("");
 
   const [isValid, validMessage] = validateJoinGame(roomID, name);
