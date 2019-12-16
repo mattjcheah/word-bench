@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import Lobby from "./Lobby";
-import ErrorPage from "./ErrorPage";
 import ServerContext from "./ServerContext";
 import GameBoard from "./GameBoard";
+import { Redirect } from "react-router-dom";
 
 const GameRoom = ({ match }) => {
   const server = useContext(ServerContext);
@@ -15,7 +15,10 @@ const GameRoom = ({ match }) => {
   if (roomID && server.name) {
     return <Lobby />;
   }
-  return <ErrorPage />;
+
+  if (roomID) {
+    return <Redirect to={`/?roomID=${roomID}`} />;
+  }
 };
 
 export default GameRoom;
