@@ -1,4 +1,5 @@
 import cwg from "cwg";
+import _ from "lodash";
 import generateWordSet from "./generateWordSet";
 
 function crosswordGenerator() {
@@ -12,7 +13,7 @@ function formatCrossword(letters, generatedCrossword) {
   return {
     height,
     width,
-    letters,
+    letters: _.shuffle(letters),
     words: words.map(({ wordStr, xNum, yNum, isHorizon }) => ({
       word: wordStr,
       startLocation: [yNum, xNum],
