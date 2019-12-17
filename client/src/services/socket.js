@@ -55,7 +55,12 @@ class Socket {
     this.socket.emit("startGame");
   };
 
-  completeWord = ({ roomID, board: { words } }, completedWords, word) => {
+  completeWord = (
+    { roomID, board: { words } },
+    completedWords,
+    submittedWord
+  ) => {
+    const word = submittedWord.toLowerCase();
     if (
       words.filter(w => w.word === word).length > 0 &&
       !completedWords.includes(word)
