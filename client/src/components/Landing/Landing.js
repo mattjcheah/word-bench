@@ -46,7 +46,7 @@ function LandingStage({ stage, setStage }) {
     case "joinGame":
       return <JoinGameLanding setStage={setStage} />;
     default:
-      return <InitialLanding />;
+      throw new Error("Stage does not exist");
   }
 }
 
