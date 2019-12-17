@@ -35,6 +35,14 @@ class SocketController {
       return;
     }
 
+    if (room.stage === "GAME") {
+      this.socket.emit("roomStatus", {
+        status: "FAILURE",
+        reason: "You cannot join a game that has already started"
+      });
+      return;
+    }
+
     this.roomID = roomID;
     this.socket.join(roomID);
 
