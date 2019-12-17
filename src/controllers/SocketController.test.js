@@ -19,6 +19,7 @@ jest.mock("../models/Rooms", () => ({
       }
     }
   })),
+
   findOneAndAddPlayer: jest.fn(roomID => {
     if (roomID === "0") {
       return {
@@ -36,6 +37,25 @@ jest.mock("../models/Rooms", () => ({
             name: "host",
             completedWords: []
           },
+          "test id": {
+            id: "test id",
+            name: "test name",
+            completedWords: []
+          }
+        }
+      };
+    }
+    if (roomID === "2") {
+      return {
+        roomID: "0",
+        stage: "GAME",
+        board: {
+          height: 0,
+          width: 0,
+          words: [],
+          letters: ["D", "K", "E", "S", "T", "O"]
+        },
+        players: {
           "test id": {
             id: "test id",
             name: "test name",
@@ -69,6 +89,23 @@ jest.mock("../models/Rooms", () => ({
     return undefined;
   }),
   findOneAndAddCompletedWord: jest.fn(() => ({
+    roomID: "0",
+    stage: "GAME",
+    board: {
+      height: 0,
+      width: 0,
+      words: [],
+      letters: ["D", "K", "E", "S", "T", "O"]
+    },
+    players: {
+      "test id": {
+        id: "test id",
+        name: "complete word test",
+        completedWords: ["word"]
+      }
+    }
+  })),
+  findOneAndChangeStage: jest.fn(() => ({
     roomID: "0",
     stage: "GAME",
     board: {
@@ -172,10 +209,8 @@ describe("SocketController", () => {
   });
 
   describe("joinRoom", () => {
-    describe("given the room exists", () => {
+    describe("given the room exists and has not started", () => {
       beforeEach(() => {
-        Rooms.add("0", { id: "hostID", name: "host" });
-
         const response = { roomID: "0", name: "test name" };
         socketController.joinRoom(response);
       });
@@ -220,6 +255,23 @@ describe("SocketController", () => {
 
       it("should save the roomID to the socket", () => {
         expect(socketController.roomID).toEqual("0");
+      });
+    });
+
+    describe("given the room exists and has started", () => {
+      beforeEach(() => {
+        const response = { roomID: "2", name: "test name" };
+        socketController.joinRoom(response);
+      });
+
+      it("should response with failure", () => {
+        expect(socketController.socket.emit).toHaveBeenCalledWith(
+          "roomStatus",
+          {
+            status: "FAILURE",
+            reason: "You cannot join a game that has already started"
+          }
+        );
       });
     });
 
