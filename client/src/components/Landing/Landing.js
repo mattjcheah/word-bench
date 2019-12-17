@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
-import { validateNewGame, validateJoinGame, getQuote } from "./Helpers";
+// import Popup from "reactjs-popup";
+import { validateNewGame, validateJoinGame, getQuote } from "../Helpers";
 import "./tooltips.scss";
-import ServerContext from "./ServerContext";
+import ServerContext from "../ServerContext";
 
 const RoomContext = React.createContext();
 
