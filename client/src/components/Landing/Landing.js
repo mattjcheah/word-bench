@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getQuote } from "../Helpers";
 import "./tooltips.scss";
 import RoomContext from "./RoomContext";
+import InitialLanding from "./InitialLanding";
 import NewGameLanding from "./NewGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
 
@@ -47,21 +48,6 @@ function LandingStage({ stage, setStage }) {
     default:
       return <InitialLanding />;
   }
-}
-
-function InitialLanding({ setStage }) {
-  return (
-    <div>
-      <div className="menuBorderContainer">
-        <button className="landingButton" onClick={() => setStage("newGame")}>
-          CREATE
-        </button>
-        <button className="landingButton" onClick={() => setStage("joinGame")}>
-          JOIN
-        </button>
-      </div>
-    </div>
-  );
 }
 
 export default Landing;
