@@ -43,41 +43,15 @@ export const quotes = [
   {
     quote: "Quality is not an act, it is a habit.",
     author: "Aristotle"
+  },
+  {
+    quote: "🥺",
+    author: "Sarah Karim"
+  },
+  {
+    quote: "Live. Laugh. Love.",
+    author: "Adam Slomoi"
   }
-  // {
-  //   quote: "We know what we are, but know not what we may be.",
-  //   author: "William Shakespeare"
-  // }
-  // {
-  //   quote: "Well done is better than well said.",
-  //   author: "Benjamin Franklin"
-  // },
-  // {
-  //   quote: "Only I can change my life. No one can do it for me.",
-  //   author: "Carol Burnett"
-  // },
-  // {
-  //   quote:
-  //     "Look up at the stars and not down at your feet. Try to make sense of what you see, and wonder about what makes the universe exist. Be curious.",
-  //   author: "Stephen Hawking"
-  // },
-  // {
-  //   quote: "With the new day comes new strength and new thoughts.",
-  //   author: "Eleanor Roosevelt"
-  // },
-  // {
-  //   quote: "Life is 10% what happens to you and 90% how you react to it.",
-  //   author: "Charles R. Swindoll"
-  // },
-  // {
-  //   quote: "The secret of getting ahead is getting started.",
-  //   author: "Mark Twain"
-  // },
-  // {
-  //   quote:
-  //     "Optimism is the faith that leads to achievement. Nothing can be done without hope and confidence.",
-  //   author: "Helen Keller"
-  // }
 ];
 
 export const dummy_board_data = {
