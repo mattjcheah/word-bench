@@ -1,24 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { getQuote } from "../Helpers";
 import "./tooltips.scss";
 import RoomContext from "./RoomContext";
 import InitialLanding from "./InitialLanding";
 import NewGameLanding from "./NewGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
+import useRedirect from "./useRedirect";
 
 function Landing({ location }) {
   const [stage, setStage] = useState("initial");
   const [roomID, setRoomID] = useState("");
 
-  useEffect(() => {
-    if (!roomID) {
-      const urlRoomID = new URLSearchParams(location.search).get("roomID");
-      if (urlRoomID) {
-        setRoomID(urlRoomID);
-        setStage("joinGame");
-      }
-    }
-  });
+  useRedirect(location, roomID, setRoomID, setStage);
 
   const quoteObject = getQuote();
 
