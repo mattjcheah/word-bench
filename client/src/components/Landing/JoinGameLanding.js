@@ -1,8 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Redirect } from "react-router-dom";
+import Popup from "reactjs-popup";
 import { validateJoinGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 import RoomContext from "./RoomContext";
+
+import "./error-modal.scss";
 
 function JoinGameLanding({ setStage }) {
   const urlRoomID = useContext(RoomContext);
@@ -33,6 +36,11 @@ function JoinGameLanding({ setStage }) {
 
   return (
     <div>
+      <ErrorModal
+        open={Boolean(server.joinError)}
+        closeModal={server.clearError}
+        message={server.joinError}
+      />
       <div className="menuBorderContainer">
         <div className="inputFieldContainer">
           <input
@@ -68,6 +76,19 @@ function JoinGameLanding({ setStage }) {
         </button>
       </div>
     </div>
+  );
+}
+
+function ErrorModal({ open, closeModal, message }) {
+  return (
+    <Popup modal open={open}>
+      <React.Fragment>
+        <p className="error-modal-container">{message}</p>
+        <button className="landingButton" onClick={closeModal}>
+          OK
+        </button>
+      </React.Fragment>
+    </Popup>
   );
 }
 

@@ -13,11 +13,11 @@ class Socket {
   updateOnRoomStatus = () => {
     this.socket.on(
       "roomStatus",
-      ({ status, roomID, players, board, stage }) => {
+      ({ status, roomID, players, board, stage, reason }) => {
         if (status === "SUCCESS") {
           this.dispatch({ type: "UPDATE_ROOM", roomID, players, board, stage });
         } else {
-          throw new Error("Room status failure");
+          this.dispatch({ type: "SET_JOIN_ERROR", errorMessage: reason });
         }
       }
     );
@@ -46,6 +46,7 @@ class Socket {
   };
 
   joinRoom = (name, roomID) => {
+    this.dispatch({ type: "SET_JOIN_ERROR", errorMessage: "" });
     this.socket.emit("joinRoom", { name, roomID });
 
     this.dispatch({ type: "SET_NAME", name });

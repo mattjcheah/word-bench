@@ -19,6 +19,13 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    dispatch({
+      type: "INIT_CLEAR_ERROR",
+      clearError: () => dispatch({ type: "SET_JOIN_ERROR", errorMessage: "" })
+    });
+  }, []);
+
   return (
     <ServerContext.Provider value={state}>
       <Switch>
