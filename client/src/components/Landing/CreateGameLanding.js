@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { validateNewGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 
-function NewGameLanding({ setStage }) {
+function CreateGameLanding({ setStage }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
@@ -76,4 +76,4 @@ function NewGameLanding({ setStage }) {
   );
 }
 
-export default NewGameLanding;
+export default CreateGameLanding;

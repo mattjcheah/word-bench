@@ -3,7 +3,7 @@ import { getQuote } from "../Helpers";
 import "./tooltips.scss";
 import RoomContext from "./RoomContext";
 import InitialLanding from "./InitialLanding";
-import NewGameLanding from "./NewGameLanding";
+import CreateGameLanding from "./CreateGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
 import useRedirect from "./useRedirect";
 
@@ -35,7 +35,7 @@ function LandingStage({ stage, setStage }) {
     case "initial":
       return <InitialLanding setStage={setStage} />;
     case "newGame":
-      return <NewGameLanding setStage={setStage} />;
+      return <CreateGameLanding setStage={setStage} />;
     case "joinGame":
       return <JoinGameLanding setStage={setStage} />;
     default:
