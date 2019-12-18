@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { getQuote } from "../Helpers";
 import "./tooltips.scss";
 import InitialLanding from "./InitialLanding";
-import NewGameLanding from "./NewGameLanding";
+import CreateGameLanding from "./CreateGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
 
 function Landing() {
@@ -28,7 +28,7 @@ function LandingStage({ stage, setStage }) {
     case "initial":
       return <InitialLanding setStage={setStage} />;
     case "newGame":
-      return <NewGameLanding setStage={setStage} />;
+      return <CreateGameLanding setStage={setStage} />;
     case "joinGame":
       return <JoinGameLanding setStage={setStage} />;
     default:

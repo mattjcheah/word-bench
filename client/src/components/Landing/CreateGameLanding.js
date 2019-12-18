@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { validateNewGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 
-function NewGameLanding({ setStage }) {
+function CreateGameLanding({ setStage }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
@@ -40,6 +40,7 @@ function NewGameLanding({ setStage }) {
             value={name}
             onChange={handleChangeUserName}
             className="inputField"
+            autoComplete="off"
           />
           <div style={{ margin: "20px auto" }}>
             <div style={{ display: "inline-block" }}>
@@ -52,6 +53,7 @@ function NewGameLanding({ setStage }) {
               value={gameLength}
               onChange={handleChangeGameLength}
               className="inputField inputFieldNumber"
+              autoComplete="off"
             />
           </div>
         </div>
@@ -74,4 +76,4 @@ function NewGameLanding({ setStage }) {
   );
 }
 
-export default NewGameLanding;
+export default CreateGameLanding;
