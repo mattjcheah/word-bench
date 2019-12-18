@@ -50,6 +50,7 @@ function JoinGameLanding({ setStage }) {
             value={roomID}
             onChange={handleChangeRoomNumber}
             className="inputField"
+            autoComplete="off"
           />
           <input
             type="text"
@@ -58,6 +59,7 @@ function JoinGameLanding({ setStage }) {
             value={name}
             onChange={handleChangeUserName}
             className="inputField"
+            autoComplete="off"
           />
         </div>
         {isValid ? (

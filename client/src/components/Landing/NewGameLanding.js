@@ -40,6 +40,7 @@ function NewGameLanding({ setStage }) {
             value={name}
             onChange={handleChangeUserName}
             className="inputField"
+            autoComplete="off"
           />
           <div style={{ margin: "20px auto" }}>
             <div style={{ display: "inline-block" }}>
@@ -52,6 +53,7 @@ function NewGameLanding({ setStage }) {
               value={gameLength}
               onChange={handleChangeGameLength}
               className="inputField inputFieldNumber"
+              autoComplete="off"
             />
           </div>
         </div>
