@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Lobby from "./Lobby";
 import ServerContext from "./ServerContext";
 import GameBoard from "./GameBoard";
@@ -17,7 +17,7 @@ const GameRoom = ({ match }) => {
   }
 
   if (roomID) {
-    return <Redirect to={`/?roomID=${roomID}`} />;
+    return <Redirect to={`/`} />;
   }
 };
 

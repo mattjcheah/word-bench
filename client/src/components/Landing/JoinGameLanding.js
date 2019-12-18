@@ -3,13 +3,11 @@ import { Redirect } from "react-router-dom";
 import Popup from "reactjs-popup";
 import { validateJoinGame } from "../Helpers";
 import ServerContext from "../ServerContext";
-import RoomContext from "./RoomContext";
 
 import "./error-modal.scss";
 
 function JoinGameLanding({ setStage }) {
-  const urlRoomID = useContext(RoomContext);
-  const [roomID, setRoomID] = useState(urlRoomID);
+  const [roomID, setRoomID] = useState("");
   const [name, setName] = useState("");
 
   const [isValid, validMessage] = validateJoinGame(roomID, name);

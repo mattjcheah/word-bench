@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import { getQuote } from "../Helpers";
 import "./tooltips.scss";
-import RoomContext from "./RoomContext";
 import InitialLanding from "./InitialLanding";
 import NewGameLanding from "./NewGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
-import useRedirect from "./useRedirect";
 
-function Landing({ location }) {
+function Landing() {
   const [stage, setStage] = useState("initial");
-  const [roomID, setRoomID] = useState("");
-
-  useRedirect(location, roomID, setRoomID, setStage);
 
   const quoteObject = getQuote();
 
   return (
     <div className="landingContainer">
       <div className="landingTitle">Welcome to WordBench</div>
-      <RoomContext.Provider value={roomID}>
-        <LandingStage stage={stage} setStage={setStage} />
-      </RoomContext.Provider>
+      <LandingStage stage={stage} setStage={setStage} />
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />
       <p className="aboutInfo">
