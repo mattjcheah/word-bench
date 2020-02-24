@@ -30,6 +30,14 @@ function reducer(state, action) {
         ...state,
         stage: "GAME"
       };
+    case "SHUFFLE_LETTERS":
+      return {
+        ...state,
+        board: {
+          ...state.board,
+          letters: action.letters
+        }
+      };
     case "COMPLETE_WORD":
       return {
         ...state,
