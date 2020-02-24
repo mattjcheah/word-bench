@@ -163,7 +163,8 @@ body {
   margin: 0 auto;
 }
 
-.letterTileContainer {
+.letterTileContainer,
+.shuffle-button {
   height: 70px;
   width: 70px;
   background-color: lightgoldenrodyellow;
@@ -176,6 +177,10 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 40px;
+}
+
+.shuffle-button:focus {
+  outline: none;
 }
 
 .playerInput {
@@ -311,6 +316,7 @@ progress[role] {
   }
   ::-webkit-progress-value {
     -webkit-animation: bar-fill 2s;
+    animation: bar-fill 2s;
     width: 0px;
   }
 }

@@ -8,6 +8,8 @@ import ServerContext from "./ServerContext";
 import "../components/stars.scss";
 import "../components/bokeh.scss";
 
+import ShuffleButton from "./ShuffleButton";
+
 function GameBoard() {
   const server = useContext(ServerContext);
 
@@ -30,6 +32,8 @@ function GameBoard() {
     return server.socket.completeWord(server, player.completedWords, word);
   };
 
+  const shuffleLetters = () => {};
+
   return (
     <div className="background">
       <div id="stars2" />
@@ -49,7 +53,10 @@ function GameBoard() {
             />
           </div>
           <div className="playerInputContainer">
-            <LetterBench letters={server.board.letters} />
+            <LetterBench
+              letters={server.board.letters}
+              shuffleLetters={shuffleLetters}
+            />
             <PlayerInput onSubmit={onSubmitWord} />
           </div>
         </div>
@@ -110,7 +117,7 @@ function Board({ board, completedWords }) {
   );
 }
 
-function LetterBench({ letters }) {
+function LetterBench({ letters, shuffleLetters }) {
   return (
     <div className="letterBench">
       <div style={{ display: "flex" }}>
@@ -121,6 +128,7 @@ function LetterBench({ letters }) {
             </div>
           );
         })}
+        <ShuffleButton shuffleLetters={shuffleLetters} />
       </div>
     </div>
   );
