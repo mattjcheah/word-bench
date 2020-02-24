@@ -32,7 +32,9 @@ function GameBoard() {
     return server.socket.completeWord(server, player.completedWords, word);
   };
 
-  const shuffleLetters = () => {};
+  const shuffleLetters = () => {
+    server.socket.shuffleLetters(server.board.letters);
+  };
 
   return (
     <div className="background">

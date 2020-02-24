@@ -1,4 +1,5 @@
 import socketIO from "socket.io-client";
+import lodash from "lodash";
 
 class Socket {
   constructor(dispatch) {
@@ -54,6 +55,12 @@ class Socket {
 
   startGame = () => {
     this.socket.emit("startGame");
+  };
+
+  shuffleLetters = oldLetters => {
+    const letters = lodash.shuffle(oldLetters);
+
+    this.dispatch({ type: "SHUFFLE_LETTERS", letters });
   };
 
   completeWord = (
