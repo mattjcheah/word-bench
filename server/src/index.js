@@ -16,15 +16,15 @@ startServer();
 httpServer.listen(PORT);
 
 function setupExpress() {
-  app.use(express.static(path.join(__dirname, "../client/dist")));
+  app.use(express.static(path.join(__dirname, "../../client/dist")));
 
   app.get("/*", (_req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
+    res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
   });
 }
 
 export function startServer() {
-  server.on("connection", socket => {
+  server.on("connection", (socket) => {
     socket.leave(socket.id);
     socket.emit("connectionStatus", { status: "SUCCESS" });
 
