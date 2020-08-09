@@ -3,7 +3,7 @@ import lodash from "lodash";
 
 class Socket {
   constructor(dispatch) {
-    this.socket = socketIO("http://word-bench.herokuapp.com/");
+    this.socket = socketIO("ws://word-bench.herokuapp.com/");
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
