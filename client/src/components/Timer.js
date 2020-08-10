@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const Timer = props => {
+const Timer = (props) => {
   const { gameEndTime } = props;
-  const [secondsCountUp, setSecondsCountUp] = useState(0);
+  const [, setSecondsCountUp] = useState(0);
 
   const [isActive, setIsActive] = useState(true);
 
@@ -22,13 +22,13 @@ const Timer = props => {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSecondsCountUp(seconds => seconds + 1);
+        setSecondsCountUp((seconds) => seconds + 1);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [isActive, seconds]);
+  }, [isActive, seconds, minutes]);
 
   return (
     <div className="timer">

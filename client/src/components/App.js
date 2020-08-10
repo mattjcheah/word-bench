@@ -17,14 +17,14 @@ function App() {
     return () => {
       socket.closeConnection();
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch({
       type: "INIT_CLEAR_ERROR",
-      clearError: () => dispatch({ type: "SET_JOIN_ERROR", errorMessage: "" })
+      clearError: () => dispatch({ type: "SET_JOIN_ERROR", errorMessage: "" }),
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <ServerContext.Provider value={state}>
