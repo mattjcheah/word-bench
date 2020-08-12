@@ -11,11 +11,14 @@ function CreateGameLanding({ setStage }) {
 
   const server = useContext(ServerContext);
 
-  const handleChangeUserName = event => {
-    setName(event.target.value);
+  const handleChangeUserName = (event) => {
+    const value = event.target.value;
+    if (value.length <= 32) {
+      setName(value);
+    }
   };
 
-  const handleChangeGameLength = event => {
+  const handleChangeGameLength = (event) => {
     setGameLength(event.target.value);
   };
 

@@ -14,12 +14,15 @@ function JoinGameLanding({ setStage }) {
 
   const server = useContext(ServerContext);
 
-  const handleChangeRoomNumber = event => {
+  const handleChangeRoomNumber = (event) => {
     setRoomID(event.target.value);
   };
 
-  const handleChangeUserName = event => {
-    setName(event.target.value);
+  const handleChangeUserName = (event) => {
+    const value = event.target.value;
+    if (value.length <= 32) {
+      setName(value);
+    }
   };
 
   const handleSubmit = () => {
