@@ -9,7 +9,7 @@ import "../components/stars.scss";
 import "../components/bokeh.scss";
 
 import Board from "../components/Board";
-import ShuffleButton from "./ShuffleButton";
+import LetterBench from "../components/LetterBench";
 
 const GameBoard = () => {
   const server = useContext(ServerContext);
@@ -77,23 +77,6 @@ const GameBoard = () => {
     </div>
   );
 };
-
-function LetterBench({ letters, shuffleLetters }) {
-  return (
-    <div className="letterBench">
-      <div style={{ display: "flex" }}>
-        {letters.map((letter, ind) => {
-          return (
-            <div className="letterTileContainer" key={letter + ind}>
-              <div className="letterTileInner">{letter.toUpperCase()}</div>
-            </div>
-          );
-        })}
-        <ShuffleButton shuffleLetters={shuffleLetters} />
-      </div>
-    </div>
-  );
-}
 
 function PlayerInput({ onSubmit }) {
   const [currentInput, setCurrentInput] = useState("");
