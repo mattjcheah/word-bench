@@ -3,7 +3,7 @@ import { useReducer } from "react";
 export function useServer() {
   return useReducer(reducer, {
     socket: null,
-    clearError: () => {}
+    clearError: () => {},
   });
 }
 
@@ -23,28 +23,28 @@ function reducer(state, action) {
         roomID: action.roomID,
         stage: action.stage,
         players: action.players,
-        board: action.board
+        board: action.board,
       };
     case "START_GAME":
       return {
         ...state,
-        stage: "GAME"
+        stage: "GAME",
       };
     case "SHUFFLE_LETTERS":
       return {
         ...state,
         board: {
           ...state.board,
-          letters: action.letters
-        }
+          letters: action.letters,
+        },
       };
     case "COMPLETE_WORD":
       return {
         ...state,
         players: {
           ...state.players,
-          [action.player.id]: action.player
-        }
+          [action.player.id]: action.player,
+        },
       };
     default:
       throw new Error();

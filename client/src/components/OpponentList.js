@@ -1,9 +1,15 @@
 import React from "react";
 
-const OpponentList = ({ opponents: opponentList }) => {
-  const opponents = opponentList
-    .slice()
-    .sort((a, b) => (a.completion < b.completion ? 1 : -1));
+const OpponentList = ({ currentPlayerId, players, totalNumberOfWords }) => {
+  const opponents = Object.values(players)
+    .filter(({ id }) => id !== currentPlayerId)
+    .map((player) => ({
+      ...player,
+      completion: Math.round(
+        (player.completedWords.length / totalNumberOfWords) * 100
+      ),
+    }))
+    .sort((a, b) => b.completedWords.length - a.completedWords.length);
 
   return (
     <ul className="skill-list">

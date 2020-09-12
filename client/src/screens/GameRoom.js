@@ -8,7 +8,16 @@ const GameRoom = ({ match }) => {
   const server = useContext(ServerContext);
 
   if (server.stage === "GAME") {
-    return <GameBoard />;
+    return (
+      <GameBoard
+        currentPlayerId={server.socket.socket.id}
+        roomId={server.roomID}
+        players={server.players}
+        board={server.board}
+        completeWord={server.socket.completeWord}
+        shuffleLetters={server.socket.shuffleLetters}
+      />
+    );
   }
 
   const roomID = match.params.roomID;

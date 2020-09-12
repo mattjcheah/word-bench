@@ -3,7 +3,7 @@ import lodash from "lodash";
 
 class Socket {
   constructor(dispatch) {
-    this.socket = socketIO("wss://word-bench.herokuapp.com/");
+    this.socket = socketIO("ws://localhost:5000/");
     this.dispatch = dispatch;
 
     this.updateOnRoomStatus();
@@ -63,17 +63,13 @@ class Socket {
     this.dispatch({ type: "SHUFFLE_LETTERS", letters });
   };
 
-  completeWord = (
-    { roomID, board: { words } },
-    completedWords,
-    submittedWord
-  ) => {
+  completeWord = (roomId, words, completedWords, submittedWord) => {
     const word = submittedWord.toLowerCase();
     if (
       words.filter((w) => w.word === word).length > 0 &&
       !completedWords.includes(word)
     ) {
-      this.socket.emit("completeWord", { roomID, word });
+      this.socket.emit("completeWord", { roomID: roomId, word });
       return true;
     }
     return false;

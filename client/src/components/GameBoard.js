@@ -1,42 +1,30 @@
-import React, { useContext } from "react";
-import Timer from "./Timer";
-
-import { generateOpponents } from "./Helpers";
-
-import ServerContext from "./ServerContext";
-
-import "./stars.scss";
-import "./bokeh.scss";
+import React from "react";
 
 import Board from "./Board";
 import LetterBench from "./LetterBench";
 import PlayerInput from "./PlayerInput";
 import OpponentList from "./OpponentList";
 
-const GameBoard = () => {
-  const server = useContext(ServerContext);
+import "./stars.scss";
+import "./bokeh.scss";
 
-  const player = server.players[server.socket.socket.id];
-
-  const opponents = generateOpponents(
-    server.id,
-    server.players,
-    server.board.words.length
-  );
-
-  const minutes = 0;
-  const seconds = 11;
-
-  const gameEndTime = new Date();
-  gameEndTime.setMinutes(gameEndTime.getMinutes() + minutes);
-  gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
+const GameBoard = ({
+  currentPlayerId,
+  roomId,
+  players,
+  board,
+  completeWord,
+  shuffleLetters,
+}) => {
+  const currentPlayer = players[currentPlayerId];
 
   const onSubmitWord = (word) => {
-    return server.socket.completeWord(server, player.completedWords, word);
-  };
-
-  const shuffleLetters = () => {
-    server.socket.shuffleLetters(server.board.letters);
+    return completeWord(
+      roomId,
+      board.words,
+      currentPlayer.completedWords,
+      word
+    );
   };
 
   return (
@@ -53,13 +41,13 @@ const GameBoard = () => {
         <div className="leftSideMain">
           <div className="boardContainer">
             <Board
-              board={server.board}
-              completedWords={player.completedWords}
+              board={board}
+              completedWords={currentPlayer.completedWords}
             />
           </div>
           <div className="playerInputContainer">
             <LetterBench
-              letters={server.board.letters}
+              letters={board.letters}
               shuffleLetters={shuffleLetters}
             />
             <PlayerInput onSubmit={onSubmitWord} />
@@ -68,11 +56,14 @@ const GameBoard = () => {
         <div className="rightSideMain">
           <div className="timerContainer">
             <p className="sideBarTitle">TIME REMAINING</p>
-            <Timer gameEndTime={gameEndTime} />
           </div>
           <div className="opponentsContainer">
             <p className="sideBarTitle">PLAYERS</p>
-            <OpponentList opponents={opponents} />
+            <OpponentList
+              currentPlayerId={currentPlayerId}
+              players={players}
+              totalNumberOfWords={board.words.length}
+            />
           </div>
         </div>
       </div>

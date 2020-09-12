@@ -13,7 +13,7 @@ const LetterBench = ({ letters, shuffleLetters }) => {
             </div>
           );
         })}
-        <ShuffleButton shuffleLetters={shuffleLetters} />
+        <ShuffleButton shuffleLetters={() => shuffleLetters(letters)} />
       </div>
     </div>
   );
