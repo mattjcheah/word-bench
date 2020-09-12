@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { validateJoinGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 
+import LandingButton from "../LandingButton";
 import ErrorModal from "../ErrorModal";
 
 function JoinGameLanding({ setStage }) {
@@ -63,9 +64,7 @@ function JoinGameLanding({ setStage }) {
           />
         </div>
         {isValid ? (
-          <button className="landingButton" onClick={handleSubmit}>
-            JOIN
-          </button>
+          <LandingButton onClick={handleSubmit}>JOIN</LandingButton>
         ) : (
           <span tooltip={validMessage} flow="left">
             <button className=" disabledButton" disabled={true}>
@@ -73,9 +72,7 @@ function JoinGameLanding({ setStage }) {
             </button>
           </span>
         )}
-        <button className="landingButton" onClick={() => setStage("initial")}>
-          BACK
-        </button>
+        <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       </div>
     </div>
   );

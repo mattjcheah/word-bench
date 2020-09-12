@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
 import { getQuote } from "./Helpers";
 import ServerContext from "./ServerContext";
+
+import LandingButton from "./LandingButton";
 
 function Lobby() {
   const server = useContext(ServerContext);
@@ -18,17 +19,12 @@ function Lobby() {
       <div className="menuBorderContainer">
         <p style={{ fontWeight: "900" }}>Room ID: {server.roomID}</p>
         <br />
-        {players.map(player => {
+        {players.map((player) => {
           return <p key={player.id}>{player.name}</p>;
         })}
         <br />
         <br />
-        <button className="landingButton" onClick={handleStart}>
-          Start
-        </button>
-        <Link to="/" className="landingButton">
-          QUIT
-        </Link>
+        <LandingButton onClick={handleStart}>Start</LandingButton>
       </div>
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />

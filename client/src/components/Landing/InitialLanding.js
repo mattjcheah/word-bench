@@ -1,15 +1,14 @@
 import React from "react";
+import LandingButton from "../LandingButton";
 
 function InitialLanding({ setStage }) {
   return (
     <div>
       <div className="menuBorderContainer">
-        <button className="landingButton" onClick={() => setStage("newGame")}>
+        <LandingButton onClick={() => setStage("newGame")}>
           CREATE
-        </button>
-        <button className="landingButton" onClick={() => setStage("joinGame")}>
-          JOIN
-        </button>
+        </LandingButton>
+        <LandingButton onClick={() => setStage("joinGame")}>JOIN</LandingButton>
       </div>
     </div>
   );

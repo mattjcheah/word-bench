@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Button = styled.button`
+const LandingButton = styled.button`
   padding: 10px 25px;
   margin: 5px;
   font-size: calc(14px + 0.3vw);
@@ -22,4 +22,4 @@ const Button = styled.button`
   }
 `;
 
-export default Button;
+export default LandingButton;

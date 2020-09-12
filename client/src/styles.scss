@@ -62,28 +62,6 @@ body {
   border-bottom: 1px solid var(--oxblood);
 }
 
-.landingButton {
-  padding: 10px 25px;
-  margin: 5px;
-  font-size: calc(14px + 0.3vw);
-  text-decoration: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--blackboard);
-  border: 1px solid var(--blackboard);
-}
-
-.landingButton:hover {
-  color: white;
-  background: var(--oxblood);
-  border: 1px solid var(--oxblood);
-  cursor: pointer;
-}
-
-.landingButton:focus {
-  outline: none;
-}
-
 .disabledButton {
   padding: 10px 25px;
   margin: 5px;

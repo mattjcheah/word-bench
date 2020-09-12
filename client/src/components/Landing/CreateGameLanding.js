@@ -3,6 +3,8 @@ import { Redirect } from "react-router-dom";
 import { validateNewGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 
+import LandingButton from "../LandingButton";
+
 function CreateGameLanding({ setStage }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
@@ -61,9 +63,7 @@ function CreateGameLanding({ setStage }) {
           </div>
         </div>
         {isValid ? (
-          <button className="landingButton" onClick={handleSubmit}>
-            CREATE
-          </button>
+          <LandingButton onClick={handleSubmit}>CREATE</LandingButton>
         ) : (
           <span tooltip={validMessage} flow="left">
             <button className=" disabledButton" disabled={true}>
@@ -71,9 +71,7 @@ function CreateGameLanding({ setStage }) {
             </button>
           </span>
         )}
-        <button className="landingButton" onClick={() => setStage("initial")}>
-          BACK
-        </button>
+        <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       </div>
     </div>
   );
