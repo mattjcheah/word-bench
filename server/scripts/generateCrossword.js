@@ -31,7 +31,7 @@ function generateCrosswords() {
     .filter(hasCrossword)
     .map((set) => generateCrossword(set));
   fs.writeFileSync(
-    __dirname + "/crosswords.json",
+    __dirname + "/output/crosswords.json",
     JSON.stringify(crosswords, undefined, 2)
   );
 }

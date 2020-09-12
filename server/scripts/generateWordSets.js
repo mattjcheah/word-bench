@@ -20,7 +20,7 @@ function generateWordSets() {
     .filter((wordList) => wordList.length >= 5)
     .sort((a, b) => a.length - b.length);
 
-  fs.writeFileSync(__dirname + "/wordsets.txt", validWords.join("\n"));
+  fs.writeFileSync(__dirname + "/output/wordsets.txt", validWords.join("\n"));
 }
 
 generateWordSets();
