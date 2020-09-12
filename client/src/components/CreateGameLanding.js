@@ -1,17 +1,14 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { validateNewGame } from "./Helpers";
-import ServerContext from "./ServerContext";
 
 import LandingButton from "./LandingButton";
 
-function CreateGameLanding({ setStage }) {
+function CreateGameLanding({ setStage, server }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
   const [isValid, validMessage] = validateNewGame(name, gameLength);
-
-  const server = useContext(ServerContext);
 
   const handleChangeUserName = (event) => {
     const value = event.target.value;
@@ -25,9 +22,7 @@ function CreateGameLanding({ setStage }) {
   };
 
   const handleSubmit = () => {
-    const socket = server.socket;
-
-    socket.createRoom(name);
+    server.socket.createRoom(name);
   };
 
   if (server.roomID) {

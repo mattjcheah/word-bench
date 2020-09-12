@@ -1,18 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { Redirect } from "react-router-dom";
 import { validateJoinGame } from "./Helpers";
-import ServerContext from "./ServerContext";
 
 import LandingButton from "./LandingButton";
 import ErrorModal from "./ErrorModal";
 
-function JoinGameLanding({ setStage }) {
+function JoinGameLanding({ setStage, server }) {
   const [roomID, setRoomID] = useState("");
   const [name, setName] = useState("");
 
   const [isValid, validMessage] = validateJoinGame(roomID, name);
-
-  const server = useContext(ServerContext);
 
   const handleChangeRoomNumber = (event) => {
     setRoomID(event.target.value);
@@ -26,9 +23,7 @@ function JoinGameLanding({ setStage }) {
   };
 
   const handleSubmit = () => {
-    const socket = server.socket;
-
-    socket.joinRoom(name, roomID);
+    server.socket.joinRoom(name, roomID);
   };
 
   if (server.roomID) {
