@@ -1,10 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import Popup from "reactjs-popup";
 import { validateJoinGame } from "../Helpers";
 import ServerContext from "../ServerContext";
 
-import "./error-modal.scss";
+import ErrorModal from "../ErrorModal";
 
 function JoinGameLanding({ setStage }) {
   const [roomID, setRoomID] = useState("");
@@ -79,19 +78,6 @@ function JoinGameLanding({ setStage }) {
         </button>
       </div>
     </div>
-  );
-}
-
-function ErrorModal({ open, closeModal, message }) {
-  return (
-    <Popup modal open={open}>
-      <React.Fragment>
-        <p className="error-modal-container">{message}</p>
-        <button className="landingButton" onClick={closeModal}>
-          OK
-        </button>
-      </React.Fragment>
-    </Popup>
   );
 }
 
