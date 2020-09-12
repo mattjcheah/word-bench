@@ -5,14 +5,20 @@ import { validateJoinGame } from "./Helpers";
 import LandingButton from "./LandingButton";
 import ErrorModal from "./ErrorModal";
 
-function JoinGameLanding({ setStage, server }) {
-  const [roomID, setRoomID] = useState("");
+function JoinGameLanding({
+  setStage,
+  roomId: existingRoomId,
+  joinRoom,
+  joinError,
+  clearError,
+}) {
+  const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
 
-  const [isValid, validMessage] = validateJoinGame(roomID, name);
+  const [isValid] = validateJoinGame(roomId, name);
 
   const handleChangeRoomNumber = (event) => {
-    setRoomID(event.target.value);
+    setRoomId(event.target.value);
   };
 
   const handleChangeUserName = (event) => {
@@ -23,19 +29,19 @@ function JoinGameLanding({ setStage, server }) {
   };
 
   const handleSubmit = () => {
-    server.socket.joinRoom(name, roomID);
+    joinRoom(name, roomId);
   };
 
-  if (server.roomID) {
-    return <Redirect to={`/${server.roomID}`} />;
+  if (existingRoomId) {
+    return <Redirect to={`/${existingRoomId}`} />;
   }
 
   return (
     <div>
       <ErrorModal
-        open={Boolean(server.joinError)}
-        closeModal={server.clearError}
-        message={server.joinError}
+        open={Boolean(joinError)}
+        closeModal={clearError}
+        message={joinError}
       />
       <div className="menuBorderContainer">
         <div className="inputFieldContainer">
@@ -43,7 +49,7 @@ function JoinGameLanding({ setStage, server }) {
             type="text"
             name="room_code"
             placeholder="Enter a room id..."
-            value={roomID}
+            value={roomId}
             onChange={handleChangeRoomNumber}
             className="inputField"
             autoComplete="off"
@@ -61,11 +67,9 @@ function JoinGameLanding({ setStage, server }) {
         {isValid ? (
           <LandingButton onClick={handleSubmit}>JOIN</LandingButton>
         ) : (
-          <span tooltip={validMessage} flow="left">
-            <button className=" disabledButton" disabled={true}>
-              JOIN
-            </button>
-          </span>
+          <button className="disabledButton" disabled={true}>
+            JOIN
+          </button>
         )}
         <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       </div>

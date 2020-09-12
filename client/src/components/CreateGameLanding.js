@@ -4,7 +4,7 @@ import { validateNewGame } from "./Helpers";
 
 import LandingButton from "./LandingButton";
 
-function CreateGameLanding({ setStage, server }) {
+function CreateGameLanding({ setStage, roomId, createRoom }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
@@ -22,11 +22,11 @@ function CreateGameLanding({ setStage, server }) {
   };
 
   const handleSubmit = () => {
-    server.socket.createRoom(name);
+    createRoom(name);
   };
 
-  if (server.roomID) {
-    return <Redirect to={`/${server.roomID}`} />;
+  if (roomId) {
+    return <Redirect to={`/${roomId}`} />;
   }
 
   return (
