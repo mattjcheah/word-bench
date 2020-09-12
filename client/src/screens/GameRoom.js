@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
-import Lobby from "./Lobby";
-import ServerContext from "./ServerContext";
-import GameBoard from "./GameBoard";
+import Lobby from "../components/Lobby";
+import ServerContext from "../components/ServerContext";
+import GameBoard from "../components/GameBoard";
 import { Redirect } from "react-router-dom";
 
 const GameRoom = ({ match }) => {

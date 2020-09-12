@@ -24,7 +24,7 @@ function Lobby() {
         })}
         <br />
         <br />
-        <LandingButton onClick={handleStart}>Start</LandingButton>
+        <LandingButton onClick={handleStart}>START</LandingButton>
       </div>
       <p className="aboutInfo">{quoteObject.quote}</p>
       <br />

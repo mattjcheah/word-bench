@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { getQuote } from "../../components/Helpers";
-import InitialLanding from "./InitialLanding";
-import CreateGameLanding from "./CreateGameLanding";
-import JoinGameLanding from "./JoinGameLanding";
+import { getQuote } from "../components/Helpers";
+import InitialLanding from "../components/InitialLanding";
+import CreateGameLanding from "../components/CreateGameLanding";
+import JoinGameLanding from "../components/JoinGameLanding";
 
 function Landing() {
   const [stage, setStage] = useState("initial");

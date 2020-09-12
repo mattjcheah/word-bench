@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Landing from "./Landing";
+import Landing from "./screens/Landing";
 import { Switch, Route } from "react-router-dom";
-import GameRoom from "./GameRoom";
-import Socket from "../services/socket";
-import ServerContext from "./ServerContext";
-import { useServer } from "./useServer";
+import GameRoom from "./screens/GameRoom";
+import Socket from "./services/socket";
+import ServerContext from "./components/ServerContext";
+import { useServer } from "./components/useServer";
 
 function App() {
   const [state, dispatch] = useServer();

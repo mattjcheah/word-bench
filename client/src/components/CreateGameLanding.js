@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { validateNewGame } from "../../components/Helpers";
-import ServerContext from "../../components/ServerContext";
+import { validateNewGame } from "./Helpers";
+import ServerContext from "./ServerContext";
 
-import LandingButton from "../../components/LandingButton";
+import LandingButton from "./LandingButton";
 
 function CreateGameLanding({ setStage }) {
   const [name, setName] = useState("");
