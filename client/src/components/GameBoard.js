@@ -1,16 +1,17 @@
 import React, { useState, useContext } from "react";
 import Timer from "./Timer";
 
-import { parseBoardData, generateOpponents } from "./Helpers";
+import { generateOpponents } from "./Helpers";
 
 import ServerContext from "./ServerContext";
 
 import "../components/stars.scss";
 import "../components/bokeh.scss";
 
+import Board from "../components/Board";
 import ShuffleButton from "./ShuffleButton";
 
-function GameBoard() {
+const GameBoard = () => {
   const server = useContext(ServerContext);
 
   const player = server.players[server.socket.socket.id];
@@ -28,7 +29,7 @@ function GameBoard() {
   gameEndTime.setMinutes(gameEndTime.getMinutes() + minutes);
   gameEndTime.setSeconds(gameEndTime.getSeconds() + seconds);
 
-  const onSubmitWord = word => {
+  const onSubmitWord = (word) => {
     return server.socket.completeWord(server, player.completedWords, word);
   };
 
@@ -75,49 +76,7 @@ function GameBoard() {
       </div>
     </div>
   );
-}
-
-function Board({ board, completedWords }) {
-  const boardWidth = board.width;
-  const boardHeight = board.height;
-
-  const col_cell_width = 100 / boardWidth;
-  const row_cell_width = 100 / boardHeight;
-
-  const col_class = (col_cell_width.toString() + "% ").repeat(boardWidth);
-  const row_class = (row_cell_width.toString() + "% ").repeat(boardHeight);
-
-  const boardData = parseBoardData(board, completedWords);
-
-  return (
-    <div style={{ margin: "2% 15%", height: "92%" }}>
-      <div
-        style={{
-          zIndex: "999",
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          gridTemplateColumns: col_class,
-          gridTemplateRows: row_class
-        }}
-      >
-        {boardData.map((row, i) =>
-          row.map(({ content, found }, j) =>
-            content === "_" ? (
-              <div key={(i, j)} />
-            ) : found ? (
-              <div className="boardTileOuter" key={(i, j)}>
-                <div className="boardTileInner">{content.toUpperCase()}</div>
-              </div>
-            ) : (
-              <div className="boardTileOuterHidden" key={(i, j)} />
-            )
-          )
-        )}
-      </div>
-    </div>
-  );
-}
+};
 
 function LetterBench({ letters, shuffleLetters }) {
   return (
@@ -139,7 +98,7 @@ function LetterBench({ letters, shuffleLetters }) {
 function PlayerInput({ onSubmit }) {
   const [currentInput, setCurrentInput] = useState("");
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const isValidWord = onSubmit(currentInput);
     if (isValidWord) {
@@ -154,7 +113,7 @@ function PlayerInput({ onSubmit }) {
         id="searchterm"
         placeholder="Enter a Word..."
         value={currentInput}
-        onChange={e => setCurrentInput(e.target.value)}
+        onChange={(e) => setCurrentInput(e.target.value)}
         autoComplete="off"
       />
       <button type="submit">GO</button>
