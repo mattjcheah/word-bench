@@ -13,12 +13,16 @@ const GameRoom = ({ match }) => {
 
   const roomID = match.params.roomID;
   if (roomID && server.name) {
-    return <Lobby />;
+    return (
+      <Lobby
+        roomId={server.roomID}
+        players={Object.values(server.players)}
+        startGame={server.socket.startGame}
+      />
+    );
   }
 
-  if (roomID) {
-    return <Redirect to={`/`} />;
-  }
+  return <Redirect to={`/`} />;
 };
 
 export default GameRoom;
