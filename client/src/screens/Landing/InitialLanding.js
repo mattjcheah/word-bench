@@ -1,5 +1,5 @@
 import React from "react";
-import LandingButton from "../LandingButton";
+import LandingButton from "../../components/LandingButton";
 
 function InitialLanding({ setStage }) {
   return (

@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Redirect } from "react-router-dom";
-import { validateJoinGame } from "../Helpers";
-import ServerContext from "../ServerContext";
+import { validateJoinGame } from "../../components/Helpers";
+import ServerContext from "../../components/ServerContext";
 
-import LandingButton from "../LandingButton";
-import ErrorModal from "../ErrorModal";
+import LandingButton from "../../components/LandingButton";
+import ErrorModal from "../../components/ErrorModal";
 
 function JoinGameLanding({ setStage }) {
   const [roomID, setRoomID] = useState("");

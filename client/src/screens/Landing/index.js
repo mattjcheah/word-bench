@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getQuote } from "../Helpers";
+import { getQuote } from "../../components/Helpers";
 import InitialLanding from "./InitialLanding";
 import CreateGameLanding from "./CreateGameLanding";
 import JoinGameLanding from "./JoinGameLanding";
