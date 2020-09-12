@@ -1,15 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import Timer from "./Timer";
 
 import { generateOpponents } from "./Helpers";
 
 import ServerContext from "./ServerContext";
 
-import "../components/stars.scss";
-import "../components/bokeh.scss";
+import "./stars.scss";
+import "./bokeh.scss";
 
-import Board from "../components/Board";
-import LetterBench from "../components/LetterBench";
+import Board from "./Board";
+import LetterBench from "./LetterBench";
+import PlayerInput from "./PlayerInput";
+import OpponentList from "./OpponentList";
 
 const GameBoard = () => {
   const server = useContext(ServerContext);
@@ -77,55 +79,5 @@ const GameBoard = () => {
     </div>
   );
 };
-
-function PlayerInput({ onSubmit }) {
-  const [currentInput, setCurrentInput] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const isValidWord = onSubmit(currentInput);
-    if (isValidWord) {
-      setCurrentInput("");
-    }
-  };
-
-  return (
-    <form className="field" onSubmit={handleSubmit}>
-      <input
-        type="text"
-        id="searchterm"
-        placeholder="Enter a Word..."
-        value={currentInput}
-        onChange={(e) => setCurrentInput(e.target.value)}
-        autoComplete="off"
-      />
-      <button type="submit">GO</button>
-    </form>
-  );
-}
-
-function OpponentList(props) {
-  const { opponents } = props;
-  opponents.sort((a, b) => (a.completion < b.completion ? 1 : -1));
-
-  return (
-    <ul className="skill-list">
-      {opponents.map((opponent, ind) => {
-        const colourIndex = (ind % 4) + 1;
-        const colourClass = "skill-" + colourIndex;
-        return (
-          <li className="skill" key={opponent + ind}>
-            <h3>{opponent.name}</h3>
-            <progress
-              className={colourClass}
-              max="100"
-              value={opponent.completion}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
 
 export default GameBoard;
