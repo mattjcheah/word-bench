@@ -1,12 +1,19 @@
 import React from "react";
+import styled from "styled-components";
 
 import Board from "./Board";
 import LetterBench from "./LetterBench";
 import PlayerInput from "./PlayerInput";
 import OpponentList from "./OpponentList";
+import ShuffleButton from "./ShuffleButton";
 
-import "./stars.scss";
-import "./bokeh.scss";
+// import "./stars.scss";
+// import "./bokeh.scss";
+
+const LetterContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const GameBoard = ({
   currentPlayerId,
@@ -17,7 +24,6 @@ const GameBoard = ({
   shuffleLetters,
 }) => {
   const currentPlayer = players.find((p) => p.id === currentPlayerId);
-
   const onSubmitWord = (word) => {
     if (
       board.words.find((w) => w.word === word) &&
@@ -48,10 +54,13 @@ const GameBoard = ({
             />
           </div>
           <div className="playerInputContainer">
-            <LetterBench
-              letters={board.letters}
-              shuffleLetters={shuffleLetters}
-            />
+            <LetterContainer>
+              <LetterBench
+                letters={board.letters}
+                shuffleLetters={shuffleLetters}
+              />
+              <ShuffleButton shuffleLetters={shuffleLetters} />
+            </LetterContainer>
             <PlayerInput onSubmit={onSubmitWord} />
           </div>
         </div>

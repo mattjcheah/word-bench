@@ -1,21 +1,31 @@
 import React from "react";
+import styled from "styled-components";
 
-import ShuffleButton from "./ShuffleButton";
+const Container = styled.div`
+  display: flex;
+`;
 
-const LetterBench = ({ letters, shuffleLetters }) => {
+const LetterTile = styled.div`
+  background-color: lightgoldenrodyellow;
+  height: 70px;
+  width: 70px;
+  font-size: 2.5rem;
+  margin: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LetterBench = ({ letters }) => {
   return (
-    <div className="letterBench">
-      <div style={{ display: "flex" }}>
-        {letters.map((letter, ind) => {
-          return (
-            <div className="letterTileContainer" key={letter + ind}>
-              <div className="letterTileInner">{letter.toUpperCase()}</div>
-            </div>
-          );
-        })}
-        <ShuffleButton shuffleLetters={() => shuffleLetters(letters)} />
-      </div>
-    </div>
+    <Container>
+      {letters.map((letter, ind) => {
+        return (
+          <LetterTile key={letter + ind}>{letter.toUpperCase()}</LetterTile>
+        );
+      })}
+    </Container>
   );
 };
 

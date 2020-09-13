@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
+import lodash from "lodash";
 
 import getUserId from "../config/getUserId";
+import { cache } from "../graphql/apollo";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import ROOM_UPDATED from "../graphql/queries/roomUpdated";
 import START_GAME from "../graphql/queries/startGame";
@@ -43,6 +45,20 @@ const GameRoom = ({ match }) => {
     [subscribeToMore, roomId]
   );
 
+  const shuffleLetters = () => {
+    cache.modify({
+      id: cache.identify(data.room),
+      fields: {
+        board(cachedBoard) {
+          return {
+            ...cachedBoard,
+            letters: lodash.shuffle(cachedBoard.letters),
+          };
+        },
+      },
+    });
+  };
+
   if (loading && !data) {
     return <div>Loading...</div>;
   }
@@ -69,7 +85,7 @@ const GameRoom = ({ match }) => {
         players={data.room.players}
         board={data.room.board}
         completeWord={completeWord}
-        shuffleLetters={console.log}
+        shuffleLetters={shuffleLetters}
       />
     );
   }
