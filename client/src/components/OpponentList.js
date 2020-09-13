@@ -1,7 +1,6 @@
 import React from "react";
 
 const OpponentList = ({ players, totalNumberOfWords }) => {
-  console.log(players);
   const opponents = players
     .map((player) => ({
       ...player,

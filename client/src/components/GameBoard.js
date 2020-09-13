@@ -19,12 +19,14 @@ const GameBoard = ({
   const currentPlayer = players.find((p) => p.id === currentPlayerId);
 
   const onSubmitWord = (word) => {
-    return completeWord(
-      roomId,
-      board.words,
-      currentPlayer.completedWords,
-      word
-    );
+    if (
+      board.words.find((w) => w.word === word) &&
+      !currentPlayer.completedWords.includes(word)
+    ) {
+      completeWord({ variables: { roomId, word } });
+      return true;
+    }
+    return false;
   };
 
   return (

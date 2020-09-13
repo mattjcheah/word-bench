@@ -8,19 +8,7 @@ const ROOM_UPDATED = gql`
       players {
         id
         name
-      }
-      board {
-        height
-        width
-        letters
-        words {
-          word
-          startLocation {
-            rowNum
-            colNum
-          }
-          direction
-        }
+        completedWords
       }
     }
   }
