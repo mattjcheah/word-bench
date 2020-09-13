@@ -9,6 +9,19 @@ const ROOM_UPDATED = gql`
         id
         name
       }
+      board {
+        height
+        width
+        letters
+        words {
+          word
+          startLocation {
+            rowNum
+            colNum
+          }
+          direction
+        }
+      }
     }
   }
 `;

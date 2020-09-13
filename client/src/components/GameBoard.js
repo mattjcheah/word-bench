@@ -16,7 +16,7 @@ const GameBoard = ({
   completeWord,
   shuffleLetters,
 }) => {
-  const currentPlayer = players[currentPlayerId];
+  const currentPlayer = players.find((p) => p.id === currentPlayerId);
 
   const onSubmitWord = (word) => {
     return completeWord(
@@ -60,7 +60,6 @@ const GameBoard = ({
           <div className="opponentsContainer">
             <p className="sideBarTitle">PLAYERS</p>
             <OpponentList
-              currentPlayerId={currentPlayerId}
               players={players}
               totalNumberOfWords={board.words.length}
             />

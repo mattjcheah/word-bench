@@ -1,8 +1,8 @@
 import React from "react";
 
-const OpponentList = ({ currentPlayerId, players, totalNumberOfWords }) => {
-  const opponents = Object.values(players)
-    .filter(({ id }) => id !== currentPlayerId)
+const OpponentList = ({ players, totalNumberOfWords }) => {
+  console.log(players);
+  const opponents = players
     .map((player) => ({
       ...player,
       completion: Math.round(

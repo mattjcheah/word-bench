@@ -2,14 +2,14 @@ import { ApolloClient, InMemoryCache, split, HttpLink } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
-import { v4 as uuid } from "uuid";
-
-const userId = uuid();
+import getUserId from "../config/getUserId";
 
 const userHeaderLink = setContext((_, { headers }) => {
   // Find or create userId in localStorage
   // const userId = localStorage.getItem("userId") || uuid();
   // localStorage.setItem("userId", userId);
+
+  const userId = getUserId();
 
   return {
     headers: {

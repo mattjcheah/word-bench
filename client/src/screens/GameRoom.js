@@ -1,17 +1,24 @@
 import React, { useContext, useEffect } from "react";
-import Lobby from "../components/Lobby";
-import ServerContext from "../components/ServerContext";
-import GameBoard from "../components/GameBoard";
 import { Redirect } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import Lobby from "../components/Lobby";
+import { useQuery, useMutation } from "@apollo/client";
+
+import getUserId from "../config/getUserId";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import ROOM_UPDATED from "../graphql/queries/roomUpdated";
+import ServerContext from "../components/ServerContext";
+import GameBoard from "../components/GameBoard";
+import START_GAME from "../graphql/queries/startGame";
 
 const GameRoom = ({ match }) => {
   const server = useContext(ServerContext);
   const roomId = match.params.roomID;
 
   const { subscribeToMore, data, loading } = useQuery(FETCH_ROOM, {
+    variables: { roomId },
+  });
+
+  const [startGame] = useMutation(START_GAME, {
     variables: { roomId },
   });
 
@@ -45,7 +52,7 @@ const GameRoom = ({ match }) => {
       <Lobby
         roomId={data.room.id}
         players={data.room.players}
-        startGame={() => console.log("startgame")}
+        startGame={startGame}
       />
     );
   }
@@ -53,12 +60,12 @@ const GameRoom = ({ match }) => {
   if (data.room.stage === "GAME") {
     return (
       <GameBoard
-        currentPlayerId={server.socket.socket.id}
-        roomId={server.roomID}
-        players={server.players}
-        board={server.board}
-        completeWord={server.socket.completeWord}
-        shuffleLetters={server.socket.shuffleLetters}
+        currentPlayerId={getUserId()}
+        roomId={data.room.id}
+        players={data.room.players}
+        board={data.room.board}
+        completeWord={console.log}
+        shuffleLetters={console.log}
       />
     );
   }

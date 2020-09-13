@@ -32,12 +32,12 @@ const addWordToBoard = (completedWords, result) => {
   };
 };
 
-const getIndexes = ([startRow, startCol], currentIndex, direction) => {
+const getIndexes = ({ rowNum, colNum }, currentIndex, direction) => {
   if (direction === "DOWN") {
-    return [startRow + currentIndex, startCol];
+    return [rowNum + currentIndex, colNum];
   }
   if (direction === "ACROSS") {
-    return [startRow, startCol + currentIndex];
+    return [rowNum, colNum + currentIndex];
   }
   throw new Error("Invalid direction");
 };

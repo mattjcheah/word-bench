@@ -10,6 +10,19 @@ const FETCH_ROOM = gql`
         name
         completedWords
       }
+      board {
+        height
+        width
+        letters
+        words {
+          word
+          startLocation {
+            rowNum
+            colNum
+          }
+          direction
+        }
+      }
     }
   }
 `;
