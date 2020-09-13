@@ -60,7 +60,7 @@ const GameRoom = ({ match }) => {
   };
 
   if (loading && !data) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   if (!data) {
