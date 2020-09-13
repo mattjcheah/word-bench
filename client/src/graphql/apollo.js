@@ -5,10 +5,6 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import getUserId from "../config/getUserId";
 
 const userHeaderLink = setContext((_, { headers }) => {
-  // Find or create userId in localStorage
-  // const userId = localStorage.getItem("userId") || uuid();
-  // localStorage.setItem("userId", userId);
-
   const userId = getUserId();
 
   return {
@@ -20,13 +16,16 @@ const userHeaderLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: "http://localhost:3001/graphql",
+  uri: "https://word-bench.herokuapp.com/graphql",
 });
 
 const wsLink = new WebSocketLink({
-  uri: `ws://localhost:3001/graphql`,
+  uri: "wss://word-bench.herokuapp.com/graphql",
   options: {
     reconnect: true,
+    connectionParams: {
+      userId: getUserId(),
+    },
   },
 });
 
@@ -39,14 +38,14 @@ const splitLink = split(
     );
   },
   wsLink,
-  httpLink
+  userHeaderLink.concat(httpLink)
 );
 
 export const cache = new InMemoryCache();
 
 const client = new ApolloClient({
   cache,
-  link: userHeaderLink.concat(splitLink),
+  link: splitLink,
 });
 
 export default client;
