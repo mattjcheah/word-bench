@@ -5,6 +5,8 @@ import GameRoom from "./screens/GameRoom";
 import Socket from "./services/socket";
 import ServerContext from "./components/ServerContext";
 import { useServer } from "./components/useServer";
+import { ApolloProvider } from "@apollo/client";
+import client from "./graphql/apollo";
 
 function App() {
   const [state, dispatch] = useServer();
@@ -27,12 +29,14 @@ function App() {
   }, [dispatch]);
 
   return (
-    <ServerContext.Provider value={state}>
-      <Switch>
-        <Route exact path="/" component={Landing} />
-        <Route path="/:roomID" component={GameRoom} />
-      </Switch>
-    </ServerContext.Provider>
+    <ApolloProvider client={client}>
+      <ServerContext.Provider value={state}>
+        <Switch>
+          <Route exact path="/" component={Landing} />
+          <Route path="/:roomID" component={GameRoom} />
+        </Switch>
+      </ServerContext.Provider>
+    </ApolloProvider>
   );
 }
 

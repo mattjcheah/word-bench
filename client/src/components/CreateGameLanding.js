@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import { validateNewGame } from "./Helpers";
 
 import LandingButton from "./LandingButton";
 
-function CreateGameLanding({ setStage, roomId, createRoom }) {
+function CreateGameLanding({ setStage, createRoom }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
@@ -24,10 +23,6 @@ function CreateGameLanding({ setStage, roomId, createRoom }) {
   const handleSubmit = () => {
     createRoom(name);
   };
-
-  if (roomId) {
-    return <Redirect to={`/${roomId}`} />;
-  }
 
   return (
     <div>

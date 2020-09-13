@@ -3,11 +3,26 @@ import Lobby from "../components/Lobby";
 import ServerContext from "../components/ServerContext";
 import GameBoard from "../components/GameBoard";
 import { Redirect } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import FETCH_ROOM from "../graphql/queries/fetchRoom";
 
 const GameRoom = ({ match }) => {
   const server = useContext(ServerContext);
+  const roomID = match.params.roomID;
 
-  if (server.stage === "GAME") {
+  const { data, loading } = useQuery(FETCH_ROOM, {
+    variables: { roomId: roomID },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data) {
+    return <Redirect to="/" />;
+  }
+
+  if (data.room.stage === "GAME") {
     return (
       <GameBoard
         currentPlayerId={server.socket.socket.id}
@@ -20,18 +35,13 @@ const GameRoom = ({ match }) => {
     );
   }
 
-  const roomID = match.params.roomID;
-  if (roomID && server.name) {
-    return (
-      <Lobby
-        roomId={server.roomID}
-        players={Object.values(server.players)}
-        startGame={server.socket.startGame}
-      />
-    );
-  }
-
-  return <Redirect to={`/`} />;
+  return (
+    <Lobby
+      roomId={data.room.id}
+      players={data.room.players}
+      startGame={() => console.log("startgame")}
+    />
+  );
 };
 
 export default GameRoom;

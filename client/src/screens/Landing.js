@@ -1,9 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+
+import CREATE_ROOM from "../graphql/queries/createRoom";
+import JOIN_ROOM from "../graphql/queries/joinRoom";
 import { getQuote } from "../components/Helpers";
 import InitialLanding from "../components/InitialLanding";
 import CreateGameLanding from "../components/CreateGameLanding";
 import JoinGameLanding from "../components/JoinGameLanding";
-import ServerContext from "../components/ServerContext";
 
 function Landing() {
   const [stage, setStage] = useState("initial");
@@ -24,28 +28,42 @@ function Landing() {
 }
 
 function LandingStage({ stage, setStage }) {
-  const server = useContext(ServerContext);
-  const roomId = server.roomID;
+  const history = useHistory();
+  const [joinError, setJoinError] = useState("");
+
+  const [createRoomMutation] = useMutation(CREATE_ROOM);
+  const [joinRoomMutation] = useMutation(JOIN_ROOM);
+
+  const createRoom = async (name) => {
+    const res = await createRoomMutation({ variables: { name } });
+    const room = res.data.createRoom;
+    history.push(`/${room.id}`);
+  };
+
+  const joinRoom = async (roomId, name) => {
+    try {
+      const res = await joinRoomMutation({
+        variables: { roomId, name },
+      });
+      const room = res.data.joinRoom;
+      history.push(`/${room.id}`);
+    } catch (e) {
+      setJoinError(e.message);
+    }
+  };
 
   switch (stage) {
     case "initial":
       return <InitialLanding setStage={setStage} />;
     case "newGame":
-      return (
-        <CreateGameLanding
-          setStage={setStage}
-          roomId={roomId}
-          createRoom={server.socket.createRoom}
-        />
-      );
+      return <CreateGameLanding setStage={setStage} createRoom={createRoom} />;
     case "joinGame":
       return (
         <JoinGameLanding
           setStage={setStage}
-          roomId={roomId}
-          joinRoom={server.socket.joinRoom}
-          clearError={server.clearError}
-          joinError={server.joinError}
+          joinRoom={joinRoom}
+          clearError={() => setJoinError("")}
+          joinError={joinError}
         />
       );
     default:

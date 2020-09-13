@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import { validateJoinGame } from "./Helpers";
 
 import LandingButton from "./LandingButton";
 import ErrorModal from "./ErrorModal";
 
-function JoinGameLanding({
-  setStage,
-  roomId: existingRoomId,
-  joinRoom,
-  joinError,
-  clearError,
-}) {
+function JoinGameLanding({ setStage, joinRoom, joinError, clearError }) {
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
 
@@ -29,12 +22,8 @@ function JoinGameLanding({
   };
 
   const handleSubmit = () => {
-    joinRoom(name, roomId);
+    joinRoom(roomId, name);
   };
-
-  if (existingRoomId) {
-    return <Redirect to={`/${existingRoomId}`} />;
-  }
 
   return (
     <div>
