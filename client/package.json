@@ -6,6 +6,9 @@
     "watch": "react-scripts start",
     "build": "react-scripts build"
   },
+  "devDependencies": {
+    "node-sass": "^4.14.1"
+  },
   "dependencies": {
     "@apollo/client": "^3.1.5",
     "@testing-library/jest-dom": "^4.2.4",
@@ -13,13 +16,11 @@
     "@testing-library/user-event": "^7.1.2",
     "graphql": "^15.3.0",
     "lodash": "^4.17.19",
-    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.3",
     "reactjs-popup": "^1.5.0",
-    "socket.io-client": "^2.3.0",
     "styled-components": "^5.2.0",
     "subscriptions-transport-ws": "^0.9.18",
     "typeface-roboto": "0.0.75",
