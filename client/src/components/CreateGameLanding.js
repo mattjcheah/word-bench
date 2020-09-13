@@ -1,13 +1,21 @@
 import React, { useState } from "react";
-import { validateNewGame } from "./Helpers";
 
 import LandingButton from "./LandingButton";
+
+const validateNewGame = (username, gameLength) => {
+  const validUsername =
+    username && username.length >= 3 && username.length <= 15;
+  const validGameLength =
+    gameLength && !isNaN(gameLength) && gameLength > 1 && gameLength < 15;
+
+  return validUsername && validGameLength;
+};
 
 function CreateGameLanding({ setStage, createRoom }) {
   const [name, setName] = useState("");
   const [gameLength, setGameLength] = useState("5");
 
-  const [isValid, validMessage] = validateNewGame(name, gameLength);
+  const isValid = validateNewGame(name, gameLength);
 
   const handleChangeUserName = (event) => {
     const value = event.target.value;
@@ -55,11 +63,9 @@ function CreateGameLanding({ setStage, createRoom }) {
         {isValid ? (
           <LandingButton onClick={handleSubmit}>CREATE</LandingButton>
         ) : (
-          <span tooltip={validMessage} flow="left">
-            <button className=" disabledButton" disabled={true}>
-              CREATE
-            </button>
-          </span>
+          <button className=" disabledButton" disabled={true}>
+            CREATE
+          </button>
         )}
         <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       </div>

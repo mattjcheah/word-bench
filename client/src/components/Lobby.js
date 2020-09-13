@@ -1,5 +1,5 @@
 import React from "react";
-import { getQuote } from "./Helpers";
+import getQuote from "./getQuote";
 
 import LandingButton from "./LandingButton";
 

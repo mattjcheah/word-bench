@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 
 import CREATE_ROOM from "../graphql/queries/createRoom";
 import JOIN_ROOM from "../graphql/queries/joinRoom";
-import { getQuote } from "../components/Helpers";
+import getQuote from "../components/getQuote";
 import InitialLanding from "../components/InitialLanding";
 import CreateGameLanding from "../components/CreateGameLanding";
 import JoinGameLanding from "../components/JoinGameLanding";

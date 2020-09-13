@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import { validateJoinGame } from "./Helpers";
 
 import LandingButton from "./LandingButton";
 import ErrorModal from "./ErrorModal";
+
+const validateJoinGame = (roomNumber, username) => {
+  const validRoomNumber = roomNumber && roomNumber.length === 4;
+  const validUsername =
+    username && username.length >= 3 && username.length <= 15;
+
+  return validRoomNumber && validUsername;
+};
 
 function JoinGameLanding({ setStage, joinRoom, joinError, clearError }) {
   const [roomId, setRoomId] = useState("");
   const [name, setName] = useState("");
 
-  const [isValid] = validateJoinGame(roomId, name);
+  const isValid = validateJoinGame(roomId, name);
 
   const handleChangeRoomNumber = (event) => {
     setRoomId(event.target.value);
