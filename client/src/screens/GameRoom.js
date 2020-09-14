@@ -27,7 +27,7 @@ const GameRoom = ({ match }) => {
     variables: { roomId },
   });
 
-  const [completeWord] = useMutation(COMPLETE_WORD);
+  const [completeWordMutation] = useMutation(COMPLETE_WORD);
 
   const [replayGameMutation] = useMutation(REPLAY_GAME);
 
@@ -84,6 +84,24 @@ const GameRoom = ({ match }) => {
   }
 
   if (data.room.stage === "GAME") {
+    const completeWord = (word) => {
+      completeWordMutation({
+        variables: { roomId, word },
+        optimisticResponse: {
+          __typename: "Mutation",
+          completeWord: {
+            __typenam: "Room",
+            ...data.room,
+            players: data.room.players.map((p) =>
+              p.id === getUserId()
+                ? { ...p, completedWords: [...p.completedWords, word] }
+                : p
+            ),
+          },
+        },
+      });
+    };
+
     return (
       <GameBoard
         currentPlayerId={getUserId()}

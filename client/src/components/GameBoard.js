@@ -29,7 +29,7 @@ const GameBoard = ({
       board.words.find((w) => w.word === word) &&
       !currentPlayer.completedWords.includes(word)
     ) {
-      completeWord({ variables: { roomId, word } });
+      completeWord(word);
       return true;
     }
     return false;
