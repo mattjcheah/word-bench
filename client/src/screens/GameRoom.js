@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import lodash from "lodash";
 
@@ -9,12 +9,15 @@ import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import ROOM_UPDATED from "../graphql/queries/roomUpdated";
 import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
+import REPLAY_GAME from "../graphql/queries/replayGame";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import CompletedGameBoard from "../components/CompletedGameBoard";
 
 const GameRoom = ({ match }) => {
   const roomId = match.params.roomID;
+
+  const history = useHistory();
 
   const { subscribeToMore, data, loading } = useQuery(FETCH_ROOM, {
     variables: { roomId },
@@ -25,6 +28,8 @@ const GameRoom = ({ match }) => {
   });
 
   const [completeWord] = useMutation(COMPLETE_WORD);
+
+  const [replayGameMutation] = useMutation(REPLAY_GAME);
 
   useEffect(
     () =>
@@ -92,11 +97,18 @@ const GameRoom = ({ match }) => {
   }
 
   if (data.room.stage === "COMPLETE") {
+    const replayGame = async (name) => {
+      const res = await replayGameMutation({ variables: { roomId, name } });
+      const nextRoomId = res.data.replayGame.id;
+      history.push(`/${nextRoomId}`);
+    };
+
     return (
       <CompletedGameBoard
         currentPlayerId={getUserId()}
         players={data.room.players}
         board={data.room.board}
+        replayGame={replayGame}
       />
     );
   }

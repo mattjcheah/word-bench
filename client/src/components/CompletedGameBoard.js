@@ -4,6 +4,7 @@ import Popup from "reactjs-popup";
 
 import Board from "./Board";
 import OpponentList from "./OpponentList";
+import LandingButton from "./LandingButton";
 
 // import "./stars.scss";
 // import "./bokeh.scss";
@@ -15,7 +16,19 @@ const PopupContainer = styled.div`
   font-size: 3rem;
 `;
 
-const CompletedGameBoard = ({ currentPlayerId, players, board }) => {
+const LandingButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+
+const CompletedGameBoard = ({
+  currentPlayerId,
+  players,
+  board,
+  replayGame,
+}) => {
   const [open, setOpen] = useState(true);
 
   const currentPlayer = players.find((p) => p.id === currentPlayerId);
@@ -35,7 +48,13 @@ const CompletedGameBoard = ({ currentPlayerId, players, board }) => {
               isComplete={true}
             />
           </div>
-          <div className="playerInputContainer"></div>
+          <div className="playerInputContainer">
+            <LandingButtonContainer>
+              <LandingButton onClick={() => replayGame(currentPlayer.name)}>
+                REPLAY
+              </LandingButton>
+            </LandingButtonContainer>
+          </div>
         </div>
         <div className="rightSideMain">
           <div className="timerContainer">
