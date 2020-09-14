@@ -10,6 +10,7 @@ import ROOM_UPDATED from "../graphql/queries/roomUpdated";
 import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
 import REPLAY_GAME from "../graphql/queries/replayGame";
+import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import CompletedGameBoard from "../components/CompletedGameBoard";
@@ -66,7 +67,7 @@ const GameRoom = ({ match }) => {
   };
 
   if (loading && !data) {
-    return <div></div>;
+    return <FullScreenLoading />;
   }
 
   if (!data) {
