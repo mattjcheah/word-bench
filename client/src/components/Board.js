@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 const parseBoardData = (boardData, completedWords) => {
   const result = initialiseBoard(boardData.height, boardData.width);
@@ -42,45 +43,74 @@ const getIndexes = ({ rowNum, colNum }, currentIndex, direction) => {
   throw new Error("Invalid direction");
 };
 
-const Board = ({ board, completedWords }) => {
+const getColours = (found, isComplete) => {
+  if (found) {
+    return {
+      backgroundColor: "grain",
+      color: "blackboard",
+    };
+  }
+
+  if (isComplete) {
+    return { backgroundColor: "oxblood", color: "grain" };
+  }
+
+  return { backgroundColor: "blueboard", color: "blackboard" };
+};
+
+const Container = styled.div`
+  margin: 2% 15%;
+  height: 92%;
+`;
+
+const Crossword = styled.div`
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: ${(props) => props.colClass};
+  grid-template-rows: ${(props) => props.rowClass};
+`;
+
+const Tile = styled.div`
+  background-color: ${(props) => `var(--${props.backgroundColor})`};
+  color: ${(props) => `var(--${props.color})`};
+  margin: 2px;
+  border-radius: 3px;
+  font-size: calc(14px + 1vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Board = ({ board, completedWords, isComplete }) => {
   const boardWidth = board.width;
   const boardHeight = board.height;
 
   const col_cell_width = 100 / boardWidth;
   const row_cell_width = 100 / boardHeight;
 
-  const col_class = (col_cell_width.toString() + "% ").repeat(boardWidth);
-  const row_class = (row_cell_width.toString() + "% ").repeat(boardHeight);
+  const colClass = (col_cell_width.toString() + "% ").repeat(boardWidth);
+  const rowClass = (row_cell_width.toString() + "% ").repeat(boardHeight);
 
   const boardData = parseBoardData(board, completedWords);
 
   return (
-    <div style={{ margin: "2% 15%", height: "92%" }}>
-      <div
-        style={{
-          zIndex: "999",
-          width: "100%",
-          height: "100%",
-          display: "grid",
-          gridTemplateColumns: col_class,
-          gridTemplateRows: row_class,
-        }}
-      >
+    <Container>
+      <Crossword colClass={colClass} rowClass={rowClass}>
         {boardData.map((row, i) =>
           row.map(({ content, found }, j) =>
             content === "_" ? (
               <div key={(i, j)} />
-            ) : found ? (
-              <div className="boardTileOuter" key={(i, j)}>
-                <div className="boardTileInner">{content.toUpperCase()}</div>
-              </div>
             ) : (
-              <div className="boardTileOuterHidden" key={(i, j)} />
+              <Tile key={(i, j)} {...getColours(found, isComplete)}>
+                {(found || isComplete) && content.toUpperCase()}
+              </Tile>
             )
           )
         )}
-      </div>
-    </div>
+      </Crossword>
+    </Container>
   );
 };
 

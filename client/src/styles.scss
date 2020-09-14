@@ -4,6 +4,8 @@
   --oxblood: #763240;
   --tan: #c2a080;
   --darktan: #997a5e;
+  --blueboard: #425972;
+  --lightpink: #ffb6c1;
 }
 
 body {
@@ -106,26 +108,6 @@ body {
   background-image: linear-gradient(#1b2735, #233244);
   flex: 1;
   overflow: auto;
-}
-
-.boardTileOuter {
-  background-color: #e5dad6;
-  margin: 2px;
-  border-radius: 3px;
-}
-
-.boardTileInner {
-  text-align: center;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: calc(14px + 1vw);
-}
-
-.boardTileOuterHidden {
-  background-color: #425972;
-  margin: 2px;
-  border-radius: 3px;
 }
 
 .playerInputContainer {

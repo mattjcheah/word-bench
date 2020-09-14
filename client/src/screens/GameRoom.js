@@ -11,6 +11,7 @@ import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
+import CompletedGameBoard from "../components/CompletedGameBoard";
 
 const GameRoom = ({ match }) => {
   const roomId = match.params.roomID;
@@ -86,6 +87,16 @@ const GameRoom = ({ match }) => {
         board={data.room.board}
         completeWord={completeWord}
         shuffleLetters={shuffleLetters}
+      />
+    );
+  }
+
+  if (data.room.stage === "COMPLETE") {
+    return (
+      <CompletedGameBoard
+        currentPlayerId={getUserId()}
+        players={data.room.players}
+        board={data.room.board}
       />
     );
   }

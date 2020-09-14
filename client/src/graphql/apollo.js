@@ -17,10 +17,12 @@ const userHeaderLink = setContext((_, { headers }) => {
 
 const httpLink = new HttpLink({
   uri: "https://word-bench.herokuapp.com/graphql",
+  // uri: "http://localhost:3001/graphql",
 });
 
 const wsLink = new WebSocketLink({
   uri: "wss://word-bench.herokuapp.com/graphql",
+  // uri: "ws://localhost:3001/graphql",
   options: {
     reconnect: true,
     connectionParams: {
