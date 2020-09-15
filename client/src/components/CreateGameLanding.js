@@ -4,7 +4,7 @@ import LandingButton from "./LandingButton";
 
 const validateNewGame = (username, gameLength) => {
   const validUsername =
-    username && username.length >= 3 && username.length <= 15;
+    username && username.length >= 3 && username.length <= 32;
   const validGameLength =
     gameLength && !isNaN(gameLength) && gameLength > 1 && gameLength < 15;
 
