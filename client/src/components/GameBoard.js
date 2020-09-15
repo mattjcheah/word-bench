@@ -15,21 +15,14 @@ const LetterContainer = styled.div`
   justify-content: center;
 `;
 
-const GameBoard = ({
-  currentPlayerId,
-  roomId,
-  players,
-  board,
-  completeWord,
-  shuffleLetters,
-}) => {
-  const currentPlayer = players.find((p) => p.id === currentPlayerId);
+const GameBoard = ({ currentPlayerId, room, completeWord, shuffleLetters }) => {
+  const currentPlayer = room.players.find((p) => p.id === currentPlayerId);
   const onSubmitWord = (word) => {
     if (
-      board.words.find((w) => w.word === word) &&
+      room.board.words.find((w) => w.word === word) &&
       !currentPlayer.completedWords.includes(word)
     ) {
-      completeWord(word);
+      completeWord(room, word);
       return true;
     }
     return false;
@@ -49,14 +42,14 @@ const GameBoard = ({
         <div className="leftSideMain">
           <div className="boardContainer">
             <Board
-              board={board}
+              board={room.board}
               completedWords={currentPlayer.completedWords}
             />
           </div>
           <div className="playerInputContainer">
             <LetterContainer>
               <LetterBench
-                letters={board.letters}
+                letters={room.board.letters}
                 shuffleLetters={shuffleLetters}
               />
               <ShuffleButton shuffleLetters={shuffleLetters} />
@@ -71,8 +64,8 @@ const GameBoard = ({
           <div className="opponentsContainer">
             <p className="sideBarTitle">PLAYERS</p>
             <OpponentList
-              players={players}
-              totalNumberOfWords={board.words.length}
+              players={room.players}
+              totalNumberOfWords={room.board.words.length}
             />
           </div>
         </div>

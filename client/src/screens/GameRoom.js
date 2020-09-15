@@ -24,14 +24,6 @@ const GameRoom = ({ match }) => {
     variables: { roomId },
   });
 
-  const [startGame] = useMutation(START_GAME, {
-    variables: { roomId },
-  });
-
-  const [completeWordMutation] = useMutation(COMPLETE_WORD);
-
-  const [replayGameMutation] = useMutation(REPLAY_GAME);
-
   useEffect(
     () =>
       subscribeToMore({
@@ -51,6 +43,14 @@ const GameRoom = ({ match }) => {
       }),
     [subscribeToMore, roomId]
   );
+
+  const [startGame] = useMutation(START_GAME, {
+    variables: { roomId },
+  });
+
+  const [completeWordMutation] = useMutation(COMPLETE_WORD);
+
+  const [replayGameMutation] = useMutation(REPLAY_GAME);
 
   const shuffleLetters = () => {
     cache.modify({
@@ -85,30 +85,25 @@ const GameRoom = ({ match }) => {
   }
 
   if (data.room.stage === "GAME") {
-    const completeWord = (word) => {
-      completeWordMutation({
-        variables: { roomId, word },
-        optimisticResponse: {
-          __typename: "Mutation",
-          completeWord: {
-            __typenam: "Room",
-            ...data.room,
-            players: data.room.players.map((p) =>
-              p.id === getUserId()
-                ? { ...p, completedWords: [...p.completedWords, word] }
-                : p
-            ),
+    const completeWord = (room, word) => {
+      const player = room.players.find((p) => p.id === getUserId());
+      cache.modify({
+        id: cache.identify(player),
+        fields: {
+          completedWords(cachedWords) {
+            return [...cachedWords, word];
           },
         },
+      });
+      completeWordMutation({
+        variables: { roomId, word },
       });
     };
 
     return (
       <GameBoard
         currentPlayerId={getUserId()}
-        roomId={data.room.id}
-        players={data.room.players}
-        board={data.room.board}
+        room={data.room}
         completeWord={completeWord}
         shuffleLetters={shuffleLetters}
       />
