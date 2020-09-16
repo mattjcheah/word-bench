@@ -22,7 +22,7 @@ const GameBoard = ({ currentPlayerId, room, completeWord, shuffleLetters }) => {
       room.board.words.find((w) => w.word === word) &&
       !currentPlayer.completedWords.includes(word)
     ) {
-      completeWord(room, word);
+      completeWord(currentPlayer, word);
       return true;
     }
     return false;
@@ -30,14 +30,6 @@ const GameBoard = ({ currentPlayerId, room, completeWord, shuffleLetters }) => {
 
   return (
     <div className="background">
-      <div id="stars2" />
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-
       <div className="gameBoardContainer">
         <div className="leftSideMain">
           <div className="boardContainer">

@@ -85,18 +85,16 @@ const GameRoom = ({ match }) => {
   }
 
   if (data.room.stage === "GAME") {
-    const completeWord = (room, word) => {
-      const player = room.players.find((p) => p.id === getUserId());
-      cache.modify({
-        id: cache.identify(player),
-        fields: {
-          completedWords(cachedWords) {
-            return [...cachedWords, word];
-          },
-        },
-      });
+    const completeWord = (currentPlayer, word) => {
       completeWordMutation({
         variables: { roomId, word },
+        optimisticResponse: {
+          __typename: "Mutation",
+          completeWord: {
+            ...currentPlayer,
+            completedWords: [...currentPlayer.completedWords, word],
+          },
+        },
       });
     };
 
