@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 import Board from "./Board";
 import OpponentList from "./OpponentList";
@@ -34,8 +36,11 @@ const CompletedGameBoard = ({
   const currentPlayer = players.find((p) => p.id === currentPlayerId);
   const isWinner = currentPlayer.completedWords.length === board.words.length;
 
+  const { width, height } = useWindowSize();
+
   return (
     <div className="background">
+      {isWinner && open && <Confetti width={width} height={height} />}
       <Popup open={open} onClose={() => setOpen(false)} closeOnDocumentClick>
         <PopupContainer>{isWinner ? "You Win!" : "You Lose!"}</PopupContainer>
       </Popup>
