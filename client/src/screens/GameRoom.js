@@ -118,8 +118,7 @@ const GameRoom = ({ match }) => {
     return (
       <CompletedGameBoard
         currentPlayerId={getUserId()}
-        players={data.room.players}
-        board={data.room.board}
+        room={data.room}
         replayGame={replayGame}
       />
     );

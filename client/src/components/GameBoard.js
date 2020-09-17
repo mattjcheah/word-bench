@@ -7,9 +7,6 @@ import PlayerInput from "./PlayerInput";
 import OpponentList from "./OpponentList";
 import ShuffleButton from "./ShuffleButton";
 
-// import "./stars.scss";
-// import "./bokeh.scss";
-
 const LetterContainer = styled.div`
   display: flex;
   justify-content: center;

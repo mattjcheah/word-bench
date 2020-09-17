@@ -8,9 +8,6 @@ import Board from "./Board";
 import OpponentList from "./OpponentList";
 import LandingButton from "./LandingButton";
 
-// import "./stars.scss";
-// import "./bokeh.scss";
-
 const PopupContainer = styled.div`
   display: flex;
   align-items: center;
@@ -27,8 +24,7 @@ const LandingButtonContainer = styled.div`
 
 const CompletedGameBoard = ({
   currentPlayerId,
-  players,
-  board,
+  room: { players, board },
   replayGame,
 }) => {
   const [open, setOpen] = useState(true);
