@@ -1,6 +1,6 @@
 import React from "react";
 
-const OpponentList = ({ players, totalNumberOfWords }) => {
+const PlayerList = ({ players, totalNumberOfWords }) => {
   const opponents = players
     .map((player) => ({
       ...player,
@@ -30,4 +30,4 @@ const OpponentList = ({ players, totalNumberOfWords }) => {
   );
 };
 
-export default OpponentList;
+export default PlayerList;

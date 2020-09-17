@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Board from "./Board";
 import LetterBench from "./LetterBench";
 import PlayerInput from "./PlayerInput";
-import OpponentList from "./OpponentList";
+import PlayerList from "./PlayerList";
 import ShuffleButton from "./ShuffleButton";
 import GameLayout from "./GameLayout";
 
@@ -70,7 +70,7 @@ const GameBoard = ({ currentPlayerId, room, completeWord, shuffleLetters }) => {
       sidebar={
         <>
           <SidebarTitle>PLAYERS</SidebarTitle>
-          <OpponentList
+          <PlayerList
             players={room.players}
             totalNumberOfWords={room.board.words.length}
           />

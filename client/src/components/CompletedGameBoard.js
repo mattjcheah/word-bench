@@ -5,7 +5,7 @@ import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
 import Board from "./Board";
-import OpponentList from "./OpponentList";
+import PlayerList from "./PlayerList";
 import LandingButton from "./LandingButton";
 
 const PopupContainer = styled.div`
@@ -63,7 +63,7 @@ const CompletedGameBoard = ({
           </div>
           <div className="opponentsContainer">
             <p className="sideBarTitle">PLAYERS</p>
-            <OpponentList
+            <PlayerList
               players={players}
               totalNumberOfWords={board.words.length}
             />
