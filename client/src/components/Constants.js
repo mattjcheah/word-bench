@@ -1,57 +1,49 @@
 export const quotes = [
   {
     quote: "Soz I'm wfh today.",
-    author: "Max Philip"
+    author: "Max Philip",
   },
   {
     quote:
       "You better come in today because we need to finish our country trivia quiz.",
-    author: "Matt Cheah"
-  },
-  {
-    quote: "There’s 69 days to Christmas my guy.",
-    author: "Julian Lee"
+    author: "Matt Cheah",
   },
   {
     quote: "Define yourself by what you love.",
-    author: "Alex Graham"
+    author: "Alex Graham",
   },
   {
     quote: "I need you to love me.",
-    author: "Justin Ha"
+    author: "Justin Ha",
   },
   {
     quote: "I got 45% off EatClub!",
-    author: "Christine Liu"
+    author: "Christine Liu",
   },
   {
     quote: "I eat pies for breakfast.",
-    author: "Jarry Chen"
+    author: "Jarry Chen",
   },
   {
     quote: "Perfectly balanced, as all things should be.",
-    author: "Thanos"
-  },
-  {
-    quote: "It’s bullshit, I did not hit her. I did nooot. Oh hi, Mark.",
-    author: "Johnny"
+    author: "Thanos",
   },
   {
     quote: "It does not matter how slowly you go as long as you do not stop.",
-    author: "Confucius"
+    author: "Confucius",
   },
   {
     quote: "Quality is not an act, it is a habit.",
-    author: "Aristotle"
+    author: "Aristotle",
   },
   {
     quote: "🥺",
-    author: "Sarah Karim"
+    author: "Sarah Karim",
   },
   {
     quote: "Live. Laugh. Love.",
-    author: "Adam Slomoi"
-  }
+    author: "Adam Slomoi",
+  },
 ];
 
 export const dummy_board_data = {
@@ -64,65 +56,65 @@ export const dummy_board_data = {
       {
         word: "toe",
         startLocation: [0, 1],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "desk",
         startLocation: [2, 0],
-        direction: "ACROSS"
+        direction: "ACROSS",
       },
       {
         word: "dote",
         startLocation: [2, 0],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "toes",
         startLocation: [4, 0],
-        direction: "ACROSS"
+        direction: "ACROSS",
       },
       {
         word: "stoke",
         startLocation: [4, 3],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "stoked",
         startLocation: [6, 1],
-        direction: "ACROSS"
+        direction: "ACROSS",
       },
       {
         word: "sod",
         startLocation: [6, 1],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "does",
         startLocation: [4, 5],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "dose",
         startLocation: [4, 5],
-        direction: "ACROSS"
+        direction: "ACROSS",
       },
       {
         word: "ode",
         startLocation: [2, 8],
-        direction: "DOWN"
+        direction: "DOWN",
       },
       {
         word: "doe",
         startLocation: [8, 1],
-        direction: "ACROSS"
-      }
-    ]
+        direction: "ACROSS",
+      },
+    ],
   },
   players: {
     "[playerID]": {
       id: "[playerID]",
       name: "[name]",
-      completedWords: ["[word]"]
-    }
-  }
+      completedWords: ["[word]"],
+    },
+  },
 };
