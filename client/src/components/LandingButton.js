@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const LandingButton = styled.button`
-  padding: 10px 25px;
+  padding: 0.75rem 1.5rem;
   margin: 5px;
   font-size: calc(14px + 0.3vw);
   text-decoration: none;
@@ -10,16 +10,28 @@ const LandingButton = styled.button`
   color: var(--blackboard);
   border: 1px solid var(--blackboard);
 
-  &:hover {
-    color: white;
-    background: var(--oxblood);
-    border: 1px solid var(--oxblood);
-    cursor: pointer;
-  }
+  ${(props) =>
+    props.disabled &&
+    css`
+      background: grey;
+      color: darkgrey;
+      border: 1px solid grey;
+    `}
 
-  &:focus {
-    outline: none;
-  }
+  ${(props) =>
+    props.disabled ||
+    css`
+      &:hover {
+        color: white;
+        background: var(--oxblood);
+        border: 1px solid var(--oxblood);
+        cursor: pointer;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    `}
 `;
 
 export default LandingButton;

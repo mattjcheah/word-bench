@@ -49,7 +49,7 @@ export const quotes = [
 ];
 
 export const mockRoomData = {
-  roomID: "1234",
+  id: "1234",
   stage: "GAME",
   board: {
     height: 9,

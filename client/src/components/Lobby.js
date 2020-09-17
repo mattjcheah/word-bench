@@ -1,34 +1,39 @@
 import React from "react";
-import getQuote from "./getQuote";
+import styled from "styled-components";
 
+import LandingLayout from "./LandingLayout";
 import LandingButton from "./LandingButton";
 
+const RoomTitle = styled.h2`
+  font-size: 1rem;
+  font-weight: 900;
+`;
+
+const PlayerList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
 const Lobby = ({ roomId, players, startGame }) => {
-  const quoteObject = getQuote();
-
-  const handleStart = () => {
-    startGame();
-  };
-
   return (
-    <div className="landingContainer">
-      <div className="landingTitle">Waiting for more players...</div>
-      <div className="menuBorderContainer">
-        <p style={{ fontWeight: "900" }}>Room ID: {roomId}</p>
-        <br />
-        {players.map((player) => {
-          return <p key={player.id}>{player.name}</p>;
-        })}
-        <br />
-        <br />
-        <LandingButton onClick={handleStart}>START</LandingButton>
+    <LandingLayout title="Waiting for more players...">
+      <div>
+        <RoomTitle>Room ID: {roomId}</RoomTitle>
+        <PlayerList>
+          {players.map((player) => {
+            return (
+              <li key={player.id}>
+                <p>{player.name}</p>
+              </li>
+            );
+          })}
+        </PlayerList>
+        <div>
+          <LandingButton onClick={() => startGame()}>START</LandingButton>
+        </div>
       </div>
-      <p className="aboutInfo">{quoteObject.quote}</p>
-      <br />
-      <p className="aboutInfo">
-        <strong>{quoteObject.author}</strong>
-      </p>
-    </div>
+    </LandingLayout>
   );
 };
 

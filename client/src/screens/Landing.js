@@ -4,31 +4,15 @@ import { useMutation } from "@apollo/client";
 
 import CREATE_ROOM from "../graphql/queries/createRoom";
 import JOIN_ROOM from "../graphql/queries/joinRoom";
-import getQuote from "../components/getQuote";
+import LandingLayout from "../components/LandingLayout";
 import InitialLanding from "../components/InitialLanding";
 import CreateGameLanding from "../components/CreateGameLanding";
 import JoinGameLanding from "../components/JoinGameLanding";
 
 function Landing() {
-  const [stage, setStage] = useState("initial");
-
-  const quoteObject = getQuote();
-
-  return (
-    <div className="landingContainer">
-      <div className="landingTitle">Welcome to WordBench</div>
-      <LandingStage stage={stage} setStage={setStage} />
-      <p className="aboutInfo">{quoteObject.quote}</p>
-      <br />
-      <p className="aboutInfo">
-        <strong>{quoteObject.author}</strong>
-      </p>
-    </div>
-  );
-}
-
-function LandingStage({ stage, setStage }) {
   const history = useHistory();
+
+  const [stage, setStage] = useState("initial");
   const [joinError, setJoinError] = useState("");
 
   const [createRoomMutation] = useMutation(CREATE_ROOM);
@@ -52,12 +36,13 @@ function LandingStage({ stage, setStage }) {
     }
   };
 
-  switch (stage) {
-    case "initial":
-      return <InitialLanding setStage={setStage} />;
-    case "newGame":
+  const getStage = () => {
+    if (stage === "initial") return <InitialLanding setStage={setStage} />;
+
+    if (stage === "newGame")
       return <CreateGameLanding setStage={setStage} createRoom={createRoom} />;
-    case "joinGame":
+
+    if (stage === "joinGame")
       return (
         <JoinGameLanding
           setStage={setStage}
@@ -66,9 +51,11 @@ function LandingStage({ stage, setStage }) {
           joinError={joinError}
         />
       );
-    default:
-      throw new Error("Stage does not exist");
-  }
+  };
+
+  return (
+    <LandingLayout title="Welcome to Word Bench">{getStage()}</LandingLayout>
+  );
 }
 
 export default Landing;

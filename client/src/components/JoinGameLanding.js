@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { LandingInputContainer, LandingInput } from "./LandingInput";
 import LandingButton from "./LandingButton";
 import ErrorModal from "./ErrorModal";
 
@@ -40,36 +41,30 @@ function JoinGameLanding({ setStage, joinRoom, joinError, clearError }) {
         closeModal={clearError}
         message={joinError}
       />
-      <div className="menuBorderContainer">
-        <div className="inputFieldContainer">
-          <input
-            type="text"
-            name="room_code"
-            placeholder="Enter a room id..."
-            value={roomId}
-            onChange={handleChangeRoomNumber}
-            className="inputField"
-            autoComplete="off"
-          />
-          <input
-            type="text"
-            name="user_name"
-            placeholder="Enter your name..."
-            value={name}
-            onChange={handleChangeUserName}
-            className="inputField"
-            autoComplete="off"
-          />
-        </div>
-        {isValid ? (
-          <LandingButton onClick={handleSubmit}>JOIN</LandingButton>
-        ) : (
-          <button className="disabledButton" disabled={true}>
-            JOIN
-          </button>
-        )}
-        <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
-      </div>
+      <LandingInputContainer>
+        <LandingInput
+          type="text"
+          name="room_code"
+          placeholder="Enter a room id..."
+          value={roomId}
+          onChange={handleChangeRoomNumber}
+          autoComplete="off"
+        />
+        <LandingInput
+          type="text"
+          name="user_name"
+          placeholder="Enter your name..."
+          value={name}
+          onChange={handleChangeUserName}
+          autoComplete="off"
+        />
+      </LandingInputContainer>
+      {isValid ? (
+        <LandingButton onClick={handleSubmit}>JOIN</LandingButton>
+      ) : (
+        <LandingButton disabled>JOIN</LandingButton>
+      )}
+      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
     </div>
   );
 }
