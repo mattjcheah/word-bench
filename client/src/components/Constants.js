@@ -117,7 +117,17 @@ export const mockRoomData = {
     {
       id: getUserId(),
       name: "test",
-      completedWords: ["stoked"],
+      completedWords: ["stoked", "ode"],
+    },
+    {
+      id: "user-1",
+      name: "asdf",
+      completedWords: [],
+    },
+    {
+      id: "user-2",
+      name: "1234124",
+      completedWords: ["ode"],
     },
   ],
 };

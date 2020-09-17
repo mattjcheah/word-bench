@@ -20,8 +20,8 @@ const TimerContainer = styled.div`
   height: 100%;
 `;
 
-const SidebarTitle = styled.div`
-  margin: 10px;
+const SidebarTitle = styled.h2`
+  margin: 1rem;
   font-size: 1.25rem;
   font-weight: 900;
 `;
