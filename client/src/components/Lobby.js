@@ -10,7 +10,7 @@ const RoomTitle = styled.h2`
 `;
 
 const PlayerList = styled.ul`
-  margin: 0;
+  margin: 3rem 0;
   padding: 0;
   list-style: none;
 `;

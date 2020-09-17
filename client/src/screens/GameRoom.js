@@ -13,7 +13,6 @@ import REPLAY_GAME from "../graphql/queries/replayGame";
 import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
-import CompletedGameBoard from "../components/CompletedGameBoard";
 
 const GameRoom = ({ match }) => {
   const roomId = match.params.roomID;
@@ -66,6 +65,25 @@ const GameRoom = ({ match }) => {
     });
   };
 
+  const completeWord = (currentPlayer, word) => {
+    completeWordMutation({
+      variables: { roomId, word },
+      optimisticResponse: {
+        __typename: "Mutation",
+        completeWord: {
+          ...currentPlayer,
+          completedWords: [...currentPlayer.completedWords, word],
+        },
+      },
+    });
+  };
+
+  const replayGame = async (name) => {
+    const res = await replayGameMutation({ variables: { roomId, name } });
+    const nextRoomId = res.data.replayGame.id;
+    history.push(`/${nextRoomId}`);
+  };
+
   if (loading && !data) {
     return <FullScreenLoading />;
   }
@@ -84,41 +102,13 @@ const GameRoom = ({ match }) => {
     );
   }
 
-  if (data.room.stage === "GAME") {
-    const completeWord = (currentPlayer, word) => {
-      completeWordMutation({
-        variables: { roomId, word },
-        optimisticResponse: {
-          __typename: "Mutation",
-          completeWord: {
-            ...currentPlayer,
-            completedWords: [...currentPlayer.completedWords, word],
-          },
-        },
-      });
-    };
-
+  if (data.room.stage === "GAME" || data.room.stage === "COMPLETE") {
     return (
       <GameBoard
         currentPlayerId={getUserId()}
         room={data.room}
         completeWord={completeWord}
         shuffleLetters={shuffleLetters}
-      />
-    );
-  }
-
-  if (data.room.stage === "COMPLETE") {
-    const replayGame = async (name) => {
-      const res = await replayGameMutation({ variables: { roomId, name } });
-      const nextRoomId = res.data.replayGame.id;
-      history.push(`/${nextRoomId}`);
-    };
-
-    return (
-      <CompletedGameBoard
-        currentPlayerId={getUserId()}
-        room={data.room}
         replayGame={replayGame}
       />
     );
