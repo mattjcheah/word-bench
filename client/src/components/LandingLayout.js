@@ -34,6 +34,7 @@ const ContentContainer = styled.div`
   padding: 2rem;
 
   width: 50vw;
+  max-width: 600px;
 
   display: flex;
   justify-content: center;
