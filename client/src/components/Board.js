@@ -59,8 +59,9 @@ const getColours = (found, isComplete) => {
 };
 
 const Container = styled.div`
-  margin: 2% 15%;
-  height: 92%;
+  width: 100%;
+  height: 100%;
+  padding: 2% 15%;
 `;
 
 const Crossword = styled.div`

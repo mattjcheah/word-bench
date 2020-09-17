@@ -1,3 +1,5 @@
+import getUserId from "../config/getUserId";
+
 export const quotes = [
   {
     quote: "Soz I'm wfh today.",
@@ -46,8 +48,9 @@ export const quotes = [
   },
 ];
 
-export const dummy_board_data = {
-  roomID: "[roomID]",
+export const mockRoomData = {
+  roomID: "1234",
+  stage: "GAME",
   board: {
     height: 9,
     width: 9,
@@ -55,66 +58,66 @@ export const dummy_board_data = {
     words: [
       {
         word: "toe",
-        startLocation: [0, 1],
+        startLocation: { rowNum: 0, colNum: 1 },
         direction: "DOWN",
       },
       {
         word: "desk",
-        startLocation: [2, 0],
+        startLocation: { rowNum: 2, colNum: 0 },
         direction: "ACROSS",
       },
       {
         word: "dote",
-        startLocation: [2, 0],
+        startLocation: { rowNum: 2, colNum: 0 },
         direction: "DOWN",
       },
       {
         word: "toes",
-        startLocation: [4, 0],
+        startLocation: { rowNum: 4, colNum: 0 },
         direction: "ACROSS",
       },
       {
         word: "stoke",
-        startLocation: [4, 3],
+        startLocation: { rowNum: 4, colNum: 3 },
         direction: "DOWN",
       },
       {
         word: "stoked",
-        startLocation: [6, 1],
+        startLocation: { rowNum: 6, colNum: 1 },
         direction: "ACROSS",
       },
       {
         word: "sod",
-        startLocation: [6, 1],
+        startLocation: { rowNum: 6, colNum: 1 },
         direction: "DOWN",
       },
       {
         word: "does",
-        startLocation: [4, 5],
+        startLocation: { rowNum: 4, colNum: 5 },
         direction: "DOWN",
       },
       {
         word: "dose",
-        startLocation: [4, 5],
+        startLocation: { rowNum: 4, colNum: 5 },
         direction: "ACROSS",
       },
       {
         word: "ode",
-        startLocation: [2, 8],
+        startLocation: { rowNum: 2, colNum: 8 },
         direction: "DOWN",
       },
       {
         word: "doe",
-        startLocation: [8, 1],
+        startLocation: { rowNum: 8, colNum: 1 },
         direction: "ACROSS",
       },
     ],
   },
-  players: {
-    "[playerID]": {
-      id: "[playerID]",
-      name: "[name]",
-      completedWords: ["[word]"],
+  players: [
+    {
+      id: getUserId(),
+      name: "test",
+      completedWords: ["stoked"],
     },
-  },
+  ],
 };
