@@ -30,15 +30,7 @@ const Timer = (props) => {
     return () => clearInterval(interval);
   }, [isActive, seconds, minutes]);
 
-  return (
-    <div className="timer">
-      {isActive ? (
-        <p>{displayTime}</p>
-      ) : (
-        <p className="timerComplete">{displayTime}</p>
-      )}
-    </div>
-  );
+  return <div>{isActive ? <p>{displayTime}</p> : <p>{displayTime}</p>}</div>;
 };
 
 export default Timer;

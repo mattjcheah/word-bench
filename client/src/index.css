@@ -1,0 +1,21 @@
+:root {
+  --grain: #e5dad6;
+  --blackboard: #565656;
+  --oxblood: #763240;
+  --tan: #c2a080;
+  --darktan: #997a5e;
+  --blueboard: #425972;
+  --lightpink: #ffb6c1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--blackboard);
+  background-color: var(--grain);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}

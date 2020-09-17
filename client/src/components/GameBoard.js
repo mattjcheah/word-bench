@@ -11,7 +11,6 @@ import PlayerList from "./PlayerList";
 import ShuffleButton from "./ShuffleButton";
 import GameLayout from "./GameLayout";
 import LandingButton from "./LandingButton";
-import { useEffect } from "react";
 
 const PopupContainer = styled.div`
   display: flex;

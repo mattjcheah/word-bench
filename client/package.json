@@ -6,9 +6,6 @@
     "watch": "react-scripts start",
     "build": "react-scripts build"
   },
-  "devDependencies": {
-    "node-sass": "^4.14.1"
-  },
   "dependencies": {
     "@apollo/client": "^3.1.5",
     "@testing-library/jest-dom": "^4.2.4",
