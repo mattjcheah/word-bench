@@ -31,6 +31,11 @@ const TimerContainer = styled.div`
   height: 100%;
 `;
 
+const SidebarContainer = styled.div`
+  height: 100%;
+  overflow-y: auto;
+`;
+
 const SidebarTitle = styled.h2`
   margin: 1rem;
   font-size: 1.25rem;
@@ -109,13 +114,13 @@ const GameBoard = ({
           </TimerContainer>
         }
         sidebar={
-          <>
+          <SidebarContainer>
             <SidebarTitle>PLAYERS</SidebarTitle>
             <PlayerList
               players={players}
               totalNumberOfWords={board.words.length}
             />
-          </>
+          </SidebarContainer>
         }
         bottom={
           isComplete ? (
