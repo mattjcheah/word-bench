@@ -41,10 +41,10 @@ const SidebarTitle = styled.h2`
 
 const InputContainer = styled.div`
   height: 100%;
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 `;
 
 const LetterContainer = styled.div`

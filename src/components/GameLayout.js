@@ -3,38 +3,52 @@ import styled from "styled-components";
 
 const Container = styled.div`
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 1fr 25vw;
-  grid-template-rows: 25vh 1fr 25vh;
   height: 100vh;
 
-  grid-template-areas:
-    "main sidebar"
-    "main sidebar"
-    "bottom sidebar";
+  display: flex;
+`;
+
+const Vertical = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Left = styled(Vertical)`
+  flex: 1;
+`;
+
+const Right = styled(Vertical)`
+  width: 25vw;
 `;
 
 const Main = styled.div`
-  grid-area: main;
   border: 1px solid var(--oxblood);
-`;
-
-const Sidebar = styled.div`
-  grid-area: sidebar;
-  border: 1px solid var(--oxblood);
+  flex: 1;
 `;
 
 const Bottom = styled.div`
-  grid-area: bottom;
   border: 1px solid var(--oxblood);
+  height: 25vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Sidebar = styled.div`
+  border: 1px solid var(--oxblood);
+  flex: 1;
 `;
 
 const GameLayout = ({ main, sidebar, bottom }) => {
   return (
     <Container>
-      <Main>{main}</Main>
-      <Sidebar>{sidebar}</Sidebar>
-      <Bottom>{bottom}</Bottom>
+      <Left>
+        <Main>{main}</Main>
+        <Bottom>{bottom}</Bottom>
+      </Left>
+      <Right>
+        <Sidebar>{sidebar}</Sidebar>
+      </Right>
     </Container>
   );
 };
