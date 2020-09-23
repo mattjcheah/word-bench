@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import styled, { css, keyframes } from "styled-components";
 
 const Form = styled.form`
   display: flex;
@@ -11,6 +11,16 @@ const Form = styled.form`
   & > * {
     font-size: 1.25rem;
     font-weight: 900;
+  }
+`;
+
+const invalidIndicator = keyframes`
+  from {
+    border-bottom: 0.25rem solid red;
+  }
+
+  to {
+    border-bottom: 0.25rem solid var(--darktan);
   }
 `;
 
@@ -26,6 +36,12 @@ const Input = styled.input`
     outline: none;
     border-bottom: 0.25rem solid var(--darktan);
   }
+
+  ${(props) =>
+    props.invalid &&
+    css`
+      animation: ${invalidIndicator} 0.5s linear;
+    `}
 `;
 
 const Button = styled.button`
@@ -44,15 +60,23 @@ const Button = styled.button`
 `;
 
 const PlayerInput = ({ onSubmit }) => {
+  const [invalid, setInvalid] = useState(false);
   const [currentInput, setCurrentInput] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const isValidWord = onSubmit(currentInput);
-    if (isValidWord) {
-      setCurrentInput("");
-    }
+    setInvalid(!isValidWord);
+    setCurrentInput("");
   };
+
+  useEffect(() => {
+    if (invalid) {
+      setTimeout(() => {
+        setInvalid(false);
+      }, 500);
+    }
+  }, [invalid]);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -62,6 +86,7 @@ const PlayerInput = ({ onSubmit }) => {
         value={currentInput}
         onChange={(e) => setCurrentInput(e.target.value)}
         autoComplete="off"
+        invalid={invalid}
       />
       <Button type="submit">GO</Button>
     </Form>
