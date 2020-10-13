@@ -118,7 +118,7 @@ const Board = ({ board, completedWords, isComplete }) => {
             content === "_" ? (
               <div key={(i, j)} />
             ) : found ? (
-              <FoundTile>{content.toUpperCase()}</FoundTile>
+              <FoundTile key={(i, j)}>{content.toUpperCase()}</FoundTile>
             ) : (
               <Tile key={(i, j)} {...getColours(found, isComplete)}>
                 {isComplete && content.toUpperCase()}
