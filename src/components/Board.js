@@ -1,4 +1,5 @@
 import React from "react";
+import { animated, useSpring } from "react-spring";
 import styled from "styled-components";
 
 const parseBoardData = (boardData, completedWords) => {
@@ -73,7 +74,7 @@ const Crossword = styled.div`
   grid-template-rows: ${(props) => props.rowClass};
 `;
 
-const Tile = styled.div`
+const Tile = styled(animated.div)`
   background-color: ${(props) => `var(--${props.backgroundColor})`};
   color: ${(props) => `var(--${props.color})`};
   margin: 2px;
@@ -83,6 +84,19 @@ const Tile = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+const FoundTile = ({ children }) => {
+  const props = useSpring({
+    backgroundColor: "#e5dad6",
+    from: { backgroundColor: "green" },
+    config: { duration: 300 },
+  });
+  return (
+    <Tile {...getColours(true, false)} style={props}>
+      {children}
+    </Tile>
+  );
+};
 
 const Board = ({ board, completedWords, isComplete }) => {
   const boardWidth = board.width;
@@ -103,9 +117,11 @@ const Board = ({ board, completedWords, isComplete }) => {
           row.map(({ content, found }, j) =>
             content === "_" ? (
               <div key={(i, j)} />
+            ) : found ? (
+              <FoundTile>{content.toUpperCase()}</FoundTile>
             ) : (
               <Tile key={(i, j)} {...getColours(found, isComplete)}>
-                {(found || isComplete) && content.toUpperCase()}
+                {isComplete && content.toUpperCase()}
               </Tile>
             )
           )
