@@ -47,16 +47,16 @@ const getIndexes = ({ rowNum, colNum }, currentIndex, direction) => {
 const getColours = (found, isComplete) => {
   if (found) {
     return {
-      backgroundColor: "grain",
+      background: "grain",
       color: "blackboard",
     };
   }
 
   if (isComplete) {
-    return { backgroundColor: "oxblood", color: "grain" };
+    return { background: "oxblood", color: "grain" };
   }
 
-  return { backgroundColor: "blueboard", color: "blackboard" };
+  return { background: "blueboard", color: "blackboard" };
 };
 
 const Container = styled.div`
@@ -75,7 +75,7 @@ const Crossword = styled.div`
 `;
 
 const Tile = styled(animated.div)`
-  background-color: ${(props) => `var(--${props.backgroundColor})`};
+  background-color: ${(props) => `var(--${props.background})`};
   color: ${(props) => `var(--${props.color})`};
   margin: 2px;
   border-radius: 3px;
