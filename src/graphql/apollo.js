@@ -43,7 +43,19 @@ const splitLink = split(
   userHeaderLink.concat(httpLink)
 );
 
-export const cache = new InMemoryCache();
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Room: {
+      fields: {
+        stage: {
+          merge(existing, incoming) {
+            return existing === "COMPLETE" ? existing : incoming;
+          },
+        },
+      },
+    },
+  },
+});
 
 const client = new ApolloClient({
   cache,

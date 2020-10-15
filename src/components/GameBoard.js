@@ -11,6 +11,7 @@ import PlayerList from "./PlayerList";
 import ShuffleButton from "./ShuffleButton";
 import GameLayout from "./GameLayout";
 import LandingButton from "./LandingButton";
+import GiveUpSection from "./GiveUpSection";
 
 const PopupContainer = styled.div`
   display: flex;
@@ -64,7 +65,7 @@ const LandingButtonContainer = styled.div`
 
 const GameBoard = ({
   currentPlayerId,
-  room: { stage, players, board },
+  room: { id, stage, players, board },
   completeWord,
   shuffleLetters,
   replayGame,
@@ -108,13 +109,9 @@ const GameBoard = ({
             />
           </BoardContainer>
         }
-        topSidebar={
-          <TimerContainer>
-            <SidebarTitle>TIME REMAINING</SidebarTitle>
-          </TimerContainer>
-        }
         sidebar={
           <SidebarContainer>
+            {isComplete || <GiveUpSection roomId={id} />}
             <SidebarTitle>PLAYERS</SidebarTitle>
             <PlayerList
               players={players}

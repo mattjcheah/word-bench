@@ -9,18 +9,13 @@ const Container = styled.div`
   height: 100vh;
 
   grid-template-areas:
-    "main topsidebar"
+    "main sidebar"
     "main sidebar"
     "bottom sidebar";
 `;
 
 const Main = styled.div`
   grid-area: main;
-  border: 1px solid var(--oxblood);
-`;
-
-const TopSidebar = styled.div`
-  grid-area: topsidebar;
   border: 1px solid var(--oxblood);
 `;
 
@@ -34,11 +29,10 @@ const Bottom = styled.div`
   border: 1px solid var(--oxblood);
 `;
 
-const GameLayout = ({ main, topSidebar, sidebar, bottom }) => {
+const GameLayout = ({ main, sidebar, bottom }) => {
   return (
     <Container>
       <Main>{main}</Main>
-      <TopSidebar>{topSidebar}</TopSidebar>
       <Sidebar>{sidebar}</Sidebar>
       <Bottom>{bottom}</Bottom>
     </Container>
