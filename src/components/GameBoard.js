@@ -28,10 +28,6 @@ const BoardContainer = styled.div`
   height: 100%;
 `;
 
-const TimerContainer = styled.div`
-  height: 100%;
-`;
-
 const SidebarContainer = styled.div`
   height: 100%;
   overflow-y: auto;
