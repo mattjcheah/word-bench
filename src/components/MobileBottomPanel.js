@@ -38,14 +38,16 @@ const MobileBottomPanel = ({
   const [input, setInput] = useState("");
 
   const handleLetterClick = (letter) => {
+    const guessedWord = `${input}${letter}`;
+
     if (
-      board.words.find((w) => w.word === input) &&
-      !currentPlayer.completedWords.includes(input)
+      board.words.find((w) => w.word === guessedWord) &&
+      !currentPlayer.completedWords.includes(guessedWord)
     ) {
-      completeWord(currentPlayer, input);
+      completeWord(currentPlayer, guessedWord);
       setInput("");
     } else {
-      setInput((input) => `${input}${letter}`);
+      setInput(guessedWord);
     }
   };
 

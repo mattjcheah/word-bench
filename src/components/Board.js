@@ -83,8 +83,8 @@ const Crossword = styled.div`
   ${({ rows, columns, screenHeight, screenWidth }) => css`
     grid-template-rows: repeat(${rows}, 1fr);
     grid-template-columns: repeat(${columns}, 1fr);
-    height: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
-    width: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
+    min-height: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
+    min-width: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
   `}
 `;
 
@@ -92,7 +92,7 @@ const Tile = styled(animated.div)`
   background-color: ${(props) => `var(--${props.background})`};
   color: ${(props) => `var(--${props.color})`};
   border-radius: 3px;
-  font-size: calc(14px + 1vw);
+  font-size: 1fr;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,7 +116,7 @@ const Board = ({ board, completedWords, isComplete, width, height }) => {
   const boardData = parseBoardData(board, completedWords);
 
   return (
-    <Container id="some-container">
+    <Container>
       <Crossword
         rows={board.height}
         columns={board.width}

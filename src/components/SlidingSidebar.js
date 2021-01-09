@@ -30,7 +30,6 @@ const HamburgerButton = styled(GiHamburgerMenu)`
 `;
 
 const Sidebar = ({ isOpen, onClose, children }) => {
-  console.log(isOpen);
   const props = useSpring({
     transform: isOpen ? "translate3d(0, 0, 0)" : "translate3d(16rem, 0, 0)",
   });

@@ -31,7 +31,7 @@ const LetterBench = ({ letters, shuffleLetters, inputRef, onClick }) => {
       <ShuffleButton
         onClick={() => {
           shuffleLetters();
-          inputRef.current.focus();
+          inputRef && inputRef.current.focus();
         }}
       />
     </Container>

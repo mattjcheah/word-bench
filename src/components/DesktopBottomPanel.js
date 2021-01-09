@@ -44,7 +44,11 @@ const DesktopBottomPanel = ({
   return (
     <InputContainer>
       <LetterContainer>
-        <LetterBench letters={board.letters} shuffleLetters={shuffleLetters} />
+        <LetterBench
+          letters={board.letters}
+          shuffleLetters={shuffleLetters}
+          inputRef={inputRef}
+        />
       </LetterContainer>
       <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
     </InputContainer>
