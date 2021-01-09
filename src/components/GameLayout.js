@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+
+import SlidingSidebar from "./SlidingSidebar";
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -19,7 +21,9 @@ const Left = styled(Vertical)`
 
 const Right = styled(Vertical)`
   width: 16rem;
-  display: none;
+  height: 100vh;
+  background-color: var(--grain);
+  border-left: 1px solid var(--oxblood);
 
   @media (min-width: 768px) {
     display: inherit;
@@ -38,20 +42,26 @@ const Bottom = styled.div`
 `;
 
 const Sidebar = styled.div`
-  border: 1px solid var(--oxblood);
-  flex: 1;
+  width: 16rem;
 `;
 
 const GameLayout = ({ main, sidebar, bottom }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <Container>
+      <SlidingSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
+        <Right>
+          <Sidebar>{sidebar}</Sidebar>
+        </Right>
+      </SlidingSidebar>
       <Left>
         <Main>{main}</Main>
         <Bottom>{bottom}</Bottom>
       </Left>
-      <Right>
+      {/* <Right>
         <Sidebar>{sidebar}</Sidebar>
-      </Right>
+      </Right> */}
     </Container>
   );
 };
