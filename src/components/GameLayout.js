@@ -18,7 +18,12 @@ const Left = styled(Vertical)`
 `;
 
 const Right = styled(Vertical)`
+  width: 16rem;
   display: none;
+
+  @media (min-width: 768px) {
+    display: inherit;
+  }
 `;
 
 const Main = styled.div`

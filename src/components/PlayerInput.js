@@ -3,13 +3,16 @@ import styled from "styled-components";
 
 const Form = styled.form`
   display: flex;
-  width: 75%;
   flex-direction: row;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
 
   & > * {
     font-size: 1.25rem;
     font-weight: 900;
+  }
+
+  @media (min-width: 768px) {
+    width: 75%;
   }
 `;
 
