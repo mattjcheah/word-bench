@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -74,6 +74,8 @@ const GameBoard = ({
 
   const { width, height } = useWindowSize();
 
+  const inputRef = useRef();
+
   const onSubmitWord = (word) => {
     const lowerCaseWord = word.toLowerCase();
     if (
@@ -130,9 +132,14 @@ const GameBoard = ({
                   letters={board.letters}
                   shuffleLetters={shuffleLetters}
                 />
-                <ShuffleButton shuffleLetters={shuffleLetters} />
+                <ShuffleButton
+                  onClick={() => {
+                    shuffleLetters();
+                    inputRef.current.focus();
+                  }}
+                />
               </LetterContainer>
-              <PlayerInput onSubmit={onSubmitWord} />
+              <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
             </InputContainer>
           )
         }

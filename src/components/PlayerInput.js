@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useState } from "react";
 import styled from "styled-components";
 
 const Form = styled.form`
@@ -43,7 +43,7 @@ const Button = styled.button`
   }
 `;
 
-const PlayerInput = ({ onSubmit }) => {
+const PlayerInput = forwardRef(({ onSubmit }, ref) => {
   const [currentInput, setCurrentInput] = useState("");
 
   const handleSubmit = (e) => {
@@ -62,10 +62,12 @@ const PlayerInput = ({ onSubmit }) => {
         value={currentInput}
         onChange={(e) => setCurrentInput(e.target.value)}
         autoComplete="off"
+        ref={ref}
+        autoFocus
       />
       <Button type="submit">GO</Button>
     </Form>
   );
-};
+});
 
 export default PlayerInput;
