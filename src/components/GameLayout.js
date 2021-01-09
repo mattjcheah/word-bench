@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 import SlidingSidebar from "./SlidingSidebar";
 
@@ -47,21 +48,25 @@ const Sidebar = styled.div`
 
 const GameLayout = ({ main, sidebar, bottom }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { width } = useWindowSize();
 
   return (
     <Container>
-      <SlidingSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
-        <Right>
-          <Sidebar>{sidebar}</Sidebar>
-        </Right>
-      </SlidingSidebar>
       <Left>
         <Main>{main}</Main>
         <Bottom>{bottom}</Bottom>
       </Left>
-      {/* <Right>
-        <Sidebar>{sidebar}</Sidebar>
-      </Right> */}
+      {width >= 768 ? (
+        <Right>
+          <Sidebar>{sidebar}</Sidebar>
+        </Right>
+      ) : (
+        <SlidingSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
+          <Right>
+            <Sidebar>{sidebar}</Sidebar>
+          </Right>
+        </SlidingSidebar>
+      )}
     </Container>
   );
 };
