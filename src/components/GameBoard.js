@@ -75,11 +75,12 @@ const GameBoard = ({
   const { width, height } = useWindowSize();
 
   const onSubmitWord = (word) => {
+    const lowerCaseWord = word.toLowerCase();
     if (
-      board.words.find((w) => w.word === word) &&
-      !currentPlayer.completedWords.includes(word)
+      board.words.find((w) => w.word === lowerCaseWord) &&
+      !currentPlayer.completedWords.includes(lowerCaseWord)
     ) {
-      completeWord(currentPlayer, word);
+      completeWord(currentPlayer, lowerCaseWord);
       return true;
     }
     return false;
