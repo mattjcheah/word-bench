@@ -1,6 +1,6 @@
 import React from "react";
 import { animated, useSpring } from "react-spring";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const parseBoardData = (boardData, completedWords) => {
   const result = initialiseBoard(boardData.height, boardData.width);
@@ -54,7 +54,7 @@ const getColours = (found, isComplete, content) => {
 
   if (content === "_") {
     return {
-      backgroundColor: "transparent",
+      background: "transparent",
       color: "transparent",
     };
   }
@@ -76,22 +76,21 @@ const Container = styled.div`
 `;
 
 const Crossword = styled.div`
-  width: 70%;
-  height: 95%;
+  padding: 0.5rem;
 
-  display: flex;
-  flex-direction: column;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex: 1;
+  display: grid;
+  gap: 4px;
+  ${({ rows, columns, screenHeight, screenWidth }) => css`
+    grid-template-rows: repeat(${rows}, 1fr);
+    grid-template-columns: repeat(${columns}, 1fr);
+    height: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
+    width: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
+  `}
 `;
 
 const Tile = styled(animated.div)`
   background-color: ${(props) => `var(--${props.background})`};
   color: ${(props) => `var(--${props.color})`};
-  margin: 2px;
   border-radius: 3px;
   font-size: calc(14px + 1vw);
   display: flex;
@@ -113,25 +112,28 @@ const FoundTile = ({ children }) => {
   );
 };
 
-const Board = ({ board, completedWords, isComplete }) => {
+const Board = ({ board, completedWords, isComplete, width, height }) => {
   const boardData = parseBoardData(board, completedWords);
 
   return (
-    <Container>
-      <Crossword>
-        {boardData.map((row, i) => (
-          <Row key={i}>
-            {row.map(({ content, found }, j) =>
-              found ? (
-                <FoundTile key={(i, j)}>{content.toUpperCase()}</FoundTile>
-              ) : (
-                <Tile key={(i, j)} {...getColours(false, isComplete, content)}>
-                  {isComplete && content !== "_" && content.toUpperCase()}
-                </Tile>
-              )
-            )}
-          </Row>
-        ))}
+    <Container id="some-container">
+      <Crossword
+        rows={board.height}
+        columns={board.width}
+        screenHeight={height}
+        screenWidth={width}
+      >
+        {boardData.map((row, i) =>
+          row.map(({ content, found }, j) =>
+            found ? (
+              <FoundTile key={(i, j)}>{content.toUpperCase()}</FoundTile>
+            ) : (
+              <Tile key={(i, j)} {...getColours(false, isComplete, content)}>
+                {isComplete && content !== "_" && content.toUpperCase()}
+              </Tile>
+            )
+          )
+        )}
       </Crossword>
     </Container>
   );

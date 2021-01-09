@@ -18,17 +18,15 @@ const Left = styled(Vertical)`
 `;
 
 const Right = styled(Vertical)`
-  width: 25vw;
+  display: none;
 `;
 
 const Main = styled.div`
-  border: 1px solid var(--oxblood);
   flex: 1;
 `;
 
 const Bottom = styled.div`
-  border: 1px solid var(--oxblood);
-  height: 25vh;
+  border-top: 1px solid var(--oxblood);
   display: flex;
   align-items: center;
   justify-content: center;

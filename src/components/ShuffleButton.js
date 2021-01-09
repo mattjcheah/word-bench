@@ -5,15 +5,6 @@ import tileStyles from "./tileStyles";
 
 const Button = styled.button`
   ${tileStyles}
-  border: 0;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &:focus {
-    outline: none;
-  }
 `;
 
 function ShuffleButton({ onClick }) {

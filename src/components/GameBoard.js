@@ -12,6 +12,7 @@ import ShuffleButton from "./ShuffleButton";
 import GameLayout from "./GameLayout";
 import LandingButton from "./LandingButton";
 import GiveUpSection from "./GiveUpSection";
+import tileStyles from "./tileStyles";
 
 const PopupContainer = styled.div`
   display: flex;
@@ -40,11 +41,10 @@ const SidebarTitle = styled.h2`
 `;
 
 const InputContainer = styled.div`
-  height: 100%;
+  height: 16rem;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
 `;
 
 const LetterContainer = styled.div`
@@ -57,6 +57,25 @@ const LandingButtonContainer = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+`;
+
+const InputDisplayContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+`;
+
+const InputDisplay = styled.div`
+  flex: 1;
+  margin: 0.5rem;
+  padding: 0 0.5rem;
+  font-size: 2.5rem;
+  border: 4px solid var(--oxblood);
+`;
+
+const DeleteButton = styled.button`
+  ${tileStyles}
 `;
 
 const GameBoard = ({
@@ -88,6 +107,8 @@ const GameBoard = ({
     return false;
   };
 
+  const [input, setInput] = useState("");
+
   return (
     <>
       {isComplete && isWinner && open && (
@@ -105,6 +126,8 @@ const GameBoard = ({
               board={board}
               completedWords={currentPlayer.completedWords}
               isComplete={isComplete}
+              width={width}
+              height={height}
             />
           </BoardContainer>
         }
@@ -127,19 +150,17 @@ const GameBoard = ({
             </LandingButtonContainer>
           ) : (
             <InputContainer>
-              <LetterContainer>
-                <LetterBench
-                  letters={board.letters}
-                  shuffleLetters={shuffleLetters}
-                />
-                <ShuffleButton
-                  onClick={() => {
-                    shuffleLetters();
-                    inputRef.current.focus();
-                  }}
-                />
-              </LetterContainer>
-              <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
+              <InputDisplayContainer>
+                <InputDisplay>{input}</InputDisplay>
+                <DeleteButton onClick={() => setInput("")}>D</DeleteButton>
+              </InputDisplayContainer>
+              <LetterBench
+                letters={board.letters}
+                shuffleLetters={shuffleLetters}
+                inputRef={inputRef}
+                onClick={(letter) => setInput((input) => `${input}${letter}`)}
+              />
+              {/* <PlayerInput ref={inputRef} onSubmit={onSubmitWord} /> */}
             </InputContainer>
           )
         }
