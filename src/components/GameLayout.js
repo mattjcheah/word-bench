@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import useWindowSize from "react-use/lib/useWindowSize";
 
+import useMedia from "./useMedia";
 import SlidingSidebar from "./SlidingSidebar";
 
 const Container = styled.div`
@@ -48,7 +48,7 @@ const Sidebar = styled.div`
 
 const GameLayout = ({ main, sidebar, bottom }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { width } = useWindowSize();
+  const isSmallScreen = useMedia();
 
   return (
     <Container>
@@ -56,7 +56,7 @@ const GameLayout = ({ main, sidebar, bottom }) => {
         <Main>{main}</Main>
         <Bottom>{bottom}</Bottom>
       </Left>
-      {width >= 768 ? (
+      {isSmallScreen ? (
         <Right>
           <Sidebar>{sidebar}</Sidebar>
         </Right>
