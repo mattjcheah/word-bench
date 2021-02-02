@@ -46,6 +46,14 @@ export const quotes = [
     quote: "Live. Laugh. Love.",
     author: "Adam Slomoi",
   },
+  {
+    quote: "Hey that's kitty kat!!! *points to hello kitty*",
+    author: "Rawad",
+  },
+  {
+    quote: "Your eyes look hazelnut",
+    author: "Rawad",
+  },
 ];
 
 export const mockRoomData = {
