@@ -4,7 +4,7 @@ import { useSpring, animated } from "react-spring";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const Overlay = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -13,7 +13,7 @@ const Overlay = styled.div`
 `;
 
 const SidebarContainer = styled(animated.div)`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   transform: translate3d(16rem, 0, 0);

@@ -7,7 +7,8 @@ import SlidingSidebar from "./SlidingSidebar";
 const Container = styled.div`
   box-sizing: border-box;
   height: 100vh;
-
+  width: 100vw;
+  position: relative;
   display: flex;
 `;
 
@@ -25,10 +26,6 @@ const Right = styled(Vertical)`
   height: 100vh;
   background-color: var(--grain);
   border-left: 1px solid var(--oxblood);
-
-  @media (min-width: 768px) {
-    display: inherit;
-  }
 `;
 
 const Main = styled.div`
@@ -57,15 +54,11 @@ const GameLayout = ({ main, sidebar, bottom }) => {
         <Bottom>{bottom}</Bottom>
       </Left>
       {isSmallScreen ? (
-        <Right>
-          <Sidebar>{sidebar}</Sidebar>
-        </Right>
-      ) : (
         <SlidingSidebar isOpen={menuOpen} onClose={() => setMenuOpen(false)}>
-          <Right>
-            <Sidebar>{sidebar}</Sidebar>
-          </Right>
+          <Right>{sidebar}</Right>
         </SlidingSidebar>
+      ) : (
+        <Right>{sidebar}</Right>
       )}
     </Container>
   );
