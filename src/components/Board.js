@@ -2,6 +2,8 @@ import React from "react";
 import { animated, useSpring } from "react-spring";
 import styled, { css } from "styled-components";
 
+import useMedia from "./useMedia";
+
 const parseBoardData = (boardData, completedWords) => {
   const result = initialiseBoard(boardData.height, boardData.width);
 
@@ -80,11 +82,11 @@ const Crossword = styled.div`
 
   display: grid;
   gap: 4px;
-  ${({ rows, columns, screenHeight, screenWidth }) => css`
+  ${({ rows, columns, size }) => css`
     grid-template-rows: repeat(${rows}, 1fr);
     grid-template-columns: repeat(${columns}, 1fr);
-    min-height: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
-    min-width: min(calc(${screenHeight}px - 16rem), ${screenWidth}px);
+    width: ${size}px;
+    height: ${size}px;
   `}
 `;
 
@@ -112,17 +114,23 @@ const FoundTile = ({ children }) => {
   );
 };
 
-const Board = ({ board, completedWords, isComplete, width, height }) => {
+const Board = ({ board, completedWords, isComplete }) => {
+  const isSmallScreen = useMedia();
   const boardData = parseBoardData(board, completedWords);
+
+  const { innerWidth: width, innerHeight: height } = window;
+
+  const containerWidth = isSmallScreen ? width : width - 256;
+  const containerHeight = height - 256;
+
+  const minCellWidth = containerWidth / board.width;
+  const minCellHeight = containerHeight / board.height;
+
+  const size = minCellWidth < minCellHeight ? containerWidth : containerHeight;
 
   return (
     <Container>
-      <Crossword
-        rows={board.height}
-        columns={board.width}
-        screenHeight={height}
-        screenWidth={width}
-      >
+      <Crossword rows={board.height} columns={board.width} size={size}>
         {boardData.map((row, i) =>
           row.map(({ content, found }, j) =>
             found ? (
