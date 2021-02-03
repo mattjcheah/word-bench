@@ -23,7 +23,10 @@ const LetterBench = ({ letters, shuffleLetters, inputRef, onClick }) => {
     <Container>
       {letters.map((letter, i) => {
         return (
-          <LetterTile key={(letter, i)} onClick={() => onClick(letter)}>
+          <LetterTile
+            key={(letter, i)}
+            onClick={() => onClick && onClick(letter)}
+          >
             {letter.toUpperCase()}
           </LetterTile>
         );
