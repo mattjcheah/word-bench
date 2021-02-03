@@ -79,16 +79,16 @@ const Container = styled.div`
 
 const Crossword = styled.div`
   padding: 0.5rem;
-  max-width: 100%;
-  max-height: 100%;
 
   display: grid;
   gap: 4px;
-  ${({ rows, columns, size }) => css`
+  ${({ rows, columns, size, containerWidth, containerHeight }) => css`
     grid-template-rows: repeat(${rows}, 1fr);
     grid-template-columns: repeat(${columns}, 1fr);
     width: ${size}px;
     height: ${size}px;
+    max-width: ${containerWidth}px;
+    max-height: ${containerHeight}px;
   `}
 `;
 
@@ -132,7 +132,13 @@ const Board = ({ board, completedWords, isComplete }) => {
 
   return (
     <Container>
-      <Crossword rows={board.height} columns={board.width} size={size}>
+      <Crossword
+        rows={board.height}
+        columns={board.width}
+        size={size}
+        containerWidth={containerWidth}
+        containerHeight={containerHeight}
+      >
         {boardData.map((row, i) =>
           row.map(({ content, found }, j) =>
             found ? (
