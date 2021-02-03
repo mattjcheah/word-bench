@@ -75,12 +75,12 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  overflow: auto;
 `;
 
 const Crossword = styled.div`
   padding: 0.5rem;
+  max-width: 100%;
+  max-height: 100%;
 
   display: grid;
   gap: 4px;
