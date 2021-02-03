@@ -1,6 +1,8 @@
 import React from "react";
 import { animated, useSpring } from "react-spring";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+import useMedia from "./useMedia";
 
 const parseBoardData = (boardData, completedWords) => {
   const result = initialiseBoard(boardData.height, boardData.width);
@@ -44,11 +46,18 @@ const getIndexes = ({ rowNum, colNum }, currentIndex, direction) => {
   throw new Error("Invalid direction");
 };
 
-const getColours = (found, isComplete) => {
+const getColours = (found, isComplete, content) => {
   if (found) {
     return {
       background: "grain",
       color: "blackboard",
+    };
+  }
+
+  if (content === "_") {
+    return {
+      background: "transparent",
+      color: "transparent",
     };
   }
 
@@ -62,27 +71,36 @@ const getColours = (found, isComplete) => {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 2% 15%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Crossword = styled.div`
-  z-index: 999;
-  width: 100%;
-  height: 100%;
+  padding: 0.5rem;
+
   display: grid;
-  grid-template-columns: ${(props) => props.colClass};
-  grid-template-rows: ${(props) => props.rowClass};
+  gap: 4px;
+  ${({ rows, columns, size, containerWidth, containerHeight }) => css`
+    grid-template-rows: repeat(${rows}, 1fr);
+    grid-template-columns: repeat(${columns}, 1fr);
+    width: ${size}px;
+    height: ${size}px;
+    max-width: ${containerWidth}px;
+    max-height: ${containerHeight}px;
+  `}
 `;
 
 const Tile = styled(animated.div)`
   background-color: ${(props) => `var(--${props.background})`};
   color: ${(props) => `var(--${props.color})`};
-  margin: 2px;
   border-radius: 3px;
-  font-size: calc(14px + 1vw);
+  font-size: 1fr;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
 `;
 
 const FoundTile = ({ children }) => {
@@ -99,29 +117,35 @@ const FoundTile = ({ children }) => {
 };
 
 const Board = ({ board, completedWords, isComplete }) => {
-  const boardWidth = board.width;
-  const boardHeight = board.height;
-
-  const col_cell_width = 100 / boardWidth;
-  const row_cell_width = 100 / boardHeight;
-
-  const colClass = (col_cell_width.toString() + "% ").repeat(boardWidth);
-  const rowClass = (row_cell_width.toString() + "% ").repeat(boardHeight);
-
+  const isSmallScreen = useMedia();
   const boardData = parseBoardData(board, completedWords);
+
+  const { innerWidth: width, innerHeight: height } = window;
+
+  const containerWidth = isSmallScreen ? width : width - 256;
+  const containerHeight = height - 256;
+
+  const minCellWidth = containerWidth / board.width;
+  const minCellHeight = containerHeight / board.height;
+
+  const size = minCellWidth < minCellHeight ? containerWidth : containerHeight;
 
   return (
     <Container>
-      <Crossword colClass={colClass} rowClass={rowClass}>
+      <Crossword
+        rows={board.height}
+        columns={board.width}
+        size={size}
+        containerWidth={containerWidth}
+        containerHeight={containerHeight}
+      >
         {boardData.map((row, i) =>
           row.map(({ content, found }, j) =>
-            content === "_" ? (
-              <div key={(i, j)} />
-            ) : found ? (
+            found ? (
               <FoundTile key={(i, j)}>{content.toUpperCase()}</FoundTile>
             ) : (
-              <Tile key={(i, j)} {...getColours(found, isComplete)}>
-                {isComplete && content.toUpperCase()}
+              <Tile key={(i, j)} {...getColours(false, isComplete, content)}>
+                {isComplete && content !== "_" && content.toUpperCase()}
               </Tile>
             )
           )
