@@ -7,7 +7,11 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 16rem;
+
+  @media (min-width: 768px) {
+    height: 12rem;
+  }
 `;
 
 const CompletedGameBottomPanel = ({ currentPlayer, replayGame }) => (
