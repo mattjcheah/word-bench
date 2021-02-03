@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import LetterBench from "./LetterBench";
 import tileStyles from "./tileStyles";
+import { FiDelete } from "react-icons/fi";
 
 const InputContainer = styled.div`
   height: 16rem;
@@ -55,7 +56,9 @@ const MobileBottomPanel = ({
     <InputContainer>
       <InputDisplayContainer>
         <InputDisplay>{input}</InputDisplay>
-        <DeleteButton onClick={() => setInput("")}>D</DeleteButton>
+        <DeleteButton onClick={() => setInput("")}>
+          <FiDelete>Delete</FiDelete>
+        </DeleteButton>
       </InputDisplayContainer>
       <LetterBench
         letters={board.letters}
