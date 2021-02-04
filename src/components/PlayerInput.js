@@ -45,7 +45,7 @@ const Button = styled.button`
   }
 `;
 
-const PlayerInput = forwardRef(({ onSubmit }, ref) => {
+const PlayerInput = forwardRef(({ onSubmit, onKeyDown }, ref) => {
   const [currentInput, setCurrentInput] = useState("");
 
   const handleSubmit = (e) => {
@@ -63,6 +63,7 @@ const PlayerInput = forwardRef(({ onSubmit }, ref) => {
         placeholder="Enter a word"
         value={currentInput}
         onChange={(e) => setCurrentInput(e.target.value)}
+        onKeyDown={onKeyDown}
         autoComplete="off"
         ref={ref}
         autoFocus

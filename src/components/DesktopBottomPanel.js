@@ -29,7 +29,7 @@ const DesktopBottomPanel = ({
 }) => {
   const inputRef = useRef();
 
-  const onSubmitWord = (word) => {
+  const handleSubmitWord = (word) => {
     const lowerCaseWord = word.toLowerCase();
     if (
       board.words.find((w) => w.word === lowerCaseWord) &&
@@ -41,6 +41,13 @@ const DesktopBottomPanel = ({
     return false;
   };
 
+  const handleKeyDown = (e) => {
+    if (e.altKey && e.keyCode === 83) {
+      e.preventDefault();
+      shuffleLetters();
+    }
+  };
+
   return (
     <InputContainer>
       <LetterContainer>
@@ -50,7 +57,11 @@ const DesktopBottomPanel = ({
           inputRef={inputRef}
         />
       </LetterContainer>
-      <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
+      <PlayerInput
+        ref={inputRef}
+        onSubmit={handleSubmitWord}
+        onKeyDown={handleKeyDown}
+      />
     </InputContainer>
   );
 };
