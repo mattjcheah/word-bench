@@ -3,8 +3,6 @@ import styled from "styled-components";
 
 const Form = styled.form`
   display: flex;
-  width: 50%;
-  margin: 0.25rem auto;
   flex-direction: row;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.2);
 
@@ -12,13 +10,17 @@ const Form = styled.form`
     font-size: 1.25rem;
     font-weight: 900;
   }
+
+  @media (min-width: 768px) {
+    width: 75%;
+  }
 `;
 
 const Input = styled.input`
   font-weight: 900;
 
   flex: 1;
-  padding: 0.6em;
+  padding: 0.5rem;
   border: 0;
   border-bottom: 0.25rem solid transparent;
 
@@ -29,7 +31,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  padding: 0.6em 0.8em;
+  padding: 0.5rem;
   background-color: var(--darktan);
   color: #fff;
   border: none;
@@ -43,7 +45,7 @@ const Button = styled.button`
   }
 `;
 
-const PlayerInput = forwardRef(({ onSubmit }, ref) => {
+const PlayerInput = forwardRef(({ onSubmit, onKeyDown }, ref) => {
   const [currentInput, setCurrentInput] = useState("");
 
   const handleSubmit = (e) => {
@@ -58,9 +60,10 @@ const PlayerInput = forwardRef(({ onSubmit }, ref) => {
     <Form onSubmit={handleSubmit}>
       <Input
         type="text"
-        placeholder="Enter a Word..."
+        placeholder="Enter a word"
         value={currentInput}
         onChange={(e) => setCurrentInput(e.target.value)}
+        onKeyDown={onKeyDown}
         autoComplete="off"
         ref={ref}
         autoFocus

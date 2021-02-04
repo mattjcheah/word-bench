@@ -1,30 +1,42 @@
 import React from "react";
 import styled from "styled-components";
+import ShuffleButton from "./ShuffleButton";
+
+import tileStyles from "./tileStyles";
 
 const Container = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
-const LetterTile = styled.div`
-  background-color: lightgoldenrodyellow;
-  height: 70px;
-  width: 70px;
-  font-size: 2.5rem;
-  margin: 10px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const LetterTile = styled.button`
+  ${tileStyles}
 `;
 
-const LetterBench = ({ letters }) => {
+const LetterBench = ({ letters, shuffleLetters, inputRef, onClick }) => {
   return (
     <Container>
-      {letters.map((letter, ind) => {
+      {letters.map((letter, i) => {
         return (
-          <LetterTile key={letter + ind}>{letter.toUpperCase()}</LetterTile>
+          <LetterTile
+            key={(letter, i)}
+            onClick={() => onClick && onClick(letter)}
+          >
+            {letter.toUpperCase()}
+          </LetterTile>
         );
       })}
+      <ShuffleButton
+        onClick={() => {
+          shuffleLetters();
+          inputRef && inputRef.current.focus();
+        }}
+      />
     </Container>
   );
 };

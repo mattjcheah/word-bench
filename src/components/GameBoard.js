@@ -1,17 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Popup from "reactjs-popup";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
 import Board from "./Board";
-import LetterBench from "./LetterBench";
-import PlayerInput from "./PlayerInput";
 import PlayerList from "./PlayerList";
-import ShuffleButton from "./ShuffleButton";
 import GameLayout from "./GameLayout";
-import LandingButton from "./LandingButton";
 import GiveUpSection from "./GiveUpSection";
+import MobileBottomPanel from "./MobileBottomPanel";
+import DesktopBottomPanel from "./DesktopBottomPanel";
+import CompletedGameBottomPanel from "./CompletedGameBottomPanel";
 
 const PopupContainer = styled.div`
   display: flex;
@@ -39,25 +38,7 @@ const SidebarTitle = styled.h2`
   font-weight: 900;
 `;
 
-const InputContainer = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const LetterContainer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-const LandingButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-`;
+const isTouchDevice = () => "ontouchstart" in window;
 
 const GameBoard = ({
   currentPlayerId,
@@ -73,20 +54,6 @@ const GameBoard = ({
   const isWinner = currentPlayer.completedWords.length === board.words.length;
 
   const { width, height } = useWindowSize();
-
-  const inputRef = useRef();
-
-  const onSubmitWord = (word) => {
-    const lowerCaseWord = word.toLowerCase();
-    if (
-      board.words.find((w) => w.word === lowerCaseWord) &&
-      !currentPlayer.completedWords.includes(lowerCaseWord)
-    ) {
-      completeWord(currentPlayer, lowerCaseWord);
-      return true;
-    }
-    return false;
-  };
 
   return (
     <>
@@ -105,6 +72,8 @@ const GameBoard = ({
               board={board}
               completedWords={currentPlayer.completedWords}
               isComplete={isComplete}
+              width={width}
+              height={height}
             />
           </BoardContainer>
         }
@@ -120,27 +89,24 @@ const GameBoard = ({
         }
         bottom={
           isComplete ? (
-            <LandingButtonContainer>
-              <LandingButton onClick={() => replayGame(currentPlayer.name)}>
-                REPLAY
-              </LandingButton>
-            </LandingButtonContainer>
+            <CompletedGameBottomPanel
+              currentPlayer={currentPlayer}
+              replayGame={replayGame}
+            />
+          ) : isTouchDevice() ? (
+            <MobileBottomPanel
+              board={board}
+              currentPlayer={currentPlayer}
+              shuffleLetters={shuffleLetters}
+              completeWord={completeWord}
+            />
           ) : (
-            <InputContainer>
-              <LetterContainer>
-                <LetterBench
-                  letters={board.letters}
-                  shuffleLetters={shuffleLetters}
-                />
-                <ShuffleButton
-                  onClick={() => {
-                    shuffleLetters();
-                    inputRef.current.focus();
-                  }}
-                />
-              </LetterContainer>
-              <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
-            </InputContainer>
+            <DesktopBottomPanel
+              board={board}
+              currentPlayer={currentPlayer}
+              shuffleLetters={shuffleLetters}
+              completeWord={completeWord}
+            />
           )
         }
       />
