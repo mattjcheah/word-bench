@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { Redirect, useHistory } from "react-router-dom";
+import { useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import lodash from "lodash";
+import { useRouter } from "next/router";
 
 import getUserId from "../config/getUserId";
 import { cache } from "../graphql/apollo";
@@ -13,11 +13,12 @@ import REPLAY_GAME from "../graphql/queries/replayGame";
 import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
+import getQuote from "../components/getQuote";
 
-const GameRoom = ({ match }) => {
-  const roomId = match.params.roomID;
+const GameRoom = ({ quote }) => {
+  const router = useRouter();
 
-  const history = useHistory();
+  const { roomId } = router.query;
 
   const { subscribeToMore, data, loading } = useQuery(FETCH_ROOM, {
     variables: { roomId },
@@ -81,7 +82,7 @@ const GameRoom = ({ match }) => {
   const replayGame = async (name) => {
     const res = await replayGameMutation({ variables: { roomId, name } });
     const nextRoomId = res.data.replayGame.id;
-    history.push(`/${nextRoomId}`);
+    router.push(`/${nextRoomId}`);
   };
 
   if (loading && !data) {
@@ -89,7 +90,8 @@ const GameRoom = ({ match }) => {
   }
 
   if (!data) {
-    return <Redirect to="/" />;
+    router.replace("/");
+    return null;
   }
 
   if (data.room.stage === "LOBBY") {
@@ -98,6 +100,7 @@ const GameRoom = ({ match }) => {
         roomId={data.room.id}
         players={data.room.players}
         startGame={startGame}
+        quote={quote}
       />
     );
   }
@@ -115,6 +118,12 @@ const GameRoom = ({ match }) => {
   }
 
   throw new Error(`Invalid stage: ${data.room.stage}`);
+};
+
+export const getServerSideProps = () => {
+  return {
+    props: { quote: getQuote() },
+  };
 };
 
 export default GameRoom;

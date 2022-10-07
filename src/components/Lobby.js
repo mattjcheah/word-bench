@@ -15,9 +15,9 @@ const PlayerList = styled.ul`
   list-style: none;
 `;
 
-const Lobby = ({ roomId, players, startGame }) => {
+const Lobby = ({ roomId, players, startGame, quote }) => {
   return (
-    <LandingLayout title="Waiting for more players...">
+    <LandingLayout title="Waiting for more players..." quote={quote}>
       <div>
         <RoomTitle>Room ID: {roomId}</RoomTitle>
         <PlayerList>
