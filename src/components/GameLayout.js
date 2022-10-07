@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Head from "./Head";
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -32,6 +33,7 @@ const Bottom = styled.div`
 const GameLayout = ({ main, sidebar, bottom }) => {
   return (
     <Container>
+      <Head />
       <Main>{main}</Main>
       <Sidebar>{sidebar}</Sidebar>
       <Bottom>{bottom}</Bottom>

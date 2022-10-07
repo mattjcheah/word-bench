@@ -1,7 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-
-import getQuote from "./getQuote";
+import Head from "./Head";
 
 const LandingContainer = styled.div`
   text-align: center;
@@ -49,18 +48,17 @@ const QuoteText = styled.p`
   animation: ${fadeInUp} 0.5s ease-in-out;
 `;
 
-const LandingLayout = ({ title, children }) => {
-  const quoteObject = getQuote();
-
+const LandingLayout = ({ title, quote, children }) => {
   return (
     <LandingContainer>
+      <Head />
       <LandingTitle>{title}</LandingTitle>
       <ContentContainer>{children}</ContentContainer>
 
       <QuoteContainer>
-        <QuoteText>{quoteObject.quote}</QuoteText>
+        <QuoteText>{quote.quote}</QuoteText>
         <QuoteText>
-          <strong>{quoteObject.author}</strong>
+          <strong>{quote.author}</strong>
         </QuoteText>
       </QuoteContainer>
     </LandingContainer>
