@@ -20,33 +20,6 @@ const httpLink = new HttpLink({
   // uri: "http://localhost:3001/graphql",
 });
 
-const createSplitLink = () => {
-  const wsLink = new WebSocketLink({
-    uri: "wss://word-bench.herokuapp.com/graphql",
-    // uri: "ws://localhost:3001/graphql",
-    options: {
-      reconnect: true,
-      connectionParams: {
-        userId: getUserId(),
-      },
-    },
-  });
-
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === "OperationDefinition" &&
-        definition.operation === "subscription"
-      );
-    },
-    wsLink,
-    userHeaderLink.concat(httpLink)
-  );
-
-  return splitLink;
-};
-
 export const cache = new InMemoryCache({
   typePolicies: {
     Room: {
@@ -63,7 +36,7 @@ export const cache = new InMemoryCache({
 
 const client = new ApolloClient({
   cache,
-  link: typeof window === "undefined" ? httpLink : createSplitLink(),
+  link: userHeaderLink.concat(httpLink),
 });
 
 export default client;
