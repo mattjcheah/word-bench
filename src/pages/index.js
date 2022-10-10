@@ -21,7 +21,6 @@ const Landing = ({ quote }) => {
   const createRoom = async (name) => {
     const res = await createRoomMutation({ variables: { name } });
     const room = res.data.createRoom;
-    console.log("pushing to", room.id);
     router.push(`/${room.id}`);
   };
 
@@ -31,8 +30,6 @@ const Landing = ({ quote }) => {
         variables: { roomId, name },
       });
       const room = res.data.joinRoom;
-      console.log("pushing to", room.id);
-
       router.push(`/${room.id}`);
     } catch (e) {
       setJoinError(e.message);

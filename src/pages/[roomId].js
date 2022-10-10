@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import lodash from "lodash";
 import { useRouter } from "next/router";
@@ -12,6 +13,7 @@ import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import getQuote from "../components/getQuote";
+import { supabase } from "../client/supabase";
 
 const GameRoom = ({ quote }) => {
   const router = useRouter();
@@ -22,25 +24,24 @@ const GameRoom = ({ quote }) => {
     variables: { roomId },
   });
 
-  // useEffect(
-  //   () =>
-  //     subscribeToMore({
-  //       document: ROOM_UPDATED,
-  //       variables: { roomId },
-  //       updateQuery: (prev, { subscriptionData }) => {
-  //         if (!subscriptionData.data) return prev;
-  //         const newRoom = subscriptionData.data.roomUpdated;
-  //         return {
-  //           ...prev,
-  //           room: {
-  //             ...prev.room,
-  //             ...newRoom,
-  //           },
-  //         };
-  //       },
-  //     }),
-  //   [subscribeToMore, roomId]
-  // );
+  useEffect(() => {
+    supabase
+      .from(`rooms:roomId=eq.${roomId}`)
+      .on("UPDATE", ({ new: { roomId, stage, players } }) => {
+        cache.modify({
+          id: `Room:${roomId}`,
+          fields: {
+            stage() {
+              return stage;
+            },
+            players() {
+              return players;
+            },
+          },
+        });
+      })
+      .subscribe();
+  }, [roomId]);
 
   const [startGame] = useMutation(START_GAME, {
     variables: { roomId },
@@ -67,11 +68,19 @@ const GameRoom = ({ quote }) => {
   const completeWord = (currentPlayer, word) => {
     completeWordMutation({
       variables: { roomId, word },
-      optimisticResponse: {
-        __typename: "Mutation",
-        completeWord: {
-          ...currentPlayer,
-          completedWords: [...currentPlayer.completedWords, word],
+    });
+    cache.modify({
+      id: cache.identify(data.room),
+      fields: {
+        players(cachedPlayers) {
+          return cachedPlayers.map((p) =>
+            p.id === currentPlayer.id
+              ? {
+                  ...p,
+                  completedWords: [...p.completedWords, word],
+                }
+              : p
+          );
         },
       },
     });

@@ -1,7 +1,6 @@
-import { ApolloClient, InMemoryCache, split, HttpLink } from "@apollo/client";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { isEqual } from "lodash";
 import getUserId from "../config/getUserId";
 
 const userHeaderLink = setContext((_, { headers }) => {
@@ -16,8 +15,7 @@ const userHeaderLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: "https://word-bench.herokuapp.com/graphql",
-  // uri: "http://localhost:3001/graphql",
+  uri: `/api/graphql`,
 });
 
 export const cache = new InMemoryCache({
@@ -37,6 +35,7 @@ export const cache = new InMemoryCache({
 const client = new ApolloClient({
   cache,
   link: userHeaderLink.concat(httpLink),
+  connectToDevTools: true,
 });
 
 export default client;
