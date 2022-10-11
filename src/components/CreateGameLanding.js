@@ -23,6 +23,7 @@ function CreateGameLanding({ setStage, createRoom }) {
   };
 
   const handleSubmit = () => {
+    setStage("loading");
     createRoom(name);
   };
 

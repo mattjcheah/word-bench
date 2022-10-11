@@ -9,6 +9,7 @@ import InitialLanding from "../components/InitialLanding";
 import CreateGameLanding from "../components/CreateGameLanding";
 import JoinGameLanding from "../components/JoinGameLanding";
 import getQuote from "../components/getQuote";
+import FullScreenLoading from "../components/FullScreenLoading";
 
 const Landing = ({ quote }) => {
   const router = useRouter();
@@ -32,12 +33,15 @@ const Landing = ({ quote }) => {
       const room = res.data.joinRoom;
       router.push(`/${room.id}`);
     } catch (e) {
+      setStage("joinGame");
       setJoinError(e.message);
     }
   };
 
   const getStage = () => {
     if (stage === "initial") return <InitialLanding setStage={setStage} />;
+
+    if (stage === "loading") return <FullScreenLoading />;
 
     if (stage === "newGame")
       return <CreateGameLanding setStage={setStage} createRoom={createRoom} />;
