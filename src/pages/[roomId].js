@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import getUserId from "../config/getUserId";
 import { cache } from "../graphql/apollo";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
-import ROOM_UPDATED from "../graphql/queries/roomUpdated";
 import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
 import REPLAY_GAME from "../graphql/queries/replayGame";
@@ -14,35 +13,35 @@ import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import getQuote from "../components/getQuote";
+import { supabase } from "../client/supabase";
 
 const GameRoom = ({ quote }) => {
   const router = useRouter();
 
   const { roomId } = router.query;
 
-  const { subscribeToMore, data, loading } = useQuery(FETCH_ROOM, {
+  const { data, loading } = useQuery(FETCH_ROOM, {
     variables: { roomId },
   });
 
-  useEffect(
-    () =>
-      subscribeToMore({
-        document: ROOM_UPDATED,
-        variables: { roomId },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData.data) return prev;
-          const newRoom = subscriptionData.data.roomUpdated;
-          return {
-            ...prev,
-            room: {
-              ...prev.room,
-              ...newRoom,
+  useEffect(() => {
+    supabase
+      .from(`rooms:roomId=eq.${roomId}`)
+      .on("UPDATE", ({ new: { roomId, stage, players } }) => {
+        cache.modify({
+          id: `Room:${roomId}`,
+          fields: {
+            stage() {
+              return stage;
             },
-          };
-        },
-      }),
-    [subscribeToMore, roomId]
-  );
+            players() {
+              return players;
+            },
+          },
+        });
+      })
+      .subscribe();
+  }, [roomId]);
 
   const [startGame] = useMutation(START_GAME, {
     variables: { roomId },
@@ -69,11 +68,19 @@ const GameRoom = ({ quote }) => {
   const completeWord = (currentPlayer, word) => {
     completeWordMutation({
       variables: { roomId, word },
-      optimisticResponse: {
-        __typename: "Mutation",
-        completeWord: {
-          ...currentPlayer,
-          completedWords: [...currentPlayer.completedWords, word],
+    });
+    cache.modify({
+      id: cache.identify(data.room),
+      fields: {
+        players(cachedPlayers) {
+          return cachedPlayers.map((p) =>
+            p.id === currentPlayer.id
+              ? {
+                  ...p,
+                  completedWords: [...p.completedWords, word],
+                }
+              : p
+          );
         },
       },
     });

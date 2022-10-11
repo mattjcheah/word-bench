@@ -1,7 +1,6 @@
-import { ApolloClient, InMemoryCache, split, HttpLink } from "@apollo/client";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "@apollo/client/link/ws";
+import { isEqual } from "lodash";
 import getUserId from "../config/getUserId";
 
 const userHeaderLink = setContext((_, { headers }) => {
@@ -16,36 +15,8 @@ const userHeaderLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: "https://word-bench.herokuapp.com/graphql",
-  // uri: "http://localhost:3001/graphql",
+  uri: `/api/graphql`,
 });
-
-const createSplitLink = () => {
-  const wsLink = new WebSocketLink({
-    uri: "wss://word-bench.herokuapp.com/graphql",
-    // uri: "ws://localhost:3001/graphql",
-    options: {
-      reconnect: true,
-      connectionParams: {
-        userId: getUserId(),
-      },
-    },
-  });
-
-  const splitLink = split(
-    ({ query }) => {
-      const definition = getMainDefinition(query);
-      return (
-        definition.kind === "OperationDefinition" &&
-        definition.operation === "subscription"
-      );
-    },
-    wsLink,
-    userHeaderLink.concat(httpLink)
-  );
-
-  return splitLink;
-};
 
 export const cache = new InMemoryCache({
   typePolicies: {
@@ -63,7 +34,8 @@ export const cache = new InMemoryCache({
 
 const client = new ApolloClient({
   cache,
-  link: typeof window === "undefined" ? httpLink : createSplitLink(),
+  link: userHeaderLink.concat(httpLink),
+  connectToDevTools: true,
 });
 
 export default client;
