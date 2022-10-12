@@ -55,8 +55,8 @@ const createSupabaseRepository = (supabase) => {
     return data ? data[0] : null;
   };
 
-  const deleteRoom = async (roomId) => {
-    await supabase.from("rooms").delete().eq("roomId", roomId);
+  const deleteRooms = (date) => {
+    return supabase.from("rooms").delete().lt("modifiedAt", date);
   };
 
   return {
@@ -66,7 +66,7 @@ const createSupabaseRepository = (supabase) => {
     fetchBoardsCount,
     addRoom,
     updateRoom,
-    deleteRoom,
+    deleteRooms,
   };
 };
 
