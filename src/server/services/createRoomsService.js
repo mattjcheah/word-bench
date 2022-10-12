@@ -5,7 +5,7 @@ const createRoomsService = (databaseRepository) => {
   const generateRoomData = async ({ roomId, playerId, name }) => {
     const boardCount = await databaseRepository.fetchBoardsCount();
     const boardId = Number(roomId) % boardCount;
-    const { data: board } = await databaseRepository.fetchBoard(boardId);
+    const board = await databaseRepository.fetchBoard(boardId);
 
     return {
       roomId,
