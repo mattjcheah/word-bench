@@ -3,15 +3,14 @@ const createSupabaseRepository = (supabase) => {
     const { data, error } = await supabase
       .from("rooms")
       .select("id, roomId, stage, players, board, nextRoomId")
-      .eq("roomId", roomId);
+      .eq("roomId", roomId)
+      .single();
+
     if (error) {
       throw new Error(`Unexpected error when fetching room: ${error.message}`);
     }
-    if (!data || data.length !== 1) {
-      throw new Error(`Could not find room with ID ${roomId}`);
-    }
 
-    return data[0];
+    return data;
   };
 
   const fetchRoomIds = async () => {
@@ -23,8 +22,9 @@ const createSupabaseRepository = (supabase) => {
     const { data } = await supabase
       .from("boards")
       .select("data")
-      .eq("id", boardId);
-    return data[0];
+      .eq("id", boardId)
+      .single();
+    return data;
   };
 
   const fetchBoardsCount = async () => {
@@ -37,22 +37,24 @@ const createSupabaseRepository = (supabase) => {
   const addRoom = async (roomData) => {
     const { data, error } = await supabase
       .from("rooms")
-      .insert([{ ...roomData, modifiedAt: new Date().toISOString() }]);
+      .insert([{ ...roomData, modifiedAt: new Date().toISOString() }])
+      .single();
 
     if (error) {
       throw new Error(`Unexpected error when adding room: ${error.message}`);
     }
 
-    return data[0];
+    return data;
   };
 
   const updateRoom = async (roomId, updatedRoomData) => {
     const { data } = await supabase
       .from("rooms")
       .update({ ...updatedRoomData, modifiedAt: new Date().toISOString() })
-      .eq("roomId", roomId);
+      .eq("roomId", roomId)
+      .single();
 
-    return data ? data[0] : null;
+    return data;
   };
 
   const deleteRooms = (date) => {
