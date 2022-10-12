@@ -1,4 +1,5 @@
-import { generateRoomId, shouldDeleteRoom } from "../helpers";
+import sub from "date-fns/sub";
+import { generateRoomId } from "../helpers";
 
 const createRoomsService = (databaseRepository) => {
   const generateRoomData = async ({ roomId, playerId, name }) => {
@@ -21,7 +22,14 @@ const createRoomsService = (databaseRepository) => {
     };
   };
 
+  const cleanupOldRooms = () => {
+    const now = new Date();
+    const expiryDate = sub(now, { hours: 2 });
+    return databaseRepository.deleteRooms(expiryDate.toISOString());
+  };
+
   const getAvailableRoomId = async () => {
+    await cleanupOldRooms();
     const rooms = await databaseRepository.fetchRoomIds();
     const roomIds = rooms.map(({ roomId }) => Number(roomId));
     return generateRoomId(roomIds);
