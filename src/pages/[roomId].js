@@ -34,8 +34,24 @@ const GameRoom = ({ quote }) => {
             stage() {
               return stage;
             },
-            players() {
-              return players;
+            players(cachedPlayers) {
+              return players.map((newPlayer) => {
+                const cachedPlayer = cachedPlayers.find(
+                  (p) => p.id === newPlayer.id
+                );
+
+                if (!cachedPlayer) return newPlayer;
+
+                return {
+                  ...newPlayer,
+                  completedWords: [
+                    ...new Set([
+                      ...cachedPlayer.completedWords,
+                      ...newPlayer.completedWords,
+                    ]),
+                  ],
+                };
+              });
             },
           },
         });
