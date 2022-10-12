@@ -21,7 +21,7 @@ const createSupabaseRepository = (supabase) => {
   const fetchBoard = async (boardId) => {
     const { data } = await supabase
       .from("boards")
-      .select("data")
+      .select("height, width, letters, words")
       .eq("id", boardId)
       .single();
     return data;
