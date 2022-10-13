@@ -1,6 +1,56 @@
 import { formatRoom } from "../helpers";
+import { GraphQLContext } from "./createContext";
 
-const resolvers = {
+type RoomQueryResolver = (
+  parent: unknown,
+  args: { roomId: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type CreateRoomMutationResolver = (
+  parent: unknown,
+  args: { name: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type JoinRoomMutationResolver = (
+  parent: unknown,
+  args: { roomId: string; name: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type StartGameMutationResolver = (
+  parent: unknown,
+  args: { roomId: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type CompleteWordMutationResolver = (
+  parent: unknown,
+  args: { roomId: string; word: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type ReplayGameMutationResolver = (
+  parent: unknown,
+  args: { roomId: string; name: string },
+  context: GraphQLContext
+) => Promise<any>;
+
+type Resolvers = {
+  Query: {
+    room: RoomQueryResolver;
+  };
+  Mutation: {
+    createRoom: CreateRoomMutationResolver;
+    joinRoom: JoinRoomMutationResolver;
+    startGame: StartGameMutationResolver;
+    completeWord: CompleteWordMutationResolver;
+    replayGame: ReplayGameMutationResolver;
+  };
+};
+
+const resolvers: Resolvers = {
   Query: {
     async room(_, { roomId }, { playerId, roomsService }) {
       const room = await roomsService.findOne(roomId);

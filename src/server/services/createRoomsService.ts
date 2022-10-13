@@ -1,8 +1,71 @@
 import sub from "date-fns/sub";
+import { DatabaseRepository } from "../repositories/createSupabaseRepository";
 import { generateRoomId } from "../helpers";
+import { Room, Stage } from "../../models/Room";
 
-const createRoomsService = (databaseRepository) => {
-  const generateRoomData = async ({ roomId, playerId, name }) => {
+type GetAvailableRoomId = () => Promise<string>;
+
+type Add = (
+  roomId: string,
+  args: { playerId: string; name: string }
+) => Promise<Room>;
+
+type FindOne = (roomId: string) => Promise<Room>;
+
+type FindOneAndUpdate = (
+  roomId: string,
+  roomData: Partial<Room>
+) => Promise<Room>;
+
+type FindOneAndAddPlayer = (
+  roomId: string,
+  args: { playerId: string; name: string }
+) => Promise<Room>;
+
+type FindOneAndActivatePlayer = (
+  roomId: string,
+  playerId: string
+) => Promise<Room | null>;
+
+type FindOneAndDeactivatePlayer = (
+  roomId: string,
+  playerId: string
+) => Promise<Room | null>;
+
+type FindOneAndAddCompletedWord = (
+  roomId: string,
+  args: { playerId: string; word: string }
+) => Promise<Room | null>;
+
+type JoinNextRoom = (
+  roomId: string,
+  args: { playerId: string; name: string }
+) => Promise<Room | null>;
+
+export type RoomsService = {
+  getAvailableRoomId: GetAvailableRoomId;
+  add: Add;
+  findOne: FindOne;
+  findOneAndUpdate: FindOneAndUpdate;
+  findOneAndAddPlayer: FindOneAndAddPlayer;
+  findOneAndActivatePlayer: FindOneAndActivatePlayer;
+  findOneAndDeactivatePlayer: FindOneAndDeactivatePlayer;
+  findOneAndAddCompletedWord: FindOneAndAddCompletedWord;
+  joinNextRoom: JoinNextRoom;
+};
+
+const createRoomsService = (
+  databaseRepository: DatabaseRepository
+): RoomsService => {
+  const generateRoomData = async ({
+    roomId,
+    playerId,
+    name,
+  }: {
+    roomId: string;
+    playerId: string;
+    name: string;
+  }): Promise<Partial<Room>> => {
     const boardCount = await databaseRepository.fetchBoardsCount();
     const boardId = Number(roomId) % boardCount;
     const board = await databaseRepository.fetchBoard(boardId);
@@ -22,36 +85,42 @@ const createRoomsService = (databaseRepository) => {
     };
   };
 
-  const cleanupOldRooms = () => {
+  const cleanupOldRooms = (): Promise<Room[]> => {
     const now = new Date();
     const expiryDate = sub(now, { hours: 2 });
     return databaseRepository.deleteRooms(expiryDate.toISOString());
   };
 
-  const getAvailableRoomId = async () => {
+  const getAvailableRoomId: GetAvailableRoomId = async () => {
     await cleanupOldRooms();
     const rooms = await databaseRepository.fetchRoomIds();
     const roomIds = rooms.map(({ roomId }) => Number(roomId));
     return generateRoomId(roomIds);
   };
 
-  const add = async (roomId, { playerId, name }) => {
+  const add: Add = async (roomId, { playerId, name }) => {
     const roomData = await generateRoomData({ roomId, playerId, name });
 
     const room = await databaseRepository.addRoom(roomData);
     return room;
   };
 
-  const findOne = (roomId) => {
+  const findOne: FindOne = (roomId) => {
     return databaseRepository.fetchRoom(roomId);
   };
 
-  const findOneAndUpdate = async (roomId, updatedRoomData) => {
+  const findOneAndUpdate: FindOneAndUpdate = async (
+    roomId,
+    updatedRoomData
+  ) => {
     const room = await databaseRepository.updateRoom(roomId, updatedRoomData);
     return room;
   };
 
-  const findOneAndAddPlayer = async (roomId, { playerId, name }) => {
+  const findOneAndAddPlayer: FindOneAndAddPlayer = async (
+    roomId,
+    { playerId, name }
+  ) => {
     const room = await findOne(roomId);
 
     const updatedRoomData = {
@@ -61,6 +130,7 @@ const createRoomsService = (databaseRepository) => {
           id: playerId,
           name,
           completedWords: [],
+          active: true,
         },
       ],
     };
@@ -68,7 +138,10 @@ const createRoomsService = (databaseRepository) => {
     return findOneAndUpdate(roomId, updatedRoomData);
   };
 
-  const findOneAndActivatePlayer = async (roomId, playerId) => {
+  const findOneAndActivatePlayer: FindOneAndActivatePlayer = async (
+    roomId,
+    playerId
+  ) => {
     const room = await findOne(roomId);
 
     if (!room) {
@@ -84,7 +157,10 @@ const createRoomsService = (databaseRepository) => {
     return findOneAndUpdate(roomId, updatedRoomData);
   };
 
-  const findOneAndDeactivatePlayer = async (roomId, playerId) => {
+  const findOneAndDeactivatePlayer: FindOneAndDeactivatePlayer = async (
+    roomId,
+    playerId
+  ) => {
     const room = await findOne(roomId);
 
     if (!room) {
@@ -100,15 +176,23 @@ const createRoomsService = (databaseRepository) => {
     return findOneAndUpdate(roomId, updatedRoomData);
   };
 
-  const findOneAndAddCompletedWord = async (roomId, { playerId, word }) => {
+  const findOneAndAddCompletedWord: FindOneAndAddCompletedWord = async (
+    roomId,
+    { playerId, word }
+  ) => {
     const room = await findOne(roomId);
 
     if (!room || room.stage === "COMPLETE") {
-      return undefined;
+      return null;
     }
 
     const player = room.players.find((p) => p.id === playerId);
-    const completedWords = [...new Set(player.completedWords.concat(word))];
+
+    if (!player) {
+      return null;
+    }
+
+    const completedWords = [...new Set([...player.completedWords, word])];
     const updatedPlayer = {
       ...player,
       completedWords,
@@ -119,7 +203,7 @@ const createRoomsService = (databaseRepository) => {
 
     const gameIsComplete =
       updatedPlayer.completedWords.length === room.board.words.length;
-    const stage = gameIsComplete ? "COMPLETE" : "GAME";
+    const stage: Stage = gameIsComplete ? "COMPLETE" : "GAME";
 
     const updatedRoomData = {
       stage,
@@ -129,7 +213,7 @@ const createRoomsService = (databaseRepository) => {
     return findOneAndUpdate(roomId, updatedRoomData);
   };
 
-  const joinNextRoom = async (roomId, { playerId, name }) => {
+  const joinNextRoom: JoinNextRoom = async (roomId, { playerId, name }) => {
     const room = await findOne(roomId);
     if (!room) {
       return null;
@@ -152,8 +236,8 @@ const createRoomsService = (databaseRepository) => {
     getAvailableRoomId,
     add,
     findOne,
-    findOneAndAddPlayer,
     findOneAndUpdate,
+    findOneAndAddPlayer,
     findOneAndActivatePlayer,
     findOneAndDeactivatePlayer,
     findOneAndAddCompletedWord,
