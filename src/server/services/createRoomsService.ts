@@ -192,7 +192,9 @@ const createRoomsService = (
       return null;
     }
 
-    const completedWords = [...new Set([...player.completedWords, word])];
+    const completedWords = Array.from(
+      new Set([...player.completedWords, word])
+    );
     const updatedPlayer = {
       ...player,
       completedWords,

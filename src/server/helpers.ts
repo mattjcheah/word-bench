@@ -1,5 +1,4 @@
-import { Room } from "../models/Room";
-import { FormattedRoom } from "./types";
+import { Room, FormattedRoom } from "../models/Room";
 
 const generateRoomId = (roomIds: number[]): string => {
   let roomId: number;

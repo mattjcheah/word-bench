@@ -1,10 +1,10 @@
-type Word = {
+export type Word = {
   word: string;
   startLocation: {
     rowNum: number;
     colNum: number;
   };
-  direction: string;
+  direction: "DOWN" | "ACROSS";
 };
 
 export type Board = {
