@@ -38,8 +38,8 @@ const GameRoom = ({ quote }: Props) => {
         cache.modify({
           id: `Room:${roomId}`,
           fields: {
-            stage() {
-              return stage;
+            stage(cachedStage) {
+              return cachedStage === "COMPLETE" ? cachedStage : stage;
             },
             players(cachedPlayers: Player[]) {
               return players.map((newPlayer: Player) => {
