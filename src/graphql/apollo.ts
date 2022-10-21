@@ -14,7 +14,7 @@ const userHeaderLink = setContext((_, { headers }) => {
 });
 
 const httpLink = new HttpLink({
-  uri: `/api/graphql`,
+  uri: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/graphql`,
 });
 
 export const cache = new InMemoryCache({
