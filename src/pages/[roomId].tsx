@@ -1,8 +1,8 @@
+import { GetServerSideProps } from "next";
 import { useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import lodash from "lodash";
 import { useRouter } from "next/router";
-import getUserId from "../config/getUserId";
 import { cache } from "../graphql/apollo";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import START_GAME from "../graphql/queries/startGame";
@@ -12,15 +12,17 @@ import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import getQuote from "../utils/getQuote";
+import { getUserId } from "../utils/user";
 import { supabase } from "../client/supabase";
 import { Quote } from "../config/constants";
 import { FormattedRoom, Player } from "../models/Room";
 
 type Props = {
   quote: Quote;
+  playerId: string;
 };
 
-const GameRoom = ({ quote }: Props) => {
+const GameRoom = ({ quote, playerId }: Props) => {
   const router = useRouter();
 
   const { roomId } = router.query;
@@ -29,7 +31,7 @@ const GameRoom = ({ quote }: Props) => {
     variables: { roomId },
   });
 
-  const currentPlayer = data?.room.players.find((p) => p.id === getUserId());
+  const currentPlayer = data?.room?.players.find((p) => p.id === playerId);
 
   useEffect(() => {
     supabase
@@ -146,13 +148,22 @@ const GameRoom = ({ quote }: Props) => {
       />
     );
   }
-
-  throw new Error(`Invalid stage: ${data.room.stage}`);
 };
 
-export const getServerSideProps = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const playerId = getUserId(context);
+
+  if (!playerId) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return {
-    props: { quote: getQuote() },
+    props: { quote: getQuote(), playerId },
   };
 };
 

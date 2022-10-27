@@ -1,3 +1,4 @@
+import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
@@ -8,6 +9,7 @@ import InitialLanding from "../components/InitialLanding";
 import CreateGameLanding from "../components/CreateGameLanding";
 import JoinGameLanding from "../components/JoinGameLanding";
 import getQuote from "../utils/getQuote";
+import { initUserId } from "../utils/user";
 import FullScreenLoading from "../components/FullScreenLoading";
 import { Quote } from "../config/constants";
 
@@ -70,7 +72,9 @@ const Landing = ({ quote }: Props) => {
   );
 };
 
-export const getServerSideProps = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  initUserId(context);
+
   return {
     props: { quote: getQuote() },
   };
