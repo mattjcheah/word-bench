@@ -3,7 +3,7 @@ import { Board } from "../../models/Board";
 import { Room } from "../../models/Room";
 
 export type DatabaseRepository = {
-  fetchRoom: (roomId: string) => Promise<Room>;
+  fetchRoom: (roomId: string) => Promise<Room | null>;
   fetchRoomIds: () => Promise<Pick<Room, "roomId">[]>;
   fetchBoard: (boardId: number) => Promise<Board>;
   fetchBoardsCount: () => Promise<number>;
@@ -17,17 +17,11 @@ const createSupabaseRepository = (
 ): DatabaseRepository => {
   return {
     async fetchRoom(roomId) {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from<Room>("rooms")
         .select("id, roomId, stage, players, board, nextRoomId")
         .eq("roomId", roomId)
         .single();
-
-      if (error) {
-        throw new Error(
-          `Unexpected error when fetching room: ${error.message}`
-        );
-      }
 
       return data;
     },

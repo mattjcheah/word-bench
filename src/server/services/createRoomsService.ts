@@ -10,17 +10,17 @@ type Add = (
   args: { playerId: string; name: string }
 ) => Promise<Room>;
 
-type FindOne = (roomId: string) => Promise<Room>;
+type FindOne = (roomId: string) => Promise<Room | null>;
 
 type FindOneAndUpdate = (
   roomId: string,
   roomData: Partial<Room>
-) => Promise<Room>;
+) => Promise<Room | null>;
 
 type FindOneAndAddPlayer = (
   roomId: string,
   args: { playerId: string; name: string }
-) => Promise<Room>;
+) => Promise<Room | null>;
 
 type FindOneAndActivatePlayer = (
   roomId: string,
@@ -122,6 +122,10 @@ const createRoomsService = (
     { playerId, name }
   ) => {
     const room = await findOne(roomId);
+
+    if (!room) {
+      return null;
+    }
 
     const updatedRoomData = {
       players: [

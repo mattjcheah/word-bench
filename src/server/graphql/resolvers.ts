@@ -1,3 +1,4 @@
+import { FormattedRoom, Player } from "../../models/Room";
 import { formatRoom } from "../helpers";
 import { GraphQLContext } from "./createContext";
 
@@ -5,37 +6,37 @@ type RoomQueryResolver = (
   parent: unknown,
   args: { roomId: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<FormattedRoom | null>;
 
 type CreateRoomMutationResolver = (
   parent: unknown,
   args: { name: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<FormattedRoom>;
 
 type JoinRoomMutationResolver = (
   parent: unknown,
   args: { roomId: string; name: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<FormattedRoom>;
 
 type StartGameMutationResolver = (
   parent: unknown,
   args: { roomId: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<FormattedRoom>;
 
 type CompleteWordMutationResolver = (
   parent: unknown,
   args: { roomId: string; word: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<Player>;
 
 type ReplayGameMutationResolver = (
   parent: unknown,
   args: { roomId: string; name: string },
   context: GraphQLContext
-) => Promise<any>;
+) => Promise<FormattedRoom>;
 
 type Resolvers = {
   Query: {
@@ -56,7 +57,7 @@ const resolvers: Resolvers = {
       const room = await roomsService.findOne(roomId);
 
       if (!room || !room.players.find((p) => p.id === playerId)) {
-        throw new Error("Room not found");
+        return null;
       }
 
       return formatRoom(room);
@@ -84,11 +85,15 @@ const resolvers: Resolvers = {
 
       return formatRoom(room);
     },
-    async startGame(_, { roomId }, { roomsService }) {
-      // TODO: Check that user is in the given room
+    async startGame(_, { roomId }, { playerId, roomsService }) {
       const room = await roomsService.findOneAndUpdate(roomId, {
         stage: "GAME",
       });
+
+      if (!room || !room.players.find((p) => p.id === playerId)) {
+        throw new Error("Room not found");
+      }
+
       return formatRoom(room);
     },
     async completeWord(_, { roomId, word }, { playerId, roomsService }) {
@@ -97,11 +102,12 @@ const resolvers: Resolvers = {
         word,
       });
 
-      if (!room) {
+      const player = room?.players.find((p) => p.id === playerId);
+      if (!room || !player) {
         throw new Error("Room not found");
       }
 
-      return room.players.find((p) => p.id === playerId);
+      return player;
     },
     async replayGame(_, { roomId, name }, { playerId, roomsService }) {
       const room = await roomsService.joinNextRoom(roomId, {
