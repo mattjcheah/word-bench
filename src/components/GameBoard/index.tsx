@@ -27,14 +27,16 @@ type Props = {
   completeWord: (word: string) => void;
   shuffleLetters: () => void;
   replayGame: (name: string) => void;
+  giveUp: () => void;
 };
 
 const GameBoard = ({
   currentPlayer,
-  room: { id, stage, players, board },
+  room: { stage, players, board },
   completeWord,
   shuffleLetters,
   replayGame,
+  giveUp,
 }: Props) => {
   const isComplete = stage === "COMPLETE";
   const [open, setOpen] = useState(true);
@@ -79,7 +81,7 @@ const GameBoard = ({
         }
         sidebar={
           <SidebarContainer>
-            {isComplete || <GiveUpSection roomId={id} />}
+            {isComplete || <GiveUpSection giveUp={giveUp} />}
             <SidebarTitle>PLAYERS</SidebarTitle>
             <PlayerList
               players={players}

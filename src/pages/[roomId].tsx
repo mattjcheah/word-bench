@@ -1,9 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import lodash from "lodash";
+import { useMutation, useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
-import { cache } from "../graphql/apollo";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
@@ -15,7 +13,8 @@ import getQuote from "../utils/getQuote";
 import { getUserId } from "../utils/user";
 import { supabase } from "../client/supabase";
 import { Quote } from "../config/constants";
-import { FormattedRoom, Player } from "../models/Room";
+import { FormattedRoom } from "../models/Room";
+import useAppState from "../hooks/useAppState";
 
 type Props = {
   quote: Quote;
@@ -24,45 +23,42 @@ type Props = {
 
 const GameRoom = ({ quote, playerId }: Props) => {
   const router = useRouter();
-
   const { roomId } = router.query;
 
-  const { data, loading } = useQuery<{ room: FormattedRoom }>(FETCH_ROOM, {
-    variables: { roomId },
-  });
+  const { state, dispatch } = useAppState();
+  const { room, loading } = state;
 
-  const currentPlayer = data?.room?.players.find((p) => p.id === playerId);
+  const apolloClient = useApolloClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "setLoading", data: { loading: true } });
+      const queryResponse = await apolloClient.query<{ room: FormattedRoom }>({
+        query: FETCH_ROOM,
+        variables: { roomId },
+      });
+
+      if (queryResponse && queryResponse.data.room) {
+        dispatch({
+          type: "loadRoom",
+          data: { room: queryResponse.data.room },
+        });
+        dispatch({ type: "setLoading", data: { loading: false } });
+      }
+    };
+
+    fetchData();
+  }, [roomId]);
+
+  const currentPlayer = room?.players.find((p) => p.id === playerId);
 
   useEffect(() => {
     supabase
       .from(`rooms:roomId=eq.${roomId}`)
-      .on("UPDATE", ({ new: { roomId, stage, players } }) => {
-        cache.modify({
-          id: `Room:${roomId}`,
-          fields: {
-            stage(cachedStage) {
-              return cachedStage === "COMPLETE" ? cachedStage : stage;
-            },
-            players(cachedPlayers: Player[]) {
-              return players.map((newPlayer: Player) => {
-                const cachedPlayer = cachedPlayers.find(
-                  (p) => p.id === newPlayer.id
-                );
-
-                if (!cachedPlayer) return newPlayer;
-
-                return {
-                  ...newPlayer,
-                  completedWords: Array.from(
-                    new Set([
-                      ...cachedPlayer.completedWords,
-                      ...newPlayer.completedWords,
-                    ])
-                  ),
-                };
-              });
-            },
-          },
+      .on("UPDATE", ({ new: newRoom }) => {
+        dispatch({
+          type: "updateRoom",
+          data: { room: newRoom },
         });
       })
       .subscribe();
@@ -76,48 +72,24 @@ const GameRoom = ({ quote, playerId }: Props) => {
 
   const [replayGameMutation] = useMutation(REPLAY_GAME);
 
-  if (loading && !data) {
+  if (loading && !room) {
     return <FullScreenLoading />;
   }
 
-  if (!data || !currentPlayer) {
+  if (!room || !currentPlayer) {
     router.replace("/");
     return null;
   }
 
   const shuffleLetters = () => {
-    cache.modify({
-      id: cache.identify(data.room),
-      fields: {
-        board(cachedBoard) {
-          return {
-            ...cachedBoard,
-            letters: lodash.shuffle(cachedBoard.letters),
-          };
-        },
-      },
-    });
+    dispatch({ type: "shuffleLetters" });
   };
 
   const completeWord = (word: string) => {
     completeWordMutation({
       variables: { roomId, word },
     });
-    cache.modify({
-      id: cache.identify(data.room),
-      fields: {
-        players(cachedPlayers: Player[]) {
-          return cachedPlayers.map((p) =>
-            p.id === currentPlayer.id
-              ? {
-                  ...p,
-                  completedWords: [...p.completedWords, word],
-                }
-              : p
-          );
-        },
-      },
-    });
+    dispatch({ type: "completeWord", data: { playerId, word } });
   };
 
   const replayGame = async (name: string) => {
@@ -126,25 +98,30 @@ const GameRoom = ({ quote, playerId }: Props) => {
     router.push(`/${nextRoomId}`);
   };
 
-  if (data.room.stage === "LOBBY") {
+  const giveUp = () => {
+    dispatch({ type: "giveUp" });
+  };
+
+  if (room.stage === "LOBBY") {
     return (
       <Lobby
-        roomId={data.room.id}
-        players={data.room.players}
+        roomId={room.id}
+        players={room.players}
         startGame={startGame}
         quote={quote}
       />
     );
   }
 
-  if (data.room.stage === "GAME" || data.room.stage === "COMPLETE") {
+  if (room.stage === "GAME" || room.stage === "COMPLETE") {
     return (
       <GameBoard
         currentPlayer={currentPlayer}
-        room={data.room}
+        room={room}
         completeWord={completeWord}
         shuffleLetters={shuffleLetters}
         replayGame={replayGame}
+        giveUp={giveUp}
       />
     );
   }
