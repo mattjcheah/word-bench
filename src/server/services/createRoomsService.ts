@@ -85,10 +85,10 @@ const createRoomsService = (
     };
   };
 
-  const cleanupOldRooms = (): Promise<Room[]> => {
+  const cleanupOldRooms = async (): Promise<void> => {
     const now = new Date();
     const expiryDate = sub(now, { hours: 2 });
-    return databaseRepository.deleteRooms(expiryDate.toISOString());
+    await databaseRepository.deleteRooms(expiryDate.toISOString());
   };
 
   const getAvailableRoomId: GetAvailableRoomId = async () => {

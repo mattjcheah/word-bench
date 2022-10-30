@@ -53,15 +53,29 @@ const GameRoom = ({ quote, playerId }: Props) => {
   const currentPlayer = room?.players.find((p) => p.id === playerId);
 
   useEffect(() => {
-    supabase
-      .from(`rooms:roomId=eq.${roomId}`)
-      .on("UPDATE", ({ new: newRoom }) => {
-        dispatch({
-          type: "updateRoom",
-          data: { room: newRoom },
-        });
-      })
+    const channel = supabase.channel(`public:rooms:roomId=eq.${roomId}`);
+
+    channel
+      .on<FormattedRoom>(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "rooms",
+          filter: `roomId=eq.${roomId}`,
+        },
+        ({ new: newRoom }) => {
+          dispatch({
+            type: "updateRoom",
+            data: { room: newRoom },
+          });
+        }
+      )
       .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, [roomId]);
 
   const [startGame] = useMutation(START_GAME, {
