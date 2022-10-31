@@ -94,7 +94,7 @@ const GameBoard = ({
         bottom={
           isComplete ? (
             <LandingButtonContainer>
-              <LandingButton onClick={() => router.push("/")}>
+              <LandingButton onClick={() => router.replace("/")}>
                 QUIT
               </LandingButton>
               <LandingButton onClick={() => replayGame(currentPlayer.name)}>

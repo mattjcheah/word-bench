@@ -125,7 +125,7 @@ const GameRoom = ({ quote, playerId }: Props) => {
   const replayGame = async (name: string) => {
     const res = await replayGameMutation({ variables: { roomId, name } });
     const nextRoomId = res.data.replayGame.id;
-    router.push(`/${nextRoomId}`);
+    router.replace(`/${nextRoomId}`);
   };
 
   const giveUp = () => {

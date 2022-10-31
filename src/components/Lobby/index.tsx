@@ -29,7 +29,9 @@ const Lobby = ({ roomId, players, startGame, quote }: Props) => {
           })}
         </PlayerList>
         <div>
-          <LandingButton onClick={() => router.push("/")}>QUIT</LandingButton>
+          <LandingButton onClick={() => router.replace("/")}>
+            QUIT
+          </LandingButton>
           <LandingButton onClick={() => startGame()}>START</LandingButton>
         </div>
       </div>
