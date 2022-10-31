@@ -89,6 +89,7 @@ const GameRoom = ({ quote, playerId }: Props) => {
 
     return () => {
       channel.unsubscribe();
+      supabase.removeChannel(channel);
     };
   }, [roomId]);
 
