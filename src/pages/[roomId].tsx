@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useEffect } from "react";
-import { useMutation, useApolloClient } from "@apollo/client";
+import { useMutation, useApolloClient, gql } from "@apollo/client";
 import { useRouter } from "next/router";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import START_GAME from "../graphql/queries/startGame";
@@ -15,6 +15,7 @@ import { supabase } from "../client/supabase";
 import { Quote } from "../config/constants";
 import { FormattedRoom } from "../models/Room";
 import useAppState from "../hooks/useAppState";
+import ROOM_DATA_FRAGMENT from "../graphql/queries/roomDataFragment";
 
 type Props = {
   quote: Quote;
@@ -32,7 +33,20 @@ const GameRoom = ({ quote, playerId }: Props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      dispatch({ type: "setLoading", data: { loading: true } });
+      const cachedRoom = apolloClient.cache.readFragment<FormattedRoom>({
+        id: `Room:${roomId}`,
+        fragment: ROOM_DATA_FRAGMENT,
+      });
+
+      if (cachedRoom) {
+        dispatch({
+          type: "loadRoom",
+          data: { room: cachedRoom },
+        });
+        dispatch({ type: "setLoading", data: { loading: false } });
+        return;
+      }
+
       const queryResponse = await apolloClient.query<{ room: FormattedRoom }>({
         query: FETCH_ROOM,
         variables: { roomId },
@@ -86,7 +100,7 @@ const GameRoom = ({ quote, playerId }: Props) => {
 
   const [replayGameMutation] = useMutation(REPLAY_GAME);
 
-  if (loading && !room) {
+  if (loading) {
     return <FullScreenLoading />;
   }
 

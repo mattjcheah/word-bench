@@ -4,7 +4,7 @@ import { FormattedRoom } from "../models/Room";
 
 type State = { room: FormattedRoom | null; loading: boolean };
 
-const initialState: State = { room: null, loading: false };
+const initialState: State = { room: null, loading: true };
 
 type SetLoadingAction = {
   type: "setLoading";
@@ -134,7 +134,6 @@ const reducer: Reducer = (state, action) => {
       },
     };
   }
-
   return state;
 };
 

@@ -1,28 +1,12 @@
 import { gql } from "@apollo/client";
+import roomDataFragment from "./roomDataFragment";
 
 const FETCH_ROOM = gql`
+  ${roomDataFragment}
+
   query FETCH_ROOM($roomId: ID!) {
     room(roomId: $roomId) {
-      id
-      stage
-      players {
-        id
-        name
-        completedWords
-      }
-      board {
-        height
-        width
-        letters
-        words {
-          word
-          startLocation {
-            rowNum
-            colNum
-          }
-          direction
-        }
-      }
+      ...RoomData
     }
   }
 `;
