@@ -5,10 +5,8 @@ import LandingButton from "../LandingButton";
 import ErrorModal from "../ErrorModal";
 
 const validateJoinGame = (roomNumber: string, username: string): boolean => {
-  const validRoomNumber =
-    roomNumber && roomNumber.length >= 1 && roomNumber.length <= 4;
-  const validUsername =
-    username && username.length >= 3 && username.length <= 32;
+  const validRoomNumber = roomNumber.length > 0 && roomNumber.length <= 4;
+  const validUsername = username.length > 0 && username.length <= 32;
 
   return !!(validRoomNumber && validUsername);
 };

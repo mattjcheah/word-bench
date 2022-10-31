@@ -4,7 +4,7 @@ import { LandingInputContainer, LandingInput } from "../LandingInput";
 import LandingButton from "../LandingButton";
 
 const validateNewGame = (username: string): boolean => {
-  const validUsername = username.length <= 32;
+  const validUsername = username.length > 0 && username.length <= 32;
 
   return validUsername;
 };
