@@ -57,8 +57,9 @@ const GameRoom = ({ quote, playerId }: Props) => {
           type: "loadRoom",
           data: { room: queryResponse.data.room },
         });
-        dispatch({ type: "setLoading", data: { loading: false } });
       }
+
+      dispatch({ type: "setLoading", data: { loading: false } });
     };
 
     fetchData();
