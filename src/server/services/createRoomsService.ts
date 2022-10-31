@@ -127,6 +127,10 @@ const createRoomsService = (
       return null;
     }
 
+    if (room.players.find((p) => p.id === playerId)) {
+      return room;
+    }
+
     const updatedRoomData = {
       players: [
         ...room.players,
