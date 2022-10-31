@@ -70,12 +70,12 @@ function JoinGameLanding({ setStage, joinRoom, joinError, clearError }: Props) {
           autoComplete="off"
         />
       </LandingInputContainer>
+      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       {isValid ? (
         <LandingButton onClick={handleSubmit}>JOIN</LandingButton>
       ) : (
         <LandingButton disabled>JOIN</LandingButton>
       )}
-      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
     </div>
   );
 }

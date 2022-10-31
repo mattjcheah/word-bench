@@ -45,12 +45,12 @@ function CreateGameLanding({ setStage, createRoom }: Props) {
           autoComplete="off"
         />
       </LandingInputContainer>
+      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       {isValid ? (
         <LandingButton onClick={handleSubmit}>CREATE</LandingButton>
       ) : (
         <LandingButton disabled>CREATE</LandingButton>
       )}
-      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
     </div>
   );
 }
