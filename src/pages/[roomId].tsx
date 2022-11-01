@@ -94,7 +94,7 @@ const GameRoom = ({ quote, playerId }: Props) => {
     };
   }, [roomId]);
 
-  const [startGame] = useMutation(START_GAME, {
+  const [startGameMutation] = useMutation(START_GAME, {
     variables: { roomId },
   });
 
@@ -110,6 +110,11 @@ const GameRoom = ({ quote, playerId }: Props) => {
     router.replace("/");
     return null;
   }
+
+  const startGame = async () => {
+    await startGameMutation();
+    dispatch({ type: "startGame" });
+  };
 
   const shuffleLetters = () => {
     dispatch({ type: "shuffleLetters" });

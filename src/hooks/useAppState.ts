@@ -23,6 +23,10 @@ type UpdateRoomAction = {
   data: { room: FormattedRoom };
 };
 
+type StartGameAction = {
+  type: "startGame";
+};
+
 type ShuffleLettersAction = {
   type: "shuffleLetters";
 };
@@ -43,6 +47,7 @@ type Action =
   | SetLoadingAction
   | LoadRoomAction
   | UpdateRoomAction
+  | StartGameAction
   | ShuffleLettersAction
   | CompleteWordAction
   | GiveUpAction;
@@ -89,6 +94,16 @@ const reducer: Reducer = (state, action) => {
             ),
           };
         }),
+      },
+    };
+  }
+
+  if (action.type === "startGame") {
+    return {
+      ...state,
+      room: {
+        ...state.room,
+        stage: "GAME",
       },
     };
   }
