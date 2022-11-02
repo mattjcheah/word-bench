@@ -10,17 +10,17 @@ type Add = (
   args: { playerId: string; name: string }
 ) => Promise<Room>;
 
-type FindOne = (roomId: string) => Promise<Room>;
+type FindOne = (roomId: string) => Promise<Room | null>;
 
 type FindOneAndUpdate = (
   roomId: string,
   roomData: Partial<Room>
-) => Promise<Room>;
+) => Promise<Room | null>;
 
 type FindOneAndAddPlayer = (
   roomId: string,
   args: { playerId: string; name: string }
-) => Promise<Room>;
+) => Promise<Room | null>;
 
 type FindOneAndActivatePlayer = (
   roomId: string,
@@ -85,10 +85,10 @@ const createRoomsService = (
     };
   };
 
-  const cleanupOldRooms = (): Promise<Room[]> => {
+  const cleanupOldRooms = async (): Promise<void> => {
     const now = new Date();
     const expiryDate = sub(now, { hours: 2 });
-    return databaseRepository.deleteRooms(expiryDate.toISOString());
+    await databaseRepository.deleteRooms(expiryDate.toISOString());
   };
 
   const getAvailableRoomId: GetAvailableRoomId = async () => {
@@ -122,6 +122,14 @@ const createRoomsService = (
     { playerId, name }
   ) => {
     const room = await findOne(roomId);
+
+    if (!room) {
+      return null;
+    }
+
+    if (room.players.find((p) => p.id === playerId)) {
+      return room;
+    }
 
     const updatedRoomData = {
       players: [

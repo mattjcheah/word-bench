@@ -4,7 +4,7 @@ import { LandingInputContainer, LandingInput } from "../LandingInput";
 import LandingButton from "../LandingButton";
 
 const validateNewGame = (username: string): boolean => {
-  const validUsername = username.length <= 32;
+  const validUsername = username.length > 0 && username.length <= 32;
 
   return validUsername;
 };
@@ -45,12 +45,12 @@ function CreateGameLanding({ setStage, createRoom }: Props) {
           autoComplete="off"
         />
       </LandingInputContainer>
+      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
       {isValid ? (
         <LandingButton onClick={handleSubmit}>CREATE</LandingButton>
       ) : (
         <LandingButton disabled>CREATE</LandingButton>
       )}
-      <LandingButton onClick={() => setStage("initial")}>BACK</LandingButton>
     </div>
   );
 }

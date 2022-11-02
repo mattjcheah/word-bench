@@ -6,28 +6,28 @@ export type Quote = {
 export const quotes: Quote[] = [
   {
     quote: "Soz I'm wfh today.",
-    author: "Max Philip",
+    author: "Max",
   },
   {
     quote:
       "You better come in today because we need to finish our country trivia quiz.",
-    author: "Matt Cheah",
+    author: "Matt",
   },
   {
     quote: "Define yourself by what you love.",
-    author: "Alex Graham",
+    author: "Alex",
   },
   {
     quote: "I need you to love me.",
-    author: "Justin Ha",
+    author: "Justin",
   },
   {
     quote: "I got 45% off EatClub!",
-    author: "Christine Liu",
+    author: "Christine",
   },
   {
     quote: "I eat pies for breakfast.",
-    author: "Jarry Chen",
+    author: "Jarry",
   },
   {
     quote: "Perfectly balanced, as all things should be.",
@@ -43,11 +43,11 @@ export const quotes: Quote[] = [
   },
   {
     quote: "🥺",
-    author: "Sarah Karim",
+    author: "Sarah",
   },
   {
     quote: "Live. Laugh. Love.",
-    author: "Adam Slomoi",
+    author: "Adam",
   },
   {
     quote: "Hey that's kitty kat!!! *points to hello kitty*",

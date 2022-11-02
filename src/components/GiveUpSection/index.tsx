@@ -1,30 +1,18 @@
 import { useState } from "react";
 import Popup from "reactjs-popup";
-import { gql } from "@apollo/client";
-import { cache } from "../../graphql/apollo";
 import LandingButton from "../LandingButton";
 import { Container, ModalContainer, ActionsContainer } from "./styles";
 
 type Props = {
-  roomId: string;
+  giveUp: () => void;
 };
 
-const GiveUpSection = ({ roomId }: Props) => {
+const GiveUpSection = ({ giveUp }: Props) => {
   const [open, setOpen] = useState(false);
 
-  const giveUp = () => {
+  const handleGiveUp = () => {
     setOpen(false);
-    cache.writeFragment({
-      id: `Room:${roomId}`,
-      fragment: gql`
-        fragment CompletedBoard on Room {
-          stage
-        }
-      `,
-      data: {
-        stage: "COMPLETE",
-      },
-    });
+    giveUp();
   };
 
   return (
@@ -34,7 +22,7 @@ const GiveUpSection = ({ roomId }: Props) => {
           <h2>Are you sure you want to give up?</h2>
           <p>Giving up will prevent guessing and show you all the words.</p>
           <ActionsContainer>
-            <LandingButton onClick={() => giveUp()}>Yes</LandingButton>
+            <LandingButton onClick={handleGiveUp}>Yes</LandingButton>
             <LandingButton onClick={() => setOpen(false)}>No</LandingButton>
           </ActionsContainer>
         </ModalContainer>

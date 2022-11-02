@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import Popup from "reactjs-popup";
 import useWindowSize from "react-use/lib/useWindowSize";
@@ -27,17 +28,20 @@ type Props = {
   completeWord: (word: string) => void;
   shuffleLetters: () => void;
   replayGame: (name: string) => void;
+  giveUp: () => void;
 };
 
 const GameBoard = ({
   currentPlayer,
-  room: { id, stage, players, board },
+  room: { stage, players, board },
   completeWord,
   shuffleLetters,
   replayGame,
+  giveUp,
 }: Props) => {
   const isComplete = stage === "COMPLETE";
   const [open, setOpen] = useState(true);
+  const router = useRouter();
 
   const isWinner = currentPlayer.completedWords.length === board.words.length;
 
@@ -79,7 +83,7 @@ const GameBoard = ({
         }
         sidebar={
           <SidebarContainer>
-            {isComplete || <GiveUpSection roomId={id} />}
+            {isComplete || <GiveUpSection giveUp={giveUp} />}
             <SidebarTitle>PLAYERS</SidebarTitle>
             <PlayerList
               players={players}
@@ -90,6 +94,9 @@ const GameBoard = ({
         bottom={
           isComplete ? (
             <LandingButtonContainer>
+              <LandingButton onClick={() => router.replace("/")}>
+                QUIT
+              </LandingButton>
               <LandingButton onClick={() => replayGame(currentPlayer.name)}>
                 REPLAY
               </LandingButton>

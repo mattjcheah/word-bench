@@ -1,9 +1,7 @@
+import { GetServerSideProps } from "next";
 import { useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import lodash from "lodash";
+import { useMutation, useApolloClient, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import getUserId from "../config/getUserId";
-import { cache } from "../graphql/apollo";
 import FETCH_ROOM from "../graphql/queries/fetchRoom";
 import START_GAME from "../graphql/queries/startGame";
 import COMPLETE_WORD from "../graphql/queries/completeWord";
@@ -12,61 +10,91 @@ import FullScreenLoading from "../components/FullScreenLoading";
 import Lobby from "../components/Lobby";
 import GameBoard from "../components/GameBoard";
 import getQuote from "../utils/getQuote";
+import { getUserId } from "../utils/user";
 import { supabase } from "../client/supabase";
 import { Quote } from "../config/constants";
-import { FormattedRoom, Player } from "../models/Room";
+import { FormattedRoom } from "../models/Room";
+import useAppState from "../hooks/useAppState";
+import ROOM_DATA_FRAGMENT from "../graphql/queries/roomDataFragment";
 
 type Props = {
   quote: Quote;
+  playerId: string;
 };
 
-const GameRoom = ({ quote }: Props) => {
+const GameRoom = ({ quote, playerId }: Props) => {
   const router = useRouter();
-
   const { roomId } = router.query;
 
-  const { data, loading } = useQuery<{ room: FormattedRoom }>(FETCH_ROOM, {
-    variables: { roomId },
-  });
+  const { state, dispatch } = useAppState();
+  const { room, loading } = state;
 
-  const currentPlayer = data?.room.players.find((p) => p.id === getUserId());
+  const apolloClient = useApolloClient();
 
   useEffect(() => {
-    supabase
-      .from(`rooms:roomId=eq.${roomId}`)
-      .on("UPDATE", ({ new: { roomId, stage, players } }) => {
-        cache.modify({
-          id: `Room:${roomId}`,
-          fields: {
-            stage(cachedStage) {
-              return cachedStage === "COMPLETE" ? cachedStage : stage;
-            },
-            players(cachedPlayers: Player[]) {
-              return players.map((newPlayer: Player) => {
-                const cachedPlayer = cachedPlayers.find(
-                  (p) => p.id === newPlayer.id
-                );
+    const fetchData = async () => {
+      const cachedRoom = apolloClient.cache.readFragment<FormattedRoom>({
+        id: `Room:${roomId}`,
+        fragment: ROOM_DATA_FRAGMENT,
+      });
 
-                if (!cachedPlayer) return newPlayer;
-
-                return {
-                  ...newPlayer,
-                  completedWords: Array.from(
-                    new Set([
-                      ...cachedPlayer.completedWords,
-                      ...newPlayer.completedWords,
-                    ])
-                  ),
-                };
-              });
-            },
-          },
+      if (cachedRoom) {
+        dispatch({
+          type: "loadRoom",
+          data: { room: cachedRoom },
         });
-      })
-      .subscribe();
+        dispatch({ type: "setLoading", data: { loading: false } });
+        return;
+      }
+
+      const queryResponse = await apolloClient.query<{ room: FormattedRoom }>({
+        query: FETCH_ROOM,
+        variables: { roomId },
+      });
+
+      if (queryResponse && queryResponse.data.room) {
+        dispatch({
+          type: "loadRoom",
+          data: { room: queryResponse.data.room },
+        });
+      }
+
+      dispatch({ type: "setLoading", data: { loading: false } });
+    };
+
+    fetchData();
   }, [roomId]);
 
-  const [startGame] = useMutation(START_GAME, {
+  const currentPlayer = room?.players.find((p) => p.id === playerId);
+
+  useEffect(() => {
+    const channel = supabase.channel(`public:rooms:roomId=eq.${roomId}`);
+
+    channel
+      .on<FormattedRoom>(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "rooms",
+          filter: `roomId=eq.${roomId}`,
+        },
+        ({ new: newRoom }) => {
+          dispatch({
+            type: "updateRoom",
+            data: { room: newRoom },
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+      supabase.removeChannel(channel);
+    };
+  }, [roomId]);
+
+  const [startGameMutation] = useMutation(START_GAME, {
     variables: { roomId },
   });
 
@@ -74,85 +102,80 @@ const GameRoom = ({ quote }: Props) => {
 
   const [replayGameMutation] = useMutation(REPLAY_GAME);
 
-  if (loading && !data) {
+  if (loading) {
     return <FullScreenLoading />;
   }
 
-  if (!data || !currentPlayer) {
+  if (!room || !currentPlayer) {
     router.replace("/");
     return null;
   }
 
+  const startGame = async () => {
+    await startGameMutation();
+    dispatch({ type: "startGame" });
+  };
+
   const shuffleLetters = () => {
-    cache.modify({
-      id: cache.identify(data.room),
-      fields: {
-        board(cachedBoard) {
-          return {
-            ...cachedBoard,
-            letters: lodash.shuffle(cachedBoard.letters),
-          };
-        },
-      },
-    });
+    dispatch({ type: "shuffleLetters" });
   };
 
   const completeWord = (word: string) => {
     completeWordMutation({
       variables: { roomId, word },
     });
-    cache.modify({
-      id: cache.identify(data.room),
-      fields: {
-        players(cachedPlayers: Player[]) {
-          return cachedPlayers.map((p) =>
-            p.id === currentPlayer.id
-              ? {
-                  ...p,
-                  completedWords: [...p.completedWords, word],
-                }
-              : p
-          );
-        },
-      },
-    });
+    dispatch({ type: "completeWord", data: { playerId, word } });
   };
 
   const replayGame = async (name: string) => {
     const res = await replayGameMutation({ variables: { roomId, name } });
     const nextRoomId = res.data.replayGame.id;
-    router.push(`/${nextRoomId}`);
+    router.replace(`/${nextRoomId}`);
   };
 
-  if (data.room.stage === "LOBBY") {
+  const giveUp = () => {
+    dispatch({ type: "giveUp" });
+  };
+
+  if (room.stage === "LOBBY") {
     return (
       <Lobby
-        roomId={data.room.id}
-        players={data.room.players}
+        roomId={room.id}
+        players={room.players}
         startGame={startGame}
         quote={quote}
       />
     );
   }
 
-  if (data.room.stage === "GAME" || data.room.stage === "COMPLETE") {
+  if (room.stage === "GAME" || room.stage === "COMPLETE") {
     return (
       <GameBoard
         currentPlayer={currentPlayer}
-        room={data.room}
+        room={room}
         completeWord={completeWord}
         shuffleLetters={shuffleLetters}
         replayGame={replayGame}
+        giveUp={giveUp}
       />
     );
   }
-
-  throw new Error(`Invalid stage: ${data.room.stage}`);
 };
 
-export const getServerSideProps = () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const playerId = getUserId(context);
+
+  if (!playerId) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   return {
-    props: { quote: getQuote() },
+    props: { quote: getQuote(), playerId },
   };
 };
 

@@ -3,6 +3,7 @@ import { Player } from "../../models/Room";
 import LandingLayout from "../LandingLayout";
 import LandingButton from "../LandingButton";
 import { RoomTitle, PlayerList } from "./styles";
+import { useRouter } from "next/router";
 
 type Props = {
   roomId: string;
@@ -12,6 +13,8 @@ type Props = {
 };
 
 const Lobby = ({ roomId, players, startGame, quote }: Props) => {
+  const router = useRouter();
+
   return (
     <LandingLayout title="Waiting for more players..." quote={quote}>
       <div>
@@ -26,6 +29,9 @@ const Lobby = ({ roomId, players, startGame, quote }: Props) => {
           })}
         </PlayerList>
         <div>
+          <LandingButton onClick={() => router.replace("/")}>
+            QUIT
+          </LandingButton>
           <LandingButton onClick={() => startGame()}>START</LandingButton>
         </div>
       </div>
