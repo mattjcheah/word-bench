@@ -7,6 +7,7 @@ export type Player = {
   name: string;
   completedWords: string[];
   active: boolean;
+  modifiedAt: string;
 };
 
 export type Room = {

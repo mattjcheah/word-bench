@@ -1,3 +1,4 @@
+import differenceInMilliseconds from "date-fns/differenceInMilliseconds";
 import { Player } from "../../models/Room";
 import { List, ListItem, Progress } from "./styles";
 
@@ -16,7 +17,16 @@ const PlayerList = ({ players, totalNumberOfWords }: Props) => {
         (player.completedWords.length / totalNumberOfWords) * 100
       ),
     }))
-    .sort((a, b) => b.completedWords.length - a.completedWords.length);
+    .sort((a, b) => {
+      const lengthDifference = b.completion - a.completion;
+      if (lengthDifference !== 0) {
+        return lengthDifference;
+      }
+      return differenceInMilliseconds(
+        new Date(a.modifiedAt),
+        new Date(b.modifiedAt)
+      );
+    });
 
   return (
     <List>
