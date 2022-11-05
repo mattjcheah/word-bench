@@ -80,6 +80,7 @@ const createRoomsService = (
           name,
           completedWords: [],
           active: true,
+          modifiedAt: new Date().toISOString(),
         },
       ],
     };
@@ -139,6 +140,7 @@ const createRoomsService = (
           name,
           completedWords: [],
           active: true,
+          modifiedAt: new Date().toISOString(),
         },
       ],
     };
@@ -158,7 +160,9 @@ const createRoomsService = (
 
     const updatedRoomData = {
       players: room.players.map((player) =>
-        player.id === playerId ? { ...player, active: true } : player
+        player.id === playerId
+          ? { ...player, active: true, modifiedAt: new Date().toISOString() }
+          : player
       ),
     };
 
@@ -206,6 +210,7 @@ const createRoomsService = (
     const updatedPlayer = {
       ...player,
       completedWords,
+      modifiedAt: new Date().toISOString(),
     };
     const players = room.players.map((player) =>
       player.id === playerId ? updatedPlayer : player

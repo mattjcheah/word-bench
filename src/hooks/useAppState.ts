@@ -133,6 +133,7 @@ const reducer: Reducer = (state, action) => {
             ? {
                 ...player,
                 completedWords: [...player.completedWords, word],
+                modifiedAt: new Date().toISOString(),
               }
             : player
         ),
