@@ -11,13 +11,19 @@ const getPermutations = (word: string, length: number) => {
 };
 
 const generateWordSet =
-  (relevantWordsSet: Set<string>, bonusWordsSet: Set<string>) =>
+  (
+    relevantWordsSet: Set<string>,
+    bonusWordsSet: Set<string>,
+    bannedWordsSet: Set<string>
+  ) =>
   (baseWord: string): WordSet => {
     const words = [3, 4, 5, 6, 7]
       .flatMap((n) => {
         const permutations = Array.from(new Set(getPermutations(baseWord, n)));
         return permutations.filter(
-          (p) => bonusWordsSet.has(p) || relevantWordsSet.has(p)
+          (p) =>
+            !bannedWordsSet.has(p) &&
+            (bonusWordsSet.has(p) || relevantWordsSet.has(p))
         );
       })
       .sort((a, b) => b.length - a.length);
