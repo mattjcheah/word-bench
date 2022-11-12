@@ -11,15 +11,18 @@ const generateWords = () => {
   const relevantWordsList = readWordList("relevantWords.txt");
   const relevantWordsSet = new Set(relevantWordsList);
 
-  const bonusWordsList = readWordList("bonusWords.txt");
-  const bonusWordsSet = new Set(bonusWordsList);
+  const bonusWordsSet = new Set(readWordList("bonusWords.txt"));
+  const bannedWordsSet = new Set(readWordList("bannedWords.txt"));
 
   const sevenLetterWords = relevantWordsList.filter((w) => w.length === 7);
 
   const crosswords = pipe(
     sevenLetterWords,
     filterMap(
-      flow(generateWordSet(relevantWordsSet, bonusWordsSet), generateCrossword)
+      flow(
+        generateWordSet(relevantWordsSet, bonusWordsSet, bannedWordsSet),
+        generateCrossword
+      )
     )
   );
 
