@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { KeyboardEventHandler, useRef, useState } from "react";
 import Popup from "reactjs-popup";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
@@ -61,6 +61,17 @@ const GameBoard = ({
     return false;
   };
 
+  const handleShuffleLetters = () => {
+    shuffleLetters();
+    inputRef.current?.focus();
+  };
+
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.altKey && e.code === "KeyS") {
+      e.preventDefault();
+      handleShuffleLetters();
+    }
+  };
   return (
     <>
       {isComplete && isWinner && open && (
@@ -105,14 +116,13 @@ const GameBoard = ({
             <InputContainer>
               <LetterContainer>
                 <LetterBench letters={board.letters} />
-                <ShuffleButton
-                  onClick={() => {
-                    shuffleLetters();
-                    inputRef.current?.focus();
-                  }}
-                />
+                <ShuffleButton onClick={handleShuffleLetters} />
               </LetterContainer>
-              <PlayerInput ref={inputRef} onSubmit={onSubmitWord} />
+              <PlayerInput
+                ref={inputRef}
+                onSubmit={onSubmitWord}
+                onKeyDown={handleKeyDown}
+              />
             </InputContainer>
           )
         }
