@@ -12,11 +12,19 @@ export type Player = {
 
 export type Room = {
   roomId: string;
+  createdAt: string;
   modifiedAt: string;
   stage: Stage;
   board: Board;
   players: Player[];
   nextRoomId: string | null;
+};
+
+export type CompletedRoom = {
+  roomId: string;
+  createdAt: string;
+  board: Board;
+  players: Player[];
 };
 
 export type FormattedRoom = Omit<Room, "roomId"> & { id: string };
