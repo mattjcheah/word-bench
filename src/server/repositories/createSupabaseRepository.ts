@@ -1,6 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Board } from "../../models/Board";
-import { Room } from "../../models/Room";
+import { CompletedRoom, Room } from "../../models/Room";
 
 export type DatabaseRepository = {
   fetchRoom: (roomId: string) => Promise<Room | null>;
@@ -10,6 +10,7 @@ export type DatabaseRepository = {
   addRoom: (roomData: Partial<Room>) => Promise<Room>;
   updateRoom: (roomId: string, roomData: Partial<Room>) => Promise<Room>;
   deleteRooms: (date: string) => Promise<void>;
+  addCompletedRoom: (roomData: CompletedRoom) => Promise<void>;
 };
 
 const createSupabaseRepository = (
@@ -19,7 +20,9 @@ const createSupabaseRepository = (
     async fetchRoom(roomId) {
       const { data } = await supabase
         .from("rooms")
-        .select("id, roomId, stage, players, board, nextRoomId, modifiedAt")
+        .select(
+          "id, roomId, stage, players, board, nextRoomId, createdAt, modifiedAt"
+        )
         .eq("roomId", roomId)
         .single();
 
@@ -78,6 +81,12 @@ const createSupabaseRepository = (
 
     async deleteRooms(date) {
       await supabase.from("rooms").delete().lt("modifiedAt", date);
+    },
+
+    async addCompletedRoom(roomData) {
+      await supabase
+        .from("completed_rooms")
+        .insert([{ ...roomData, completedAt: new Date().toISOString() }]);
     },
   };
 };

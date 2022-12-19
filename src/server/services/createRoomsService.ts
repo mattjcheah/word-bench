@@ -218,8 +218,19 @@ const createRoomsService = (
 
     const gameIsComplete =
       updatedPlayer.completedWords.length === room.board.words.length;
-    const stage: Stage = gameIsComplete ? "COMPLETE" : "GAME";
 
+    if (gameIsComplete) {
+      const completedRoom = {
+        roomId,
+        createdAt: room.createdAt,
+        board: room.board,
+        players,
+      };
+
+      await databaseRepository.addCompletedRoom(completedRoom);
+    }
+
+    const stage: Stage = gameIsComplete ? "COMPLETE" : "GAME";
     const updatedRoomData = {
       stage,
       players,
